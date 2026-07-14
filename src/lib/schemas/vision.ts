@@ -47,7 +47,7 @@ export const visionScanResultSchema = z.object({
 });
 
 export const visionScanSubmissionSchema = z.object({
-  projectId: z.string().uuid().optional(),
+  projectId: z.string().optional(),
   currentRow: z.number().int().positive().optional(),
   scanType: visionScanTypeSchema.default("stitch_check"),
   imageDataUrl: z.string().optional(),

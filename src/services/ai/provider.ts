@@ -1,5 +1,7 @@
 import { z } from "zod";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { withJsonSchemaInstruction } from "@/lib/ai-prompt-utils";
+import type { ParsedImageData } from "@/lib/ai-image-utils";
 
 export type AIProviderName = "openai" | "anthropic" | "gemini" | "mock";
 
@@ -9,6 +11,11 @@ export interface AIProvider {
   generateJSON<T extends z.ZodTypeAny>(
     prompt: string,
     schema: T,
+  ): Promise<z.infer<T>>;
+  generateJSONWithImage<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+    image: ParsedImageData,
   ): Promise<z.infer<T>>;
 }
 
@@ -129,6 +136,21 @@ function mockFromZod(schema: z.ZodTypeAny, seed: number, depth = 0): unknown {
   return null;
 }
 
+function parseModelJson<T extends z.ZodTypeAny>(
+  content: string,
+  schema: T,
+  providerLabel: string,
+): z.infer<T> {
+  const json = JSON.parse(content) as unknown;
+  const parsed = schema.safeParse(json);
+  if (!parsed.success) {
+    throw new Error(
+      `${providerLabel} JSON failed validation: ${parsed.error.message}`,
+    );
+  }
+  return parsed.data;
+}
+
 class MockAIProvider implements AIProvider {
   readonly name = "mock" as const;
   readonly model = "stitch-mock-v1";
@@ -147,6 +169,14 @@ class MockAIProvider implements AIProvider {
       `Mock generator could not satisfy schema: ${parsed.error.message}`,
     );
   }
+
+  async generateJSONWithImage<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+    image: ParsedImageData,
+  ): Promise<z.infer<T>> {
+    return this.generateJSON(`${prompt}\n[image:${image.mimeType}]`, schema);
+  }
 }
 
 class OpenAIProvider implements AIProvider {
@@ -157,14 +187,28 @@ class OpenAIProvider implements AIProvider {
     this.model = model;
   }
 
-  async generateJSON<T extends z.ZodTypeAny>(
+  private async requestJson<T extends z.ZodTypeAny>(
     prompt: string,
     schema: T,
+    image?: ParsedImageData,
   ): Promise<z.infer<T>> {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      return new MockAIProvider().generateJSON(prompt, schema);
+      const mock = new MockAIProvider();
+      return image
+        ? mock.generateJSONWithImage(prompt, schema, image)
+        : mock.generateJSON(prompt, schema);
     }
+
+    const userContent = image
+      ? [
+          { type: "text", text: withJsonSchemaInstruction(prompt, schema) },
+          {
+            type: "image_url",
+            image_url: { url: image.dataUrl, detail: "high" },
+          },
+        ]
+      : withJsonSchemaInstruction(prompt, schema);
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -179,16 +223,17 @@ class OpenAIProvider implements AIProvider {
           {
             role: "system",
             content:
-              "You are a crochet pattern assistant for Stitch by Nuvio. Respond with valid JSON only.",
+              "You are a crochet pattern assistant for Stitch by Nuvio. Analyze images carefully when provided. Respond with valid JSON only.",
           },
-          { role: "user", content: prompt },
+          { role: "user", content: userContent },
         ],
         temperature: 0.2,
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`OpenAI request failed (${response.status})`);
+      const detail = await response.text();
+      throw new Error(`OpenAI request failed (${response.status}): ${detail}`);
     }
 
     const payload = (await response.json()) as {
@@ -199,12 +244,22 @@ class OpenAIProvider implements AIProvider {
       throw new Error("OpenAI returned an empty response");
     }
 
-    const json = JSON.parse(content) as unknown;
-    const parsed = schema.safeParse(json);
-    if (!parsed.success) {
-      throw new Error(`OpenAI JSON failed validation: ${parsed.error.message}`);
-    }
-    return parsed.data;
+    return parseModelJson(content, schema, "OpenAI");
+  }
+
+  async generateJSON<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+  ): Promise<z.infer<T>> {
+    return this.requestJson(prompt, schema);
+  }
+
+  async generateJSONWithImage<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+    image: ParsedImageData,
+  ): Promise<z.infer<T>> {
+    return this.requestJson(prompt, schema, image);
   }
 }
 
@@ -216,14 +271,35 @@ class AnthropicProvider implements AIProvider {
     this.model = model;
   }
 
-  async generateJSON<T extends z.ZodTypeAny>(
+  private async requestJson<T extends z.ZodTypeAny>(
     prompt: string,
     schema: T,
+    image?: ParsedImageData,
   ): Promise<z.infer<T>> {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
-      return new MockAIProvider().generateJSON(prompt, schema);
+      const mock = new MockAIProvider();
+      return image
+        ? mock.generateJSONWithImage(prompt, schema, image)
+        : mock.generateJSON(prompt, schema);
     }
+
+    const content = image
+      ? [
+          {
+            type: "image",
+            source: {
+              type: "base64",
+              media_type: image.mimeType,
+              data: image.base64,
+            },
+          },
+          {
+            type: "text",
+            text: withJsonSchemaInstruction(prompt, schema),
+          },
+        ]
+      : withJsonSchemaInstruction(prompt, schema);
 
     const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -236,14 +312,15 @@ class AnthropicProvider implements AIProvider {
         model: this.model,
         max_tokens: 4096,
         system:
-          "You are a crochet pattern assistant for Stitch by Nuvio. Respond with valid JSON only, no markdown.",
-        messages: [{ role: "user", content: prompt }],
+          "You are a crochet pattern assistant for Stitch by Nuvio. Analyze images carefully when provided. Respond with valid JSON only, no markdown.",
+        messages: [{ role: "user", content }],
         temperature: 0.2,
       }),
     });
 
     if (!response.ok) {
-      throw new Error(`Anthropic request failed (${response.status})`);
+      const detail = await response.text();
+      throw new Error(`Anthropic request failed (${response.status}): ${detail}`);
     }
 
     const payload = (await response.json()) as {
@@ -254,14 +331,22 @@ class AnthropicProvider implements AIProvider {
       throw new Error("Anthropic returned an empty response");
     }
 
-    const json = JSON.parse(text) as unknown;
-    const parsed = schema.safeParse(json);
-    if (!parsed.success) {
-      throw new Error(
-        `Anthropic JSON failed validation: ${parsed.error.message}`,
-      );
-    }
-    return parsed.data;
+    return parseModelJson(text, schema, "Anthropic");
+  }
+
+  async generateJSON<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+  ): Promise<z.infer<T>> {
+    return this.requestJson(prompt, schema);
+  }
+
+  async generateJSONWithImage<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+    image: ParsedImageData,
+  ): Promise<z.infer<T>> {
+    return this.requestJson(prompt, schema, image);
   }
 }
 
@@ -273,13 +358,17 @@ class GeminiProvider implements AIProvider {
     this.model = model ?? process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
   }
 
-  async generateJSON<T extends z.ZodTypeAny>(
+  private async requestJson<T extends z.ZodTypeAny>(
     prompt: string,
     schema: T,
+    image?: ParsedImageData,
   ): Promise<z.infer<T>> {
     const apiKey = process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY;
     if (!apiKey) {
-      return new MockAIProvider().generateJSON(prompt, schema);
+      const mock = new MockAIProvider();
+      return image
+        ? mock.generateJSONWithImage(prompt, schema, image)
+        : mock.generateJSON(prompt, schema);
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
@@ -291,20 +380,40 @@ class GeminiProvider implements AIProvider {
       },
     });
 
-    const result = await model.generateContent(
-      `${prompt}\n\nRespond with valid JSON only.`,
-    );
+    const parts = image
+      ? [
+          { text: withJsonSchemaInstruction(prompt, schema) },
+          {
+            inlineData: {
+              mimeType: image.mimeType,
+              data: image.base64,
+            },
+          },
+        ]
+      : [withJsonSchemaInstruction(prompt, schema)];
+
+    const result = await model.generateContent(parts);
     const text = result.response.text();
     if (!text) {
       throw new Error("Gemini returned an empty response");
     }
 
-    const json = JSON.parse(text) as unknown;
-    const parsed = schema.safeParse(json);
-    if (!parsed.success) {
-      throw new Error(`Gemini JSON failed validation: ${parsed.error.message}`);
-    }
-    return parsed.data;
+    return parseModelJson(text, schema, "Gemini");
+  }
+
+  async generateJSON<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+  ): Promise<z.infer<T>> {
+    return this.requestJson(prompt, schema);
+  }
+
+  async generateJSONWithImage<T extends z.ZodTypeAny>(
+    prompt: string,
+    schema: T,
+    image: ParsedImageData,
+  ): Promise<z.infer<T>> {
+    return this.requestJson(prompt, schema, image);
   }
 }
 

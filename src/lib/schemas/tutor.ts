@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { aiUserProfileSchema } from "@/lib/ai-user-context";
 
 export const tutorNextActionSchema = z.object({
   label: z.string().min(1),
@@ -33,6 +34,11 @@ export const tutorResponseSchema = z.object({
   followUpQuestions: z.array(z.string()).optional(),
 });
 
+export const tutorHistoryMessageSchema = z.object({
+  role: z.enum(["user", "assistant"]),
+  content: z.string().min(1),
+});
+
 export const tutorMessageInputSchema = z.object({
   conversationId: z.string().optional(),
   projectId: z.string().optional(),
@@ -40,6 +46,8 @@ export const tutorMessageInputSchema = z.object({
   currentRow: z.number().int().positive().optional(),
   includePhoto: z.boolean().default(false),
   voiceTranscript: z.boolean().default(false),
+  history: z.array(tutorHistoryMessageSchema).max(12).optional(),
+  userProfile: aiUserProfileSchema.optional(),
 });
 
 export const tutorConversationSummarySchema = z.object({

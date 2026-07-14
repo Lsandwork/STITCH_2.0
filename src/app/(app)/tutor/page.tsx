@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageHeading } from "@/components/stitch/PageHeading";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { getOnboardingProfile } from "@/lib/onboarding-storage";
 import { validateTutorResponse, type TutorResponse } from "@/lib/schemas/tutor";
 
 type Message = {
@@ -24,9 +25,17 @@ function messageId(): string {
 
 export default function TutorPage() {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [demoMode, setDemoMode] = useState(false);
+
+  useEffect(() => {
+    if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+      setConversationId(crypto.randomUUID());
+    }
+  }, []);
 
   async function sendMessage(event: React.FormEvent) {
     event.preventDefault();
@@ -37,27 +46,51 @@ export default function TutorPage() {
       role: "user",
       content: input.trim(),
     };
-    setMessages((prev) => [...prev, userMessage]);
+    const nextMessages = [...messages, userMessage];
+    setMessages(nextMessages);
     setInput("");
     setLoading(true);
     setError(null);
+
+    const profile = getOnboardingProfile();
 
     try {
       const res = await fetch("/api/ai/tutor", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          conversationId,
           message: userMessage.content,
           projectId: "demo-dachshund",
           currentRow: 24,
+          history: nextMessages.slice(-10).map((msg) => ({
+            role: msg.role,
+            content:
+              msg.role === "assistant" && msg.response
+                ? `${msg.response.likelyIssue} Fix: ${msg.response.howToFix}`
+                : msg.content,
+          })),
+          userProfile: profile
+            ? {
+                displayName: profile.displayName,
+                skillLevel: profile.skillLevel,
+                terminology: profile.terminology,
+                measurement: profile.measurement,
+                handedness: profile.handedness,
+                projectTypes: profile.projectTypes,
+                yarnWeights: profile.yarnWeights,
+              }
+            : undefined,
         }),
       });
 
       const payload = (await res.json()) as {
         response?: unknown;
         error?: string;
-        details?: unknown;
+        demoMode?: boolean;
       };
+
+      setDemoMode(Boolean(payload.demoMode));
 
       if (!res.ok) {
         const detail =
@@ -108,6 +141,12 @@ export default function TutorPage() {
         description="Ask questions about stitches, shaping, and fixing mistakes."
       />
 
+      {demoMode ? (
+        <p className="mb-4 rounded-stitch-md border border-stitch-gold/40 bg-stitch-peach/50 px-4 py-2 text-sm text-stitch-ink">
+          Demo mode — connect an AI API key in production for live personalized answers.
+        </p>
+      ) : null}
+
       <Card padding="lg" className="flex min-h-[480px] flex-col">
         <div className="flex-1 space-y-4 overflow-y-auto">
           {messages.length === 0 ? (
@@ -144,6 +183,21 @@ export default function TutorPage() {
                         <strong>Related lesson:</strong>{" "}
                         {msg.response.relatedLesson.title}
                       </p>
+                    ) : null}
+                    {msg.response.followUpQuestions?.length ? (
+                      <div className="space-y-1 pt-1">
+                        <p className="font-semibold">Follow-up ideas:</p>
+                        {msg.response.followUpQuestions.map((question) => (
+                          <button
+                            key={question}
+                            type="button"
+                            onClick={() => setInput(question)}
+                            className="block text-left text-stitch-coral hover:underline"
+                          >
+                            {question}
+                          </button>
+                        ))}
+                      </div>
                     ) : null}
                     {msg.response.suggestedNextAction?.href ? (
                       <Button

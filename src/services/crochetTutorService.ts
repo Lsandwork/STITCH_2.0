@@ -5,6 +5,11 @@ import {
   type TutorResponse,
 } from "@/lib/schemas/tutor";
 import { DEMO_LESSONS, DEMO_PROJECTS } from "@/lib/demo-data";
+import {
+  buildConversationHistoryBlock,
+  buildProjectContextBlock,
+  buildUserContextBlock,
+} from "@/lib/ai-user-context";
 import { getAIProvider, isMockMode } from "@/services/ai/provider";
 
 function buildMockTutorResponse(input: TutorMessageInput): TutorResponse {
@@ -87,15 +92,29 @@ function buildMockTutorResponse(input: TutorMessageInput): TutorResponse {
 }
 
 function buildTutorPrompt(input: TutorMessageInput): string {
+  const userContext = buildUserContextBlock(input.userProfile);
+  const projectContext = buildProjectContextBlock(input.projectId);
+  const historyContext = buildConversationHistoryBlock(input.history);
+  const terminology = input.userProfile?.terminology?.toUpperCase() ?? "US";
+  const handedness = input.userProfile?.handedness ?? "right";
+
   return [
-    "You are the Stitch by Nuvio Crochet Tutor. Respond with JSON matching the tutor response schema.",
-    `User question: ${input.message}`,
-    input.projectId ? `Project ID: ${input.projectId}` : null,
-    input.currentRow ? `Current row: ${input.currentRow}` : null,
+    "You are the Stitch by Nuvio Crochet Tutor — a patient expert who gives practical, accurate crochet help.",
+    "Use the maker's conversation history and profile to personalize your answer and avoid repeating prior advice.",
+    "If they already tried something in earlier messages, acknowledge it and go deeper.",
+    "",
+    userContext ? `Maker profile:\n${userContext}` : null,
+    projectContext ? `Project context:\n${projectContext}` : null,
+    historyContext,
+    "",
+    `Current question: ${input.message}`,
+    input.currentRow ? `Current row/round: ${input.currentRow}` : null,
     input.includePhoto
-      ? "User may attach a photo — suggest Vision Mode if visual confirmation helps."
+      ? "The maker may attach a photo — suggest Vision Mode for visual confirmation when helpful."
       : null,
-    "Provide: likelyIssue, howToConfirm, howToFix, howToPrevent, suggestedNextAction, optional relatedLesson, confidence (0-1), followUpQuestions.",
+    `Use ${terminology} crochet terminology and ${handedness}-handed guidance.`,
+    "",
+    "Respond with JSON containing: likelyIssue, howToConfirm, howToFix, howToPrevent, suggestedNextAction, optional relatedLesson, confidence (0-1), followUpQuestions (2-3 specific follow-ups based on this conversation).",
   ]
     .filter(Boolean)
     .join("\n");

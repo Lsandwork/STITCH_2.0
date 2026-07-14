@@ -4,6 +4,11 @@ import {
   type VisionScanResult,
   type VisionScanSubmission,
 } from "@/lib/schemas/vision";
+import {
+  isSupportedVisionMimeType,
+  parseImageDataUrl,
+} from "@/lib/ai-image-utils";
+import { buildProjectContextBlock } from "@/lib/ai-user-context";
 import { getAIProvider, isMockMode } from "@/services/ai/provider";
 
 const CONFIDENCE_THRESHOLD = 0.85;
@@ -80,40 +85,80 @@ function buildMockVisionResult(
   });
 }
 
+function buildVisionPrompt(submission: VisionScanSubmission): string {
+  const projectContext = buildProjectContextBlock(submission.projectId);
+
+  return [
+    "You are Stitch Vision — an expert crochet work analyzer.",
+    "Study the attached photo carefully. Base every finding on visible stitches, yarn, shaping, and construction.",
+    "Do not invent details that are not visible. Lower confidence when the image is blurry, dark, or partially cropped.",
+    "",
+    `Scan type: ${submission.scanType}`,
+    submission.currentRow
+      ? `Maker believes they are on row/round ${submission.currentRow}. Verify or refine this from the image when possible.`
+      : "Estimate the current row/round from visible shaping if possible.",
+    projectContext,
+    "",
+    "For stitch_check: look for missed stitches, extra stitches, accidental increases/decreases, tension issues, and join problems.",
+    "For row_counter: estimate the current row/round from visible rounds, markers, or shaping.",
+    "For pattern_read: identify stitch pattern, construction method, and working direction.",
+    "For general: provide the most useful crochet analysis for the maker.",
+    "",
+    "problemAreas coordinates must be normalized 0-1 relative to the image (x,y = top-left).",
+    `If confidence is below ${CONFIDENCE_THRESHOLD}, use cautious language and avoid certainty.`,
+    "Return JSON matching the required schema.",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function normalizeVisionResult(result: VisionScanResult): VisionScanResult {
+  return visionScanResultSchema.parse({
+    ...result,
+    confidence: Math.min(1, Math.max(0, result.confidence)),
+    summary: result.summary
+      ? qualifySummary(result.summary, result.confidence)
+      : qualifySummary("Analysis complete.", result.confidence),
+    findings: result.findings.map((finding) => ({
+      ...finding,
+      description:
+        (finding.confidence ?? result.confidence) >= CONFIDENCE_THRESHOLD
+          ? finding.description
+          : `Possible: ${finding.description}`,
+    })),
+  });
+}
+
 export async function analyzeVisionImage(
   submission: unknown,
 ): Promise<VisionScanResult> {
   const parsed = visionScanSubmissionSchema.parse(submission);
+  const image = parsed.imageDataUrl
+    ? parseImageDataUrl(parsed.imageDataUrl)
+    : null;
 
-  if (isMockMode() || !parsed.imageDataUrl) {
+  if (
+    isMockMode() ||
+    !image ||
+    !isSupportedVisionMimeType(image.mimeType)
+  ) {
     return buildMockVisionResult(parsed);
   }
 
   const provider = getAIProvider();
-  const prompt = [
-    "Analyze this crochet work image and return JSON matching the vision scan result schema.",
-    `Scan type: ${parsed.scanType}`,
-    parsed.currentRow ? `User believes they are on row ${parsed.currentRow}` : null,
-    `IMPORTANT: If confidence is below ${CONFIDENCE_THRESHOLD}, use cautious language in summary and findings. Never claim certainty below that threshold.`,
-  ]
-    .filter(Boolean)
-    .join("\n");
+  const prompt = buildVisionPrompt(parsed);
 
-  const result = await provider.generateJSON(prompt, visionScanResultSchema);
-
-  return visionScanResultSchema.parse({
-    ...result,
-    summary: result.summary
-      ? qualifySummary(result.summary, result.confidence)
-      : qualifySummary("Analysis complete.", result.confidence),
-    findings: result.findings.map((f) => ({
-      ...f,
-      description:
-        (f.confidence ?? result.confidence) >= CONFIDENCE_THRESHOLD
-          ? f.description
-          : `Possible: ${f.description}`,
-    })),
-  });
+  try {
+    const result = await provider.generateJSONWithImage(
+      prompt,
+      visionScanResultSchema,
+      image,
+    );
+    return normalizeVisionResult(result);
+  } catch (error) {
+    console.error("[visionAnalysisService] Vision AI failed, using mock fallback:", error);
+    return buildMockVisionResult(parsed);
+  }
 }
 
 export { CONFIDENCE_THRESHOLD as VISION_CONFIDENCE_THRESHOLD };

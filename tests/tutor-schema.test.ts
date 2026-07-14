@@ -63,12 +63,18 @@ describe("tutor schemas", () => {
     expect(result.success).toBe(true);
   });
 
-  it("accepts optional conversation and project ids", () => {
+  it("accepts conversation history and user profile", () => {
     const result = tutorMessageInputSchema.safeParse({
-      conversationId: "550e8400-e29b-41d4-a716-446655440000",
-      projectId: "550e8400-e29b-41d4-a716-446655440001",
-      message: "How do I fix a magic ring?",
-      currentRow: 3,
+      message: "My edge is curling again",
+      history: [
+        { role: "user", content: "Why is my edge curling?" },
+        { role: "assistant", content: "Try blocking and check your stitch count." },
+      ],
+      userProfile: {
+        skillLevel: "intermediate",
+        terminology: "us",
+        handedness: "left",
+      },
     });
 
     expect(result.success).toBe(true);
