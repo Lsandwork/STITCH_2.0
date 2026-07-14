@@ -7,7 +7,7 @@ Creative Commons–licensed collections (Flickr, Wikimedia Commons, Openverse).
 
 | File | Source | License |
 |------|--------|---------|
-| `projects/dachshund-plushie.jpg` | Flickr — Sausage Dog crochet amigurumi | CC BY |
+| `projects/dachshund-plushie.jpg` | User-provided — crochet dachshund amigurumi | — |
 | `projects/sunflower-bag.jpg` | Flickr — Borsa Girasole (sunflower crochet bag) | CC BY |
 | `projects/sunflower-coasters.jpg` | Flickr — flower power coasters set | CC BY |
 | `projects/granny-blanket.jpg` | Flickr — Crochet granny blanket | CC BY |
