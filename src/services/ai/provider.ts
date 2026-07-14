@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export type AIProviderName = "openai" | "anthropic" | "gemini" | "mock";
 
@@ -268,8 +269,8 @@ class GeminiProvider implements AIProvider {
   readonly name = "gemini" as const;
   readonly model: string;
 
-  constructor(model = "gemini-2.0-flash") {
-    this.model = model;
+  constructor(model?: string) {
+    this.model = model ?? process.env.GEMINI_MODEL ?? "gemini-2.5-flash";
   }
 
   async generateJSON<T extends z.ZodTypeAny>(
@@ -281,27 +282,19 @@ class GeminiProvider implements AIProvider {
       return new MockAIProvider().generateJSON(prompt, schema);
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:generateContent?key=${apiKey}`;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: `${prompt}\n\nRespond with JSON only.` }] }],
-        generationConfig: {
-          temperature: 0.2,
-          responseMimeType: "application/json",
-        },
-      }),
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({
+      model: this.model,
+      generationConfig: {
+        temperature: 0.2,
+        responseMimeType: "application/json",
+      },
     });
 
-    if (!response.ok) {
-      throw new Error(`Gemini request failed (${response.status})`);
-    }
-
-    const payload = (await response.json()) as {
-      candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
-    };
-    const text = payload.candidates?.[0]?.content?.parts?.[0]?.text;
+    const result = await model.generateContent(
+      `${prompt}\n\nRespond with valid JSON only.`,
+    );
+    const text = result.response.text();
     if (!text) {
       throw new Error("Gemini returned an empty response");
     }

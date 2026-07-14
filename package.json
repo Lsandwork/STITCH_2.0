@@ -15,6 +15,7 @@
     "db:types": "echo 'Configure SUPABASE_PROJECT_ID to generate types'"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@hookform/resolvers": "^5.0.1",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-dropdown-menu": "^2.1.15",

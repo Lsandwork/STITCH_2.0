@@ -106,10 +106,14 @@ export async function getTutorResponse(
 ): Promise<TutorResponse> {
   const parsed = tutorMessageInputSchema.parse(input);
 
-  if (isMockMode()) {
-    return buildMockTutorResponse(parsed);
+  if (!isMockMode()) {
+    try {
+      const provider = getAIProvider();
+      return await provider.generateJSON(buildTutorPrompt(parsed), tutorResponseSchema);
+    } catch (error) {
+      console.error("[crochetTutorService] AI provider failed, using mock fallback:", error);
+    }
   }
 
-  const provider = getAIProvider();
-  return provider.generateJSON(buildTutorPrompt(parsed), tutorResponseSchema);
+  return buildMockTutorResponse(parsed);
 }
