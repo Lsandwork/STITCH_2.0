@@ -1,0 +1,1 @@
+import Image from 'next/image'; export function QuickAction({icon,label,onClick}:{icon:string;label:string;onClick?:()=>void}){return <button className="quick-action" onClick={onClick}><Image src={`/assets/icons/svg/${icon}.svg`} alt="" width={30} height={30}/><span>{label}</span></button>}

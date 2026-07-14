@@ -1,0 +1,1810 @@
+[
+  {
+    "path": "README.md",
+    "bytes": 688
+  },
+  {
+    "path": "docs/CURSOR_IMPLEMENTATION_COMMAND.md",
+    "bytes": 1457
+  },
+  {
+    "path": "reference/stitch-dashboard-reference.png",
+    "bytes": 1788745
+  },
+  {
+    "path": "psd/stitch-logo-source.png",
+    "bytes": 32038
+  },
+  {
+    "path": "psd/stitch-logo-layered.psd",
+    "bytes": 107734
+  },
+  {
+    "path": "code/components/Sidebar.tsx",
+    "bytes": 795
+  },
+  {
+    "path": "code/components/ProgressBar.tsx",
+    "bytes": 232
+  },
+  {
+    "path": "code/components/QuickAction.tsx",
+    "bytes": 291
+  },
+  {
+    "path": "code/components/ProjectCard.tsx",
+    "bytes": 358
+  },
+  {
+    "path": "code/components/MobileBottomNav.tsx",
+    "bytes": 444
+  },
+  {
+    "path": "code/styles/design-tokens.json",
+    "bytes": 870
+  },
+  {
+    "path": "code/styles/stitch-theme.css",
+    "bytes": 1687
+  },
+  {
+    "path": "code/styles/tailwind-theme.js",
+    "bytes": 269
+  },
+  {
+    "path": "code/data/seed.json",
+    "bytes": 935
+  },
+  {
+    "path": "avatars/svg/avatar-1.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-2.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-3.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-4.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-5.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-6.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-7.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-8.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-9.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-10.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-11.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/svg/avatar-12.svg",
+    "bytes": 443
+  },
+  {
+    "path": "avatars/png/avatar-1.png",
+    "bytes": 12293
+  },
+  {
+    "path": "avatars/png/avatar-2.png",
+    "bytes": 12626
+  },
+  {
+    "path": "avatars/png/avatar-3.png",
+    "bytes": 12438
+  },
+  {
+    "path": "avatars/png/avatar-4.png",
+    "bytes": 12423
+  },
+  {
+    "path": "avatars/png/avatar-5.png",
+    "bytes": 12682
+  },
+  {
+    "path": "avatars/png/avatar-6.png",
+    "bytes": 12441
+  },
+  {
+    "path": "avatars/png/avatar-7.png",
+    "bytes": 12293
+  },
+  {
+    "path": "avatars/png/avatar-8.png",
+    "bytes": 12626
+  },
+  {
+    "path": "avatars/png/avatar-9.png",
+    "bytes": 12438
+  },
+  {
+    "path": "avatars/png/avatar-10.png",
+    "bytes": 12423
+  },
+  {
+    "path": "avatars/png/avatar-11.png",
+    "bytes": 12682
+  },
+  {
+    "path": "avatars/png/avatar-12.png",
+    "bytes": 12441
+  },
+  {
+    "path": "backgrounds/svg/background-1.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-2.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-3.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-4.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-5.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-6.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-7.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-8.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-9.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/svg/background-10.svg",
+    "bytes": 695
+  },
+  {
+    "path": "backgrounds/png/background-1.png",
+    "bytes": 22122
+  },
+  {
+    "path": "backgrounds/png/background-2.png",
+    "bytes": 22932
+  },
+  {
+    "path": "backgrounds/png/background-3.png",
+    "bytes": 22344
+  },
+  {
+    "path": "backgrounds/png/background-4.png",
+    "bytes": 21862
+  },
+  {
+    "path": "backgrounds/png/background-5.png",
+    "bytes": 20744
+  },
+  {
+    "path": "backgrounds/png/background-6.png",
+    "bytes": 22122
+  },
+  {
+    "path": "backgrounds/png/background-7.png",
+    "bytes": 22932
+  },
+  {
+    "path": "backgrounds/png/background-8.png",
+    "bytes": 22344
+  },
+  {
+    "path": "backgrounds/png/background-9.png",
+    "bytes": 21862
+  },
+  {
+    "path": "backgrounds/png/background-10.png",
+    "bytes": 20744
+  },
+  {
+    "path": "ui/components/svg/sidebar.svg",
+    "bytes": 582
+  },
+  {
+    "path": "ui/components/svg/topbar.svg",
+    "bytes": 581
+  },
+  {
+    "path": "ui/components/svg/search-field.svg",
+    "bytes": 587
+  },
+  {
+    "path": "ui/components/svg/continue-project-card.svg",
+    "bytes": 596
+  },
+  {
+    "path": "ui/components/svg/quick-action-tile.svg",
+    "bytes": 592
+  },
+  {
+    "path": "ui/components/svg/yarn-summary-card.svg",
+    "bytes": 592
+  },
+  {
+    "path": "ui/components/svg/ai-recommendation-card.svg",
+    "bytes": 597
+  },
+  {
+    "path": "ui/components/svg/project-card.svg",
+    "bytes": 587
+  },
+  {
+    "path": "ui/components/svg/lesson-card.svg",
+    "bytes": 586
+  },
+  {
+    "path": "ui/components/svg/scan-card.svg",
+    "bytes": 584
+  },
+  {
+    "path": "ui/components/svg/upgrade-card.svg",
+    "bytes": 587
+  },
+  {
+    "path": "ui/components/svg/empty-state.svg",
+    "bytes": 586
+  },
+  {
+    "path": "ui/components/svg/loading-skeleton.svg",
+    "bytes": 591
+  },
+  {
+    "path": "ui/components/svg/error-state.svg",
+    "bytes": 586
+  },
+  {
+    "path": "ui/components/svg/modal.svg",
+    "bytes": 580
+  },
+  {
+    "path": "ui/components/svg/toast.svg",
+    "bytes": 580
+  },
+  {
+    "path": "ui/components/svg/progress-bar.svg",
+    "bytes": 587
+  },
+  {
+    "path": "ui/components/svg/status-badge.svg",
+    "bytes": 587
+  },
+  {
+    "path": "ui/components/svg/tabs.svg",
+    "bytes": 579
+  },
+  {
+    "path": "ui/components/svg/segmented-control.svg",
+    "bytes": 592
+  },
+  {
+    "path": "ui/components/svg/mobile-bottom-nav.svg",
+    "bytes": 592
+  },
+  {
+    "path": "ui/components/svg/mobile-header.svg",
+    "bytes": 588
+  },
+  {
+    "path": "ui/components/svg/profile-menu.svg",
+    "bytes": 587
+  },
+  {
+    "path": "ui/components/svg/filter-panel.svg",
+    "bytes": 587
+  },
+  {
+    "path": "ui/components/png/sidebar.png",
+    "bytes": 13594
+  },
+  {
+    "path": "ui/components/png/topbar.png",
+    "bytes": 12559
+  },
+  {
+    "path": "ui/components/png/search-field.png",
+    "bytes": 14142
+  },
+  {
+    "path": "ui/components/png/continue-project-card.png",
+    "bytes": 15920
+  },
+  {
+    "path": "ui/components/png/quick-action-tile.png",
+    "bytes": 15498
+  },
+  {
+    "path": "ui/components/png/yarn-summary-card.png",
+    "bytes": 16067
+  },
+  {
+    "path": "ui/components/png/ai-recommendation-card.png",
+    "bytes": 17139
+  },
+  {
+    "path": "ui/components/png/project-card.png",
+    "bytes": 15140
+  },
+  {
+    "path": "ui/components/png/lesson-card.png",
+    "bytes": 14874
+  },
+  {
+    "path": "ui/components/png/scan-card.png",
+    "bytes": 14135
+  },
+  {
+    "path": "ui/components/png/upgrade-card.png",
+    "bytes": 15193
+  },
+  {
+    "path": "ui/components/png/empty-state.png",
+    "bytes": 14728
+  },
+  {
+    "path": "ui/components/png/loading-skeleton.png",
+    "bytes": 15882
+  },
+  {
+    "path": "ui/components/png/error-state.png",
+    "bytes": 13548
+  },
+  {
+    "path": "ui/components/png/modal.png",
+    "bytes": 12578
+  },
+  {
+    "path": "ui/components/png/toast.png",
+    "bytes": 12310
+  },
+  {
+    "path": "ui/components/png/progress-bar.png",
+    "bytes": 15013
+  },
+  {
+    "path": "ui/components/png/status-badge.png",
+    "bytes": 15949
+  },
+  {
+    "path": "ui/components/png/tabs.png",
+    "bytes": 11870
+  },
+  {
+    "path": "ui/components/png/segmented-control.png",
+    "bytes": 16034
+  },
+  {
+    "path": "ui/components/png/mobile-bottom-nav.png",
+    "bytes": 16127
+  },
+  {
+    "path": "ui/components/png/mobile-header.png",
+    "bytes": 14351
+  },
+  {
+    "path": "ui/components/png/profile-menu.png",
+    "bytes": 13432
+  },
+  {
+    "path": "ui/components/png/filter-panel.png",
+    "bytes": 12486
+  },
+  {
+    "path": "illustrations/svg/dachshund-plushie.svg",
+    "bytes": 625
+  },
+  {
+    "path": "illustrations/svg/sunflower-bag.svg",
+    "bytes": 621
+  },
+  {
+    "path": "illustrations/svg/granny-blanket.svg",
+    "bytes": 622
+  },
+  {
+    "path": "illustrations/svg/cozy-sweater.svg",
+    "bytes": 620
+  },
+  {
+    "path": "illustrations/svg/dino-plushie.svg",
+    "bytes": 620
+  },
+  {
+    "path": "illustrations/svg/frog-prince.svg",
+    "bytes": 619
+  },
+  {
+    "path": "illustrations/svg/magic-ring.svg",
+    "bytes": 618
+  },
+  {
+    "path": "illustrations/svg/single-crochet.svg",
+    "bytes": 622
+  },
+  {
+    "path": "illustrations/svg/increasing.svg",
+    "bytes": 618
+  },
+  {
+    "path": "illustrations/svg/decreasing.svg",
+    "bytes": 618
+  },
+  {
+    "path": "illustrations/svg/working-in-round.svg",
+    "bytes": 624
+  },
+  {
+    "path": "illustrations/svg/yarn-coral.svg",
+    "bytes": 618
+  },
+  {
+    "path": "illustrations/svg/yarn-teal.svg",
+    "bytes": 617
+  },
+  {
+    "path": "illustrations/svg/yarn-gold.svg",
+    "bytes": 617
+  },
+  {
+    "path": "illustrations/svg/yarn-cream.svg",
+    "bytes": 618
+  },
+  {
+    "path": "illustrations/svg/yarn-lavender.svg",
+    "bytes": 621
+  },
+  {
+    "path": "illustrations/svg/camera-scan.svg",
+    "bytes": 619
+  },
+  {
+    "path": "illustrations/svg/pattern-ai.svg",
+    "bytes": 618
+  },
+  {
+    "path": "illustrations/svg/voice-mode.svg",
+    "bytes": 618
+  },
+  {
+    "path": "illustrations/svg/color-studio.svg",
+    "bytes": 620
+  },
+  {
+    "path": "illustrations/png/dachshund-plushie.png",
+    "bytes": 38819
+  },
+  {
+    "path": "illustrations/png/sunflower-bag.png",
+    "bytes": 41731
+  },
+  {
+    "path": "illustrations/png/granny-blanket.png",
+    "bytes": 38643
+  },
+  {
+    "path": "illustrations/png/cozy-sweater.png",
+    "bytes": 40432
+  },
+  {
+    "path": "illustrations/png/dino-plushie.png",
+    "bytes": 38821
+  },
+  {
+    "path": "illustrations/png/frog-prince.png",
+    "bytes": 38646
+  },
+  {
+    "path": "illustrations/png/magic-ring.png",
+    "bytes": 37253
+  },
+  {
+    "path": "illustrations/png/single-crochet.png",
+    "bytes": 41059
+  },
+  {
+    "path": "illustrations/png/increasing.png",
+    "bytes": 37688
+  },
+  {
+    "path": "illustrations/png/decreasing.png",
+    "bytes": 38817
+  },
+  {
+    "path": "illustrations/png/working-in-round.png",
+    "bytes": 40500
+  },
+  {
+    "path": "illustrations/png/yarn-coral.png",
+    "bytes": 38313
+  },
+  {
+    "path": "illustrations/png/yarn-teal.png",
+    "bytes": 35540
+  },
+  {
+    "path": "illustrations/png/yarn-gold.png",
+    "bytes": 38964
+  },
+  {
+    "path": "illustrations/png/yarn-cream.png",
+    "bytes": 37387
+  },
+  {
+    "path": "illustrations/png/yarn-lavender.png",
+    "bytes": 37716
+  },
+  {
+    "path": "illustrations/png/camera-scan.png",
+    "bytes": 39852
+  },
+  {
+    "path": "illustrations/png/pattern-ai.png",
+    "bytes": 37997
+  },
+  {
+    "path": "illustrations/png/voice-mode.png",
+    "bytes": 37413
+  },
+  {
+    "path": "illustrations/png/color-studio.png",
+    "bytes": 38994
+  },
+  {
+    "path": "icons/svg/home.svg",
+    "bytes": 213
+  },
+  {
+    "path": "icons/svg/create.svg",
+    "bytes": 257
+  },
+  {
+    "path": "icons/svg/pattern.svg",
+    "bytes": 355
+  },
+  {
+    "path": "icons/svg/vision.svg",
+    "bytes": 311
+  },
+  {
+    "path": "icons/svg/tutor.svg",
+    "bytes": 341
+  },
+  {
+    "path": "icons/svg/yarn.svg",
+    "bytes": 323
+  },
+  {
+    "path": "icons/svg/projects.svg",
+    "bytes": 344
+  },
+  {
+    "path": "icons/svg/learn.svg",
+    "bytes": 229
+  },
+  {
+    "path": "icons/svg/bookmark.svg",
+    "bytes": 175
+  },
+  {
+    "path": "icons/svg/settings.svg",
+    "bytes": 284
+  },
+  {
+    "path": "icons/svg/camera.svg",
+    "bytes": 313
+  },
+  {
+    "path": "icons/svg/sparkles.svg",
+    "bytes": 266
+  },
+  {
+    "path": "icons/svg/chat.svg",
+    "bytes": 323
+  },
+  {
+    "path": "icons/svg/upload.svg",
+    "bytes": 211
+  },
+  {
+    "path": "icons/svg/image.svg",
+    "bytes": 303
+  },
+  {
+    "path": "icons/svg/microphone.svg",
+    "bytes": 272
+  },
+  {
+    "path": "icons/svg/bell.svg",
+    "bytes": 257
+  },
+  {
+    "path": "icons/svg/search.svg",
+    "bytes": 225
+  },
+  {
+    "path": "icons/svg/plus.svg",
+    "bytes": 231
+  },
+  {
+    "path": "icons/svg/arrow-right.svg",
+    "bytes": 174
+  },
+  {
+    "path": "icons/svg/check.svg",
+    "bytes": 208
+  },
+  {
+    "path": "icons/svg/crown.svg",
+    "bytes": 245
+  },
+  {
+    "path": "icons/svg/globe.svg",
+    "bytes": 292
+  },
+  {
+    "path": "icons/svg/calendar.svg",
+    "bytes": 257
+  },
+  {
+    "path": "icons/svg/clock.svg",
+    "bytes": 227
+  },
+  {
+    "path": "icons/svg/timer.svg",
+    "bytes": 227
+  },
+  {
+    "path": "icons/svg/pause.svg",
+    "bytes": 231
+  },
+  {
+    "path": "icons/svg/play.svg",
+    "bytes": 150
+  },
+  {
+    "path": "icons/svg/rewind.svg",
+    "bytes": 171
+  },
+  {
+    "path": "icons/svg/forward.svg",
+    "bytes": 172
+  },
+  {
+    "path": "icons/svg/edit.svg",
+    "bytes": 236
+  },
+  {
+    "path": "icons/svg/trash.svg",
+    "bytes": 194
+  },
+  {
+    "path": "icons/svg/download.svg",
+    "bytes": 188
+  },
+  {
+    "path": "icons/svg/share.svg",
+    "bytes": 366
+  },
+  {
+    "path": "icons/svg/lock.svg",
+    "bytes": 258
+  },
+  {
+    "path": "icons/svg/unlock.svg",
+    "bytes": 258
+  },
+  {
+    "path": "icons/svg/user.svg",
+    "bytes": 247
+  },
+  {
+    "path": "icons/svg/users.svg",
+    "bytes": 331
+  },
+  {
+    "path": "icons/svg/heart.svg",
+    "bytes": 237
+  },
+  {
+    "path": "icons/svg/star.svg",
+    "bytes": 205
+  },
+  {
+    "path": "icons/svg/filter.svg",
+    "bytes": 181
+  },
+  {
+    "path": "icons/svg/sort.svg",
+    "bytes": 193
+  },
+  {
+    "path": "icons/svg/menu.svg",
+    "bytes": 174
+  },
+  {
+    "path": "icons/svg/close.svg",
+    "bytes": 171
+  },
+  {
+    "path": "icons/svg/chevron-down.svg",
+    "bytes": 188
+  },
+  {
+    "path": "icons/svg/chevron-up.svg",
+    "bytes": 188
+  },
+  {
+    "path": "icons/svg/chevron-left.svg",
+    "bytes": 188
+  },
+  {
+    "path": "icons/svg/chevron-right.svg",
+    "bytes": 188
+  },
+  {
+    "path": "icons/svg/scan.svg",
+    "bytes": 311
+  },
+  {
+    "path": "icons/svg/barcode.svg",
+    "bytes": 210
+  },
+  {
+    "path": "icons/svg/palette.svg",
+    "bytes": 416
+  },
+  {
+    "path": "icons/svg/wand.svg",
+    "bytes": 236
+  },
+  {
+    "path": "icons/svg/book.svg",
+    "bytes": 229
+  },
+  {
+    "path": "icons/svg/help.svg",
+    "bytes": 265
+  },
+  {
+    "path": "icons/svg/info.svg",
+    "bytes": 231
+  },
+  {
+    "path": "icons/svg/warning.svg",
+    "bytes": 232
+  },
+  {
+    "path": "icons/svg/success.svg",
+    "bytes": 208
+  },
+  {
+    "path": "icons/svg/error.svg",
+    "bytes": 216
+  },
+  {
+    "path": "icons/svg/eye.svg",
+    "bytes": 262
+  },
+  {
+    "path": "icons/svg/eye-off.svg",
+    "bytes": 255
+  },
+  {
+    "path": "icons/png/24/home.png",
+    "bytes": 528
+  },
+  {
+    "path": "icons/png/24/create.png",
+    "bytes": 822
+  },
+  {
+    "path": "icons/png/24/pattern.png",
+    "bytes": 485
+  },
+  {
+    "path": "icons/png/24/vision.png",
+    "bytes": 619
+  },
+  {
+    "path": "icons/png/24/tutor.png",
+    "bytes": 395
+  },
+  {
+    "path": "icons/png/24/yarn.png",
+    "bytes": 888
+  },
+  {
+    "path": "icons/png/24/projects.png",
+    "bytes": 554
+  },
+  {
+    "path": "icons/png/24/learn.png",
+    "bytes": 538
+  },
+  {
+    "path": "icons/png/24/bookmark.png",
+    "bytes": 333
+  },
+  {
+    "path": "icons/png/24/settings.png",
+    "bytes": 459
+  },
+  {
+    "path": "icons/png/24/camera.png",
+    "bytes": 659
+  },
+  {
+    "path": "icons/png/24/sparkles.png",
+    "bytes": 653
+  },
+  {
+    "path": "icons/png/24/chat.png",
+    "bytes": 416
+  },
+  {
+    "path": "icons/png/24/upload.png",
+    "bytes": 377
+  },
+  {
+    "path": "icons/png/24/image.png",
+    "bytes": 565
+  },
+  {
+    "path": "icons/png/24/microphone.png",
+    "bytes": 588
+  },
+  {
+    "path": "icons/png/24/bell.png",
+    "bytes": 424
+  },
+  {
+    "path": "icons/png/24/search.png",
+    "bytes": 532
+  },
+  {
+    "path": "icons/png/24/plus.png",
+    "bytes": 681
+  },
+  {
+    "path": "icons/png/24/arrow-right.png",
+    "bytes": 241
+  },
+  {
+    "path": "icons/png/24/check.png",
+    "bytes": 645
+  },
+  {
+    "path": "icons/png/24/crown.png",
+    "bytes": 608
+  },
+  {
+    "path": "icons/png/24/globe.png",
+    "bytes": 853
+  },
+  {
+    "path": "icons/png/24/calendar.png",
+    "bytes": 444
+  },
+  {
+    "path": "icons/png/24/clock.png",
+    "bytes": 694
+  },
+  {
+    "path": "icons/png/24/timer.png",
+    "bytes": 694
+  },
+  {
+    "path": "icons/png/24/pause.png",
+    "bytes": 204
+  },
+  {
+    "path": "icons/png/24/play.png",
+    "bytes": 300
+  },
+  {
+    "path": "icons/png/24/rewind.png",
+    "bytes": 367
+  },
+  {
+    "path": "icons/png/24/forward.png",
+    "bytes": 372
+  },
+  {
+    "path": "icons/png/24/edit.png",
+    "bytes": 418
+  },
+  {
+    "path": "icons/png/24/trash.png",
+    "bytes": 477
+  },
+  {
+    "path": "icons/png/24/download.png",
+    "bytes": 363
+  },
+  {
+    "path": "icons/png/24/share.png",
+    "bytes": 530
+  },
+  {
+    "path": "icons/png/24/lock.png",
+    "bytes": 421
+  },
+  {
+    "path": "icons/png/24/unlock.png",
+    "bytes": 421
+  },
+  {
+    "path": "icons/png/24/user.png",
+    "bytes": 565
+  },
+  {
+    "path": "icons/png/24/users.png",
+    "bytes": 717
+  },
+  {
+    "path": "icons/png/24/heart.png",
+    "bytes": 681
+  },
+  {
+    "path": "icons/png/24/star.png",
+    "bytes": 738
+  },
+  {
+    "path": "icons/png/24/filter.png",
+    "bytes": 461
+  },
+  {
+    "path": "icons/png/24/sort.png",
+    "bytes": 381
+  },
+  {
+    "path": "icons/png/24/menu.png",
+    "bytes": 194
+  },
+  {
+    "path": "icons/png/24/close.png",
+    "bytes": 323
+  },
+  {
+    "path": "icons/png/24/chevron-down.png",
+    "bytes": 280
+  },
+  {
+    "path": "icons/png/24/chevron-up.png",
+    "bytes": 280
+  },
+  {
+    "path": "icons/png/24/chevron-left.png",
+    "bytes": 279
+  },
+  {
+    "path": "icons/png/24/chevron-right.png",
+    "bytes": 258
+  },
+  {
+    "path": "icons/png/24/scan.png",
+    "bytes": 619
+  },
+  {
+    "path": "icons/png/24/barcode.png",
+    "bytes": 243
+  },
+  {
+    "path": "icons/png/24/palette.png",
+    "bytes": 864
+  },
+  {
+    "path": "icons/png/24/wand.png",
+    "bytes": 551
+  },
+  {
+    "path": "icons/png/24/book.png",
+    "bytes": 538
+  },
+  {
+    "path": "icons/png/24/help.png",
+    "bytes": 800
+  },
+  {
+    "path": "icons/png/24/info.png",
+    "bytes": 653
+  },
+  {
+    "path": "icons/png/24/warning.png",
+    "bytes": 640
+  },
+  {
+    "path": "icons/png/24/success.png",
+    "bytes": 645
+  },
+  {
+    "path": "icons/png/24/error.png",
+    "bytes": 616
+  },
+  {
+    "path": "icons/png/24/eye.png",
+    "bytes": 585
+  },
+  {
+    "path": "icons/png/24/eye-off.png",
+    "bytes": 670
+  },
+  {
+    "path": "icons/png/32/home.png",
+    "bytes": 708
+  },
+  {
+    "path": "icons/png/32/create.png",
+    "bytes": 999
+  },
+  {
+    "path": "icons/png/32/pattern.png",
+    "bytes": 522
+  },
+  {
+    "path": "icons/png/32/vision.png",
+    "bytes": 744
+  },
+  {
+    "path": "icons/png/32/tutor.png",
+    "bytes": 465
+  },
+  {
+    "path": "icons/png/32/yarn.png",
+    "bytes": 1282
+  },
+  {
+    "path": "icons/png/32/projects.png",
+    "bytes": 715
+  },
+  {
+    "path": "icons/png/32/learn.png",
+    "bytes": 660
+  },
+  {
+    "path": "icons/png/32/bookmark.png",
+    "bytes": 419
+  },
+  {
+    "path": "icons/png/32/settings.png",
+    "bytes": 510
+  },
+  {
+    "path": "icons/png/32/camera.png",
+    "bytes": 891
+  },
+  {
+    "path": "icons/png/32/sparkles.png",
+    "bytes": 695
+  },
+  {
+    "path": "icons/png/32/chat.png",
+    "bytes": 519
+  },
+  {
+    "path": "icons/png/32/upload.png",
+    "bytes": 376
+  },
+  {
+    "path": "icons/png/32/image.png",
+    "bytes": 696
+  },
+  {
+    "path": "icons/png/32/microphone.png",
+    "bytes": 740
+  },
+  {
+    "path": "icons/png/32/bell.png",
+    "bytes": 545
+  },
+  {
+    "path": "icons/png/32/search.png",
+    "bytes": 699
+  },
+  {
+    "path": "icons/png/32/plus.png",
+    "bytes": 828
+  },
+  {
+    "path": "icons/png/32/arrow-right.png",
+    "bytes": 262
+  },
+  {
+    "path": "icons/png/32/check.png",
+    "bytes": 849
+  },
+  {
+    "path": "icons/png/32/crown.png",
+    "bytes": 752
+  },
+  {
+    "path": "icons/png/32/globe.png",
+    "bytes": 1148
+  },
+  {
+    "path": "icons/png/32/calendar.png",
+    "bytes": 516
+  },
+  {
+    "path": "icons/png/32/clock.png",
+    "bytes": 886
+  },
+  {
+    "path": "icons/png/32/timer.png",
+    "bytes": 886
+  },
+  {
+    "path": "icons/png/32/pause.png",
+    "bytes": 216
+  },
+  {
+    "path": "icons/png/32/play.png",
+    "bytes": 388
+  },
+  {
+    "path": "icons/png/32/rewind.png",
+    "bytes": 345
+  },
+  {
+    "path": "icons/png/32/forward.png",
+    "bytes": 333
+  },
+  {
+    "path": "icons/png/32/edit.png",
+    "bytes": 430
+  },
+  {
+    "path": "icons/png/32/trash.png",
+    "bytes": 560
+  },
+  {
+    "path": "icons/png/32/download.png",
+    "bytes": 354
+  },
+  {
+    "path": "icons/png/32/share.png",
+    "bytes": 599
+  },
+  {
+    "path": "icons/png/32/lock.png",
+    "bytes": 562
+  },
+  {
+    "path": "icons/png/32/unlock.png",
+    "bytes": 562
+  },
+  {
+    "path": "icons/png/32/user.png",
+    "bytes": 790
+  },
+  {
+    "path": "icons/png/32/users.png",
+    "bytes": 1001
+  },
+  {
+    "path": "icons/png/32/heart.png",
+    "bytes": 939
+  },
+  {
+    "path": "icons/png/32/star.png",
+    "bytes": 980
+  },
+  {
+    "path": "icons/png/32/filter.png",
+    "bytes": 589
+  },
+  {
+    "path": "icons/png/32/sort.png",
+    "bytes": 389
+  },
+  {
+    "path": "icons/png/32/menu.png",
+    "bytes": 134
+  },
+  {
+    "path": "icons/png/32/close.png",
+    "bytes": 422
+  },
+  {
+    "path": "icons/png/32/chevron-down.png",
+    "bytes": 314
+  },
+  {
+    "path": "icons/png/32/chevron-up.png",
+    "bytes": 329
+  },
+  {
+    "path": "icons/png/32/chevron-left.png",
+    "bytes": 289
+  },
+  {
+    "path": "icons/png/32/chevron-right.png",
+    "bytes": 285
+  },
+  {
+    "path": "icons/png/32/scan.png",
+    "bytes": 744
+  },
+  {
+    "path": "icons/png/32/barcode.png",
+    "bytes": 148
+  },
+  {
+    "path": "icons/png/32/palette.png",
+    "bytes": 1120
+  },
+  {
+    "path": "icons/png/32/wand.png",
+    "bytes": 660
+  },
+  {
+    "path": "icons/png/32/book.png",
+    "bytes": 660
+  },
+  {
+    "path": "icons/png/32/help.png",
+    "bytes": 1012
+  },
+  {
+    "path": "icons/png/32/info.png",
+    "bytes": 860
+  },
+  {
+    "path": "icons/png/32/warning.png",
+    "bytes": 876
+  },
+  {
+    "path": "icons/png/32/success.png",
+    "bytes": 849
+  },
+  {
+    "path": "icons/png/32/error.png",
+    "bytes": 812
+  },
+  {
+    "path": "icons/png/32/eye.png",
+    "bytes": 761
+  },
+  {
+    "path": "icons/png/32/eye-off.png",
+    "bytes": 834
+  },
+  {
+    "path": "icons/png/48/home.png",
+    "bytes": 1007
+  },
+  {
+    "path": "icons/png/48/create.png",
+    "bytes": 1510
+  },
+  {
+    "path": "icons/png/48/pattern.png",
+    "bytes": 763
+  },
+  {
+    "path": "icons/png/48/vision.png",
+    "bytes": 1182
+  },
+  {
+    "path": "icons/png/48/tutor.png",
+    "bytes": 678
+  },
+  {
+    "path": "icons/png/48/yarn.png",
+    "bytes": 2117
+  },
+  {
+    "path": "icons/png/48/projects.png",
+    "bytes": 1002
+  },
+  {
+    "path": "icons/png/48/learn.png",
+    "bytes": 1069
+  },
+  {
+    "path": "icons/png/48/bookmark.png",
+    "bytes": 620
+  },
+  {
+    "path": "icons/png/48/settings.png",
+    "bytes": 1135
+  },
+  {
+    "path": "icons/png/48/camera.png",
+    "bytes": 1339
+  },
+  {
+    "path": "icons/png/48/sparkles.png",
+    "bytes": 1236
+  },
+  {
+    "path": "icons/png/48/chat.png",
+    "bytes": 641
+  },
+  {
+    "path": "icons/png/48/upload.png",
+    "bytes": 581
+  },
+  {
+    "path": "icons/png/48/image.png",
+    "bytes": 1043
+  },
+  {
+    "path": "icons/png/48/microphone.png",
+    "bytes": 1161
+  },
+  {
+    "path": "icons/png/48/bell.png",
+    "bytes": 825
+  },
+  {
+    "path": "icons/png/48/search.png",
+    "bytes": 1026
+  },
+  {
+    "path": "icons/png/48/plus.png",
+    "bytes": 1478
+  },
+  {
+    "path": "icons/png/48/arrow-right.png",
+    "bytes": 400
+  },
+  {
+    "path": "icons/png/48/check.png",
+    "bytes": 1264
+  },
+  {
+    "path": "icons/png/48/crown.png",
+    "bytes": 1121
+  },
+  {
+    "path": "icons/png/48/globe.png",
+    "bytes": 2061
+  },
+  {
+    "path": "icons/png/48/calendar.png",
+    "bytes": 735
+  },
+  {
+    "path": "icons/png/48/clock.png",
+    "bytes": 1554
+  },
+  {
+    "path": "icons/png/48/timer.png",
+    "bytes": 1554
+  },
+  {
+    "path": "icons/png/48/pause.png",
+    "bytes": 271
+  },
+  {
+    "path": "icons/png/48/play.png",
+    "bytes": 559
+  },
+  {
+    "path": "icons/png/48/rewind.png",
+    "bytes": 523
+  },
+  {
+    "path": "icons/png/48/forward.png",
+    "bytes": 489
+  },
+  {
+    "path": "icons/png/48/edit.png",
+    "bytes": 692
+  },
+  {
+    "path": "icons/png/48/trash.png",
+    "bytes": 780
+  },
+  {
+    "path": "icons/png/48/download.png",
+    "bytes": 596
+  },
+  {
+    "path": "icons/png/48/share.png",
+    "bytes": 901
+  },
+  {
+    "path": "icons/png/48/lock.png",
+    "bytes": 764
+  },
+  {
+    "path": "icons/png/48/unlock.png",
+    "bytes": 764
+  },
+  {
+    "path": "icons/png/48/user.png",
+    "bytes": 1209
+  },
+  {
+    "path": "icons/png/48/users.png",
+    "bytes": 1638
+  },
+  {
+    "path": "icons/png/48/heart.png",
+    "bytes": 1463
+  },
+  {
+    "path": "icons/png/48/star.png",
+    "bytes": 1459
+  },
+  {
+    "path": "icons/png/48/filter.png",
+    "bytes": 930
+  },
+  {
+    "path": "icons/png/48/sort.png",
+    "bytes": 585
+  },
+  {
+    "path": "icons/png/48/menu.png",
+    "bytes": 174
+  },
+  {
+    "path": "icons/png/48/close.png",
+    "bytes": 544
+  },
+  {
+    "path": "icons/png/48/chevron-down.png",
+    "bytes": 461
+  },
+  {
+    "path": "icons/png/48/chevron-up.png",
+    "bytes": 446
+  },
+  {
+    "path": "icons/png/48/chevron-left.png",
+    "bytes": 488
+  },
+  {
+    "path": "icons/png/48/chevron-right.png",
+    "bytes": 458
+  },
+  {
+    "path": "icons/png/48/scan.png",
+    "bytes": 1182
+  },
+  {
+    "path": "icons/png/48/barcode.png",
+    "bytes": 200
+  },
+  {
+    "path": "icons/png/48/palette.png",
+    "bytes": 1869
+  },
+  {
+    "path": "icons/png/48/wand.png",
+    "bytes": 1111
+  },
+  {
+    "path": "icons/png/48/book.png",
+    "bytes": 1069
+  },
+  {
+    "path": "icons/png/48/help.png",
+    "bytes": 1800
+  },
+  {
+    "path": "icons/png/48/info.png",
+    "bytes": 1426
+  },
+  {
+    "path": "icons/png/48/warning.png",
+    "bytes": 1314
+  },
+  {
+    "path": "icons/png/48/success.png",
+    "bytes": 1264
+  },
+  {
+    "path": "icons/png/48/error.png",
+    "bytes": 1156
+  },
+  {
+    "path": "icons/png/48/eye.png",
+    "bytes": 1331
+  },
+  {
+    "path": "icons/png/48/eye-off.png",
+    "bytes": 1398
+  },
+  {
+    "path": "icons/png/96/home.png",
+    "bytes": 1781
+  },
+  {
+    "path": "icons/png/96/create.png",
+    "bytes": 3049
+  },
+  {
+    "path": "icons/png/96/pattern.png",
+    "bytes": 1235
+  },
+  {
+    "path": "icons/png/96/vision.png",
+    "bytes": 2350
+  },
+  {
+    "path": "icons/png/96/tutor.png",
+    "bytes": 1202
+  },
+  {
+    "path": "icons/png/96/yarn.png",
+    "bytes": 4473
+  },
+  {
+    "path": "icons/png/96/projects.png",
+    "bytes": 1714
+  },
+  {
+    "path": "icons/png/96/learn.png",
+    "bytes": 2102
+  },
+  {
+    "path": "icons/png/96/bookmark.png",
+    "bytes": 1182
+  },
+  {
+    "path": "icons/png/96/settings.png",
+    "bytes": 2170
+  },
+  {
+    "path": "icons/png/96/camera.png",
+    "bytes": 2575
+  },
+  {
+    "path": "icons/png/96/sparkles.png",
+    "bytes": 2262
+  },
+  {
+    "path": "icons/png/96/chat.png",
+    "bytes": 1066
+  },
+  {
+    "path": "icons/png/96/upload.png",
+    "bytes": 933
+  },
+  {
+    "path": "icons/png/96/image.png",
+    "bytes": 1822
+  },
+  {
+    "path": "icons/png/96/microphone.png",
+    "bytes": 2383
+  },
+  {
+    "path": "icons/png/96/bell.png",
+    "bytes": 1572
+  },
+  {
+    "path": "icons/png/96/search.png",
+    "bytes": 2106
+  },
+  {
+    "path": "icons/png/96/plus.png",
+    "bytes": 2910
+  },
+  {
+    "path": "icons/png/96/arrow-right.png",
+    "bytes": 613
+  },
+  {
+    "path": "icons/png/96/check.png",
+    "bytes": 2315
+  },
+  {
+    "path": "icons/png/96/crown.png",
+    "bytes": 2120
+  },
+  {
+    "path": "icons/png/96/globe.png",
+    "bytes": 4353
+  },
+  {
+    "path": "icons/png/96/calendar.png",
+    "bytes": 1153
+  },
+  {
+    "path": "icons/png/96/clock.png",
+    "bytes": 3043
+  },
+  {
+    "path": "icons/png/96/timer.png",
+    "bytes": 3043
+  },
+  {
+    "path": "icons/png/96/pause.png",
+    "bytes": 541
+  },
+  {
+    "path": "icons/png/96/play.png",
+    "bytes": 902
+  },
+  {
+    "path": "icons/png/96/rewind.png",
+    "bytes": 708
+  },
+  {
+    "path": "icons/png/96/forward.png",
+    "bytes": 704
+  },
+  {
+    "path": "icons/png/96/edit.png",
+    "bytes": 1103
+  },
+  {
+    "path": "icons/png/96/trash.png",
+    "bytes": 1246
+  },
+  {
+    "path": "icons/png/96/download.png",
+    "bytes": 802
+  },
+  {
+    "path": "icons/png/96/share.png",
+    "bytes": 1908
+  },
+  {
+    "path": "icons/png/96/lock.png",
+    "bytes": 1525
+  },
+  {
+    "path": "icons/png/96/unlock.png",
+    "bytes": 1525
+  },
+  {
+    "path": "icons/png/96/user.png",
+    "bytes": 2592
+  },
+  {
+    "path": "icons/png/96/users.png",
+    "bytes": 3293
+  },
+  {
+    "path": "icons/png/96/heart.png",
+    "bytes": 3038
+  },
+  {
+    "path": "icons/png/96/star.png",
+    "bytes": 2591
+  },
+  {
+    "path": "icons/png/96/filter.png",
+    "bytes": 1692
+  },
+  {
+    "path": "icons/png/96/sort.png",
+    "bytes": 970
+  },
+  {
+    "path": "icons/png/96/menu.png",
+    "bytes": 200
+  },
+  {
+    "path": "icons/png/96/close.png",
+    "bytes": 903
+  },
+  {
+    "path": "icons/png/96/chevron-down.png",
+    "bytes": 653
+  },
+  {
+    "path": "icons/png/96/chevron-up.png",
+    "bytes": 612
+  },
+  {
+    "path": "icons/png/96/chevron-left.png",
+    "bytes": 642
+  },
+  {
+    "path": "icons/png/96/chevron-right.png",
+    "bytes": 653
+  },
+  {
+    "path": "icons/png/96/scan.png",
+    "bytes": 2350
+  },
+  {
+    "path": "icons/png/96/barcode.png",
+    "bytes": 292
+  },
+  {
+    "path": "icons/png/96/palette.png",
+    "bytes": 3535
+  },
+  {
+    "path": "icons/png/96/wand.png",
+    "bytes": 1992
+  },
+  {
+    "path": "icons/png/96/book.png",
+    "bytes": 2102
+  },
+  {
+    "path": "icons/png/96/help.png",
+    "bytes": 3670
+  },
+  {
+    "path": "icons/png/96/info.png",
+    "bytes": 2864
+  },
+  {
+    "path": "icons/png/96/warning.png",
+    "bytes": 2362
+  },
+  {
+    "path": "icons/png/96/success.png",
+    "bytes": 2315
+  },
+  {
+    "path": "icons/png/96/error.png",
+    "bytes": 2121
+  },
+  {
+    "path": "icons/png/96/eye.png",
+    "bytes": 2915
+  },
+  {
+    "path": "icons/png/96/eye-off.png",
+    "bytes": 2655
+  },
+  {
+    "path": "brand/svg/stitch-by-nuvio-horizontal.svg",
+    "bytes": 530
+  },
+  {
+    "path": "brand/svg/stitch-wordmark.svg",
+    "bytes": 234
+  },
+  {
+    "path": "brand/svg/stitch-mark.svg",
+    "bytes": 427
+  },
+  {
+    "path": "brand/png/stitch-by-nuvio-horizontal.png",
+    "bytes": 32142
+  },
+  {
+    "path": "brand/png/stitch-wordmark.png",
+    "bytes": 17382
+  },
+  {
+    "path": "brand/png/stitch-mark.png",
+    "bytes": 18962
+  }
+]

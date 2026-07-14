@@ -1,0 +1,1 @@
+import Image from 'next/image'; import {ProgressBar} from './ProgressBar'; export function ProjectCard({title,image,progress,status}:{title:string;image:string;progress:number;status:string}){return <article className="project-card"><Image src={image} alt="" width={320} height={220}/><h3>{title}</h3><p>{status}</p><ProgressBar value={progress}/></article>}

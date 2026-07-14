@@ -1,0 +1,297 @@
+@import "tailwindcss";
+
+@theme {
+  --color-stitch-coral: #f46f61;
+  --color-stitch-coral-dark: #d95b50;
+  --color-stitch-teal: #2c9a95;
+  --color-stitch-teal-dark: #237b77;
+  --color-stitch-cream: #fff9f3;
+  --color-stitch-paper: #ffffff;
+  --color-stitch-ink: #202124;
+  --color-stitch-muted: #77736f;
+  --color-stitch-border: #e8ddd3;
+  --color-stitch-peach: #fce7dd;
+  --color-stitch-gold: #e7a63b;
+  --color-stitch-lavender: #8e67c6;
+  --color-stitch-mint: #ddf2ee;
+  --color-stitch-rose: #f9d9d2;
+  --color-stitch-sky: #dceaf7;
+  --color-stitch-sand: #f0e4d6;
+
+  --radius-stitch-xs: 6px;
+  --radius-stitch-sm: 10px;
+  --radius-stitch-md: 16px;
+  --radius-stitch-lg: 24px;
+  --radius-stitch-xl: 32px;
+  --radius-stitch-pill: 999px;
+
+  --shadow-stitch-card: 0 8px 24px rgba(78, 53, 38, 0.08);
+  --shadow-stitch-floating: 0 16px 48px rgba(78, 53, 38, 0.14);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+:root {
+  --stitch-coral: #f46f61;
+  --stitch-coral-dark: #d95b50;
+  --stitch-teal: #2c9a95;
+  --stitch-teal-dark: #237b77;
+  --stitch-cream: #fff9f3;
+  --stitch-paper: #ffffff;
+  --stitch-ink: #202124;
+  --stitch-muted: #77736f;
+  --stitch-border: #e8ddd3;
+  --stitch-peach: #fce7dd;
+  --stitch-gold: #e7a63b;
+  --stitch-lavender: #8e67c6;
+  --stitch-mint: #ddf2ee;
+  --stitch-rose: #f9d9d2;
+  --stitch-sky: #dceaf7;
+  --stitch-sand: #f0e4d6;
+  --stitch-shadow-card: 0 8px 24px rgba(78, 53, 38, 0.08);
+  --stitch-shadow-floating: 0 16px 48px rgba(78, 53, 38, 0.14);
+  --stitch-sidebar-width: 272px;
+  --stitch-insight-rail-width: 300px;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+    background-color: var(--stitch-cream);
+    color: var(--stitch-ink);
+    font-family: var(--font-sans);
+  }
+
+  img,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--stitch-teal);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .stitch-card {
+    background: var(--stitch-paper);
+    border: 1px solid var(--stitch-border);
+    border-radius: var(--radius-stitch-md);
+    box-shadow: var(--stitch-shadow-card);
+  }
+
+  .stitch-panel {
+    background: var(--stitch-paper);
+    border: 1px solid var(--stitch-border);
+    border-radius: var(--radius-stitch-lg);
+    box-shadow: var(--stitch-shadow-card);
+  }
+
+  .stitch-sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 40;
+    width: var(--stitch-sidebar-width);
+    background: var(--stitch-paper);
+    border-right: 1px solid var(--stitch-border);
+    padding: 24px 18px;
+    overflow-y: auto;
+  }
+
+  .stitch-sidebar nav {
+    display: grid;
+    gap: 8px;
+    margin-top: 24px;
+  }
+
+  .stitch-sidebar a,
+  .stitch-sidebar button.stitch-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 12px;
+    color: inherit;
+    transition: background-color 150ms ease;
+  }
+
+  .stitch-sidebar a:hover,
+  .stitch-sidebar button.stitch-nav-item:hover {
+    background: var(--stitch-peach);
+  }
+
+  .stitch-sidebar a[data-active="true"],
+  .stitch-sidebar button.stitch-nav-item[data-active="true"] {
+    background: var(--stitch-peach);
+    color: var(--stitch-coral);
+  }
+
+  .stitch-progress {
+    height: 8px;
+    background: #eee8e2;
+    border-radius: var(--radius-stitch-pill);
+    overflow: hidden;
+  }
+
+  .stitch-progress > span,
+  .stitch-progress-bar {
+    display: block;
+    height: 100%;
+    background: var(--stitch-teal);
+    border-radius: var(--radius-stitch-pill);
+    transition: width 300ms ease;
+  }
+
+  .stitch-quick-action {
+    display: grid;
+    place-items: center;
+    gap: 8px;
+    min-height: 96px;
+    padding: 16px 12px;
+    border: 1px solid var(--stitch-border);
+    background: var(--stitch-paper);
+    border-radius: var(--radius-stitch-md);
+    cursor: pointer;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  .stitch-quick-action:hover {
+    border-color: var(--stitch-coral);
+    box-shadow: var(--stitch-shadow-card);
+  }
+
+  .stitch-project-card {
+    background: var(--stitch-paper);
+    border: 1px solid var(--stitch-border);
+    border-radius: var(--radius-stitch-md);
+    overflow: hidden;
+    box-shadow: var(--stitch-shadow-card);
+  }
+
+  .stitch-project-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .stitch-insight-rail {
+    width: var(--stitch-insight-rail-width);
+    flex-shrink: 0;
+  }
+
+  .mobile-bottom-nav {
+    display: none;
+  }
+
+  .stitch-main-shell {
+    min-height: 100dvh;
+    padding-left: var(--stitch-sidebar-width);
+  }
+
+  .stitch-page-content {
+    padding: 24px;
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  }
+}
+
+@layer utilities {
+  .text-stitch-muted {
+    color: var(--stitch-muted);
+  }
+
+  .bg-stitch-cream {
+    background-color: var(--stitch-cream);
+  }
+
+  .bg-stitch-peach {
+    background-color: var(--stitch-peach);
+  }
+
+  .border-stitch {
+    border-color: var(--stitch-border);
+  }
+}
+
+@media (max-width: 1180px) {
+  .stitch-insight-rail {
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .stitch-sidebar {
+    display: none;
+  }
+
+  .stitch-main-shell {
+    padding-left: 0;
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-bottom-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    background: var(--stitch-paper);
+    border-top: 1px solid var(--stitch-border);
+    padding: 8px 4px calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-bottom-nav a,
+  .mobile-bottom-nav button {
+    display: grid;
+    place-items: center;
+    gap: 4px;
+    min-height: 44px;
+    font-size: 12px;
+    color: inherit;
+  }
+
+  .mobile-bottom-nav a[data-active="true"],
+  .mobile-bottom-nav button[data-active="true"] {
+    color: var(--stitch-coral);
+  }
+}

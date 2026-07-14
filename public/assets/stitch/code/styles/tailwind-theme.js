@@ -1,0 +1,1 @@
+export const stitchTheme={colors:{coral:'#F46F61',teal:'#2C9A95',cream:'#FFF9F3',ink:'#202124',muted:'#77736F',border:'#E8DDD3',peach:'#FCE7DD',gold:'#E7A63B',lavender:'#8E67C6'},borderRadius:{card:'16px',panel:'24px'},boxShadow:{card:'0 8px 24px rgba(78,53,38,.08)'}};

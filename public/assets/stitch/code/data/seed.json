@@ -1,0 +1,53 @@
+{
+  "projects": [
+    {
+      "id": "dachshund",
+      "title": "Dachshund Plushie",
+      "progress": 68,
+      "row": 24,
+      "rows": 38,
+      "status": "In Progress",
+      "image": "/assets/illustrations/png/dachshund-plushie.png"
+    },
+    {
+      "id": "sunflower",
+      "title": "Sunflower Bag",
+      "progress": 54,
+      "status": "In Progress",
+      "image": "/assets/illustrations/png/sunflower-bag.png"
+    },
+    {
+      "id": "blanket",
+      "title": "Granny Blanket",
+      "progress": 32,
+      "status": "In Progress",
+      "image": "/assets/illustrations/png/granny-blanket.png"
+    }
+  ],
+  "quickActions": [
+    [
+      "sparkles",
+      "Create Pattern"
+    ],
+    [
+      "camera",
+      "Scan My Work"
+    ],
+    [
+      "chat",
+      "Ask Tutor"
+    ],
+    [
+      "yarn",
+      "Add Yarn"
+    ],
+    [
+      "upload",
+      "Upload Pattern"
+    ],
+    [
+      "image",
+      "From a Photo"
+    ]
+  ]
+}

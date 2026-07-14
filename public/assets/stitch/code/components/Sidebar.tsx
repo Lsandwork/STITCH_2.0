@@ -1,0 +1,4 @@
+import Image from 'next/image';
+import Link from 'next/link';
+const items=[['Home','/','home'],['Create Studio','/create','create'],['Pattern Workspace','/workspace','pattern'],['Vision Mode','/vision','vision'],['Crochet Tutor','/tutor','tutor'],['Yarn Vault','/yarn','yarn'],['My Projects','/projects','projects'],['Learn','/learn','learn'],['Saved Patterns','/patterns','bookmark'],['Profile & Settings','/settings','settings']];
+export function Sidebar(){return <aside className="stitch-sidebar"><Image src="/assets/brand/svg/stitch-by-nuvio-horizontal.svg" alt="Stitch by Nuvio" width={220} height={68}/><nav>{items.map(([label,href,icon])=><Link key={href} href={href}><Image src={`/assets/icons/svg/${icon}.svg`} alt="" width={22} height={22}/><span>{label}</span></Link>)}</nav></aside>}
