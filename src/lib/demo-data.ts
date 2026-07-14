@@ -422,7 +422,7 @@ export const DEMO_WHAT_CAN_I_MAKE: DemoRecommendation = {
   title: "Mini Sunflower Coaster Set",
   description:
     "You have enough gold and cream yarn for a cheerful 4-piece coaster set this weekend.",
-  imageUrl: projectImage.sunflower,
+  imageUrl: projectImage.sunflowerCoasters,
   href: "/create/pattern?idea=sunflower-coasters",
   reason: "Matches yarn in your vault",
 };

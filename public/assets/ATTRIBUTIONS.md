@@ -7,11 +7,12 @@ Creative Commons–licensed collections (Flickr, Wikimedia Commons, Openverse).
 
 | File | Source | License |
 |------|--------|---------|
-| `projects/dachshund-plushie.jpg` | Flickr — crochet amigurumi dog | CC BY |
-| `projects/sunflower-bag.jpg` | Openverse — crocheted sunflower | CC0 |
+| `projects/dachshund-plushie.jpg` | Flickr — Sausage Dog crochet amigurumi | CC BY |
+| `projects/sunflower-bag.jpg` | Flickr — Borsa Girasole (sunflower crochet bag) | CC BY |
+| `projects/sunflower-coasters.jpg` | Flickr — flower power coasters set | CC BY |
 | `projects/granny-blanket.jpg` | Flickr — Crochet granny blanket | CC BY |
 | `projects/cozy-sweater.jpg` | Flickr — Crochet Sweater | CC BY |
-| `projects/dino-plushie.jpg` | Flickr — crochet dinosaur (Rawr!) | CC BY |
+| `projects/dino-plushie.jpg` | Flickr — Lazy T-Rex Rainbow Dinosaur Amigurumi | CC BY |
 | `projects/frog-prince.jpg` | Flickr — Lilleliis FELIX the frog | CC BY |
 | `projects/plushie-builder.jpg` | Flickr — Crocheted tote bag | CC BY |
 | `projects/pattern-from-photo.jpg` | Flickr — crochet work in progress | CC BY |
@@ -32,6 +33,6 @@ Creative Commons–licensed collections (Flickr, Wikimedia Commons, Openverse).
 | File | Source | License |
 |------|--------|---------|
 | `yarn/*` | Flickr / Wikimedia | CC BY / CC BY-SA |
-| `scans/scan-dachshund-wip.jpg` | Flickr — Amigurumi round WIP | CC BY |
-| `scans/scan-sunflower-wip.jpg` | Openverse — crocheted sunflower | CC0 |
-| `scans/scan-granny-wip.jpg` | Flickr — Granny square close up | CC BY |
+| `scans/scan-dachshund-wip.jpg` | Same as dachshund-plushie (project match) | CC BY |
+| `scans/scan-sunflower-wip.jpg` | Same as sunflower-bag (project match) | CC BY |
+| `scans/scan-granny-wip.jpg` | Same as granny-blanket (project match) | CC BY |

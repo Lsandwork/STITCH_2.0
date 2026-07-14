@@ -231,7 +231,7 @@ function buildDemoProjects(userId: string): SeedProject[] {
       progress_percent: 54,
       current_row: 18,
       total_rows: 34,
-      cover_image_url: "/assets/stitch/illustrations/png/sunflower-bag.png",
+      cover_image_url: "/assets/projects/sunflower-bag.jpg",
     },
     {
       id: randomUUID(),
@@ -242,7 +242,7 @@ function buildDemoProjects(userId: string): SeedProject[] {
       progress_percent: 32,
       current_row: 12,
       total_rows: 40,
-      cover_image_url: "/assets/stitch/illustrations/png/granny-blanket.png",
+      cover_image_url: "/assets/projects/granny-blanket.jpg",
     },
     {
       id: randomUUID(),
@@ -253,7 +253,7 @@ function buildDemoProjects(userId: string): SeedProject[] {
       progress_percent: 0,
       current_row: 0,
       total_rows: null,
-      cover_image_url: "/assets/stitch/illustrations/png/cozy-sweater.png",
+      cover_image_url: "/assets/projects/cozy-sweater.jpg",
     },
   ];
 }

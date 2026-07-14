@@ -8,6 +8,7 @@ const BASE = "/assets";
 export const projectImage = {
   dachshund: `${BASE}/projects/dachshund-plushie.jpg`,
   sunflower: `${BASE}/projects/sunflower-bag.jpg`,
+  sunflowerCoasters: `${BASE}/projects/sunflower-coasters.jpg`,
   granny: `${BASE}/projects/granny-blanket.jpg`,
   sweater: `${BASE}/projects/cozy-sweater.jpg`,
   dino: `${BASE}/projects/dino-plushie.jpg`,
