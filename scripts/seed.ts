@@ -220,7 +220,7 @@ function buildDemoProjects(userId: string): SeedProject[] {
       progress_percent: 68,
       current_row: 24,
       total_rows: 38,
-      cover_image_url: "/assets/stitch/illustrations/png/dachshund-plushie.png",
+      cover_image_url: "/assets/projects/dachshund-plushie.jpg",
     },
     {
       id: randomUUID(),

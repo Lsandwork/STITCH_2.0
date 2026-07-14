@@ -4,15 +4,14 @@ import { PageHeading } from "@/components/stitch/PageHeading";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
-import { DEMO_LESSONS } from "@/lib/demo-data";
+import { Badge } from "@/components/ui/Badge";
+import { getDemoLesson } from "@/lib/demo-data";
 
 type Props = { params: Promise<{ lessonId: string }> };
 
 export default async function LessonDetailPage({ params }: Props) {
   const { lessonId } = await params;
-  const lesson = DEMO_LESSONS.find(
-    (l) => l.slug === lessonId || l.id === lessonId,
-  );
+  const lesson = getDemoLesson(lessonId);
 
   if (!lesson) notFound();
 
@@ -24,12 +23,12 @@ export default async function LessonDetailPage({ params }: Props) {
         backHref="/learn"
       />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-[1fr_1.2fr]">
         <Card padding="lg">
           <div className="overflow-hidden rounded-stitch-lg bg-stitch-cream">
             <Image
               src={lesson.illustrationUrl}
-              alt={lesson.title}
+              alt={`${lesson.title} crochet technique`}
               width={500}
               height={400}
               className="aspect-[5/4] w-full object-cover"
@@ -37,26 +36,47 @@ export default async function LessonDetailPage({ params }: Props) {
           </div>
         </Card>
 
-        <Card padding="lg" className="space-y-4">
-          <ProgressBar value={lesson.progressPercent} label="Your progress" />
-          <div className="prose-sm space-y-3 text-sm text-stitch-ink">
-            <p>
-              Learn the fundamentals of <strong>{lesson.title.toLowerCase()}</strong> with
-              step-by-step guidance from Stitch Tutor.
-            </p>
-            <ol className="list-decimal space-y-2 pl-5">
-              <li>Watch the technique overview</li>
-              <li>Practice with guided rows</li>
-              <li>Apply it in your active project</li>
+        <div className="space-y-4">
+          <Card padding="lg" className="space-y-4">
+            <div className="flex items-center gap-2">
+              <Badge variant="teal">{lesson.category}</Badge>
+              <Badge>{lesson.durationMinutes} min</Badge>
+            </div>
+            <ProgressBar value={lesson.progressPercent} label="Your progress" />
+          </Card>
+
+          <Card padding="lg">
+            <h3 className="mb-4 text-base font-semibold text-stitch-ink">
+              Step-by-step
+            </h3>
+            <ol className="space-y-3">
+              {lesson.steps.map((step, i) => (
+                <li
+                  key={step}
+                  className="flex gap-3 text-sm leading-relaxed text-stitch-ink"
+                >
+                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-stitch-teal text-xs font-bold text-white">
+                    {i + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
             </ol>
-          </div>
+          </Card>
+
+          <Card padding="md" className="border-stitch-teal/30 bg-stitch-mint/20">
+            <p className="text-sm text-stitch-ink">
+              <strong className="text-stitch-teal-dark">Tip:</strong> {lesson.tip}
+            </p>
+          </Card>
+
           <div className="flex flex-wrap gap-2">
             <Button href="/tutor">Ask Tutor</Button>
             <Button href="/workspace/demo-dachshund" variant="secondary">
               Practice in workspace
             </Button>
           </div>
-        </Card>
+        </div>
       </div>
     </>
   );

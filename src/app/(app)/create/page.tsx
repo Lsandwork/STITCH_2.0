@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PageHeading } from "@/components/stitch/PageHeading";
 import { Card } from "@/components/ui/Card";
-import { assetPath } from "@/lib/constants";
+import { projectImage } from "@/lib/project-images";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
 
 const CREATE_OPTIONS = [
@@ -11,28 +11,28 @@ const CREATE_OPTIONS = [
     description: "Describe your dream project and get a full written pattern.",
     href: "/create/pattern",
     icon: "sparkles" as const,
-    image: assetPath.illustrationSvg("pattern-ai"),
+    image: projectImage.patternFromPhoto,
   },
   {
     title: "From a Photo",
     description: "Upload a photo and reconstruct an approximate crochet pattern.",
     href: "/create/photo",
     icon: "image" as const,
-    image: assetPath.illustrationSvg("camera-scan"),
+    image: projectImage.patternFromPhoto,
   },
   {
     title: "Plushie Builder",
     description: "Pick shapes, colors, and features for a custom amigurumi.",
     href: "/create/plushie",
     icon: "create" as const,
-    image: assetPath.illustrationSvg("dachshund-plushie"),
+    image: projectImage.plushieBuilder,
   },
   {
     title: "Color Studio",
     description: "Build palettes from mood, stash colors, or inspiration photos.",
     href: "/create/colors",
     icon: "palette" as const,
-    image: assetPath.illustrationSvg("color-studio"),
+    image: projectImage.colorStudio,
   },
 ];
 
@@ -51,7 +51,7 @@ export default function CreateHubPage() {
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-stitch-md bg-stitch-cream">
                   <Image
                     src={option.image}
-                    alt=""
+                    alt={option.title}
                     width={80}
                     height={80}
                     className="h-full w-full object-cover"

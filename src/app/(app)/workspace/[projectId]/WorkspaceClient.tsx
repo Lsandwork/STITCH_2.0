@@ -262,6 +262,23 @@ export default function WorkspaceClient() {
           </FeatureGate>
 
           <Card padding="md">
+            <h3 className="text-sm font-semibold">Pattern info</h3>
+            {pattern.gauge ? (
+              <p className="mt-1 text-sm text-stitch-muted">Gauge: {pattern.gauge}</p>
+            ) : null}
+            {pattern.finishedSize ? (
+              <p className="text-sm text-stitch-muted">Size: {pattern.finishedSize}</p>
+            ) : null}
+            {pattern.materials && pattern.materials.length > 0 ? (
+              <ul className="mt-2 space-y-1 text-xs text-stitch-muted">
+                {pattern.materials.slice(0, 4).map((m) => (
+                  <li key={m}>• {m}</li>
+                ))}
+              </ul>
+            ) : null}
+          </Card>
+
+          <Card padding="md">
             <h3 className="text-sm font-semibold">Quick links</h3>
             <ul className="mt-2 space-y-2 text-sm">
               <li>

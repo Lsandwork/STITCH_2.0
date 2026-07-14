@@ -6,20 +6,20 @@ import { useSearchParams } from "next/navigation";
 import { PageHeading } from "@/components/stitch/PageHeading";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { assetPath } from "@/lib/constants";
+import { projectImage, yarnImage } from "@/lib/project-images";
 import { cn } from "@/lib/utils";
 
 const BODY_OPTIONS = [
-  { id: "dachshund", label: "Long body", image: "dachshund-plushie" },
-  { id: "dino", label: "Dino", image: "dino-plushie" },
-  { id: "frog", label: "Frog", image: "frog-prince" },
+  { id: "dachshund", label: "Long body", image: projectImage.dachshund },
+  { id: "dino", label: "Dino", image: projectImage.dino },
+  { id: "frog", label: "Frog", image: projectImage.frog },
 ] as const;
 
 const COLOR_OPTIONS = [
-  { id: "coral", label: "Coral", image: "yarn-coral" },
-  { id: "teal", label: "Teal", image: "yarn-teal" },
-  { id: "gold", label: "Gold", image: "yarn-gold" },
-  { id: "lavender", label: "Lavender", image: "yarn-lavender" },
+  { id: "coral", label: "Coral", image: yarnImage.coral },
+  { id: "teal", label: "Teal", image: yarnImage.teal },
+  { id: "gold", label: "Gold", image: yarnImage.gold },
+  { id: "lavender", label: "Lavender", image: yarnImage.lavender },
 ] as const;
 
 const FEATURE_OPTIONS = ["Floppy ears", "Safety eyes", "Embroidered face", "Bow tie"] as const;
@@ -36,7 +36,7 @@ export default function PlushieBuilderClient() {
 
   const previewImage = useMemo(() => {
     const bodyOpt = BODY_OPTIONS.find((b) => b.id === body);
-    return assetPath.illustrationSvg(bodyOpt?.image ?? "dachshund-plushie");
+    return bodyOpt?.image ?? projectImage.dachshund;
   }, [body]);
 
   function toggleFeature(feature: string) {
@@ -72,13 +72,20 @@ export default function PlushieBuilderClient() {
                   type="button"
                   onClick={() => setBody(opt.id)}
                   className={cn(
-                    "rounded-stitch-md border p-2 text-xs font-medium transition-colors",
+                    "overflow-hidden rounded-stitch-md border-2 transition-colors",
                     body === opt.id
                       ? "border-stitch-coral bg-stitch-peach"
                       : "border-stitch-border",
                   )}
                 >
-                  {opt.label}
+                  <Image
+                    src={opt.image}
+                    alt={opt.label}
+                    width={120}
+                    height={120}
+                    className="aspect-square w-full object-cover"
+                  />
+                  <span className="block py-1.5 text-xs font-medium">{opt.label}</span>
                 </button>
               ))}
             </div>
@@ -98,7 +105,7 @@ export default function PlushieBuilderClient() {
                   )}
                 >
                   <Image
-                    src={assetPath.illustrationSvg(opt.image)}
+                    src={opt.image}
                     alt={opt.label}
                     width={64}
                     height={64}
@@ -139,7 +146,7 @@ export default function PlushieBuilderClient() {
               alt="Plushie preview"
               width={400}
               height={400}
-              className="h-full w-full object-contain p-6"
+              className="h-full w-full object-cover"
             />
           </div>
           <p className="mt-4 text-center text-sm text-stitch-muted">
