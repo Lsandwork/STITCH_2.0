@@ -17,12 +17,12 @@ export default function LearnPage() {
         {DEMO_LESSONS.map((lesson) => (
           <Link key={lesson.id} href={lesson.href}>
             <article className="stitch-card flex gap-4 p-4 transition-transform hover:-translate-y-0.5">
-              <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-stitch-md bg-stitch-cream">
+              <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-stitch-md bg-stitch-cream sm:h-28 sm:w-28">
                 <Image
                   src={lesson.illustrationUrl}
-                  alt={lesson.title}
-                  width={80}
-                  height={80}
+                  alt={`${lesson.title} crochet technique`}
+                  width={112}
+                  height={112}
                   className="h-full w-full object-cover"
                 />
               </div>
