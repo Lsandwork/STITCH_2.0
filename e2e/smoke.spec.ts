@@ -24,5 +24,13 @@ test.describe("Stitch smoke tests", () => {
     await expect(
       page.getByRole("button", { name: "Generate pattern" }),
     ).toBeVisible();
+  test("vocabulary page renders with search", async ({ page }) => {
+    await page.goto("/vocab?category=crochet");
+
+    await expect(page.getByRole("heading", { name: "Vocab" })).toBeVisible();
+    await expect(
+      page.getByPlaceholder("Search a term, abbreviation, stitch, or technique…"),
+    ).toBeVisible();
+    await expect(page.getByRole("tab", { name: /Crochet/i })).toBeVisible();
   });
 });

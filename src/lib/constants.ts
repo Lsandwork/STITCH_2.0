@@ -37,6 +37,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Yarn Vault", href: "/yarn", icon: "yarn" },
   { label: "My Projects", href: "/projects", icon: "projects" },
   { label: "Learn", href: "/learn", icon: "learn" },
+  { label: "Vocab", href: "/vocab", icon: "book" },
   { label: "Saved Patterns", href: "/patterns", icon: "bookmark" },
   { label: "Marketplace", href: "/marketplace", icon: "star" },
   { label: "Social Network", href: "/social", icon: "users" },

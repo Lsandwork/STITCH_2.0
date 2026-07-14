@@ -784,6 +784,35 @@ export interface Database {
           },
         ];
       };
+      user_vocab_favorites: {
+        Row: {
+          id: string;
+          user_id: string;
+          term_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          term_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          term_id?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_vocab_favorites_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       yarn_inventory: {
         Row: {
           id: string;
