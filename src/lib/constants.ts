@@ -38,6 +38,8 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "My Projects", href: "/projects", icon: "projects" },
   { label: "Learn", href: "/learn", icon: "learn" },
   { label: "Saved Patterns", href: "/patterns", icon: "bookmark" },
+  { label: "Marketplace", href: "/marketplace", icon: "star" },
+  { label: "Social Network", href: "/social", icon: "users" },
   { label: "Profile & Settings", href: "/settings", icon: "settings" },
 ];
 
@@ -51,18 +53,25 @@ export const QUICK_ACTIONS: QuickAction[] = [
   { label: "Create Pattern", href: "/create/pattern", icon: "sparkles" },
   { label: "Scan My Work", href: "/vision/scan", icon: "camera" },
   { label: "Ask Tutor", href: "/tutor", icon: "chat" },
-  { label: "Add Yarn", href: "/yarn/add", icon: "yarn" },
-  { label: "Upload Pattern", href: "/patterns", icon: "upload" },
+  { label: "Marketplace", href: "/marketplace", icon: "star" },
+  { label: "Social Feed", href: "/social", icon: "users" },
   { label: "From a Photo", href: "/create/photo", icon: "image" },
 ];
 
 export const MOBILE_NAV_ITEMS: NavItem[] = [
   { label: "Home", href: "/", icon: "home" },
+  { label: "Social", href: "/social", icon: "users" },
   { label: "Create", href: "/create", icon: "sparkles" },
-  { label: "Project", href: "/projects", icon: "projects" },
-  { label: "Vision", href: "/vision", icon: "vision" },
+  { label: "Market", href: "/marketplace", icon: "star" },
   { label: "More", href: "/settings", icon: "menu" },
 ];
+
+import {
+  BILLING_PLANS,
+  BILLING_PROMO,
+  formatAnnualPrice,
+  formatMonthlyPrice,
+} from "@/lib/billing";
 
 export type SubscriptionTierId = "free" | "stitch_plus" | "stitch_vision";
 
@@ -70,56 +79,25 @@ export type SubscriptionTier = {
   id: SubscriptionTierId;
   name: string;
   price: string;
+  annualPrice: string;
   description: string;
   features: string[];
   highlighted?: boolean;
+  promoEligible: boolean;
 };
 
-export const SUBSCRIPTION_TIERS: SubscriptionTier[] = [
-  {
-    id: "free",
-    name: "Free",
-    price: "$0",
-    description: "Essential crochet tools to get started.",
-    features: [
-      "Up to 3 active projects",
-      "Basic manual row counter",
-      "3 pattern uploads",
-      "10 Tutor messages per month",
-      "Manual Yarn Vault",
-    ],
-  },
-  {
-    id: "stitch_plus",
-    name: "Stitch Plus",
-    price: "$9.99/mo",
-    description: "AI-powered pattern tools and unlimited projects.",
-    features: [
-      "Unlimited projects",
-      "AI pattern generation",
-      "Pattern translation",
-      "Voice pattern player",
-      "Yarn substitutions",
-      "Color Studio",
-      "PDF export",
-    ],
-    highlighted: true,
-  },
-  {
-    id: "stitch_vision",
-    name: "Stitch Vision",
-    price: "$14.99/mo",
-    description: "Everything in Plus with camera intelligence.",
-    features: [
-      "Everything in Stitch Plus",
-      "Camera stitch analysis",
-      "Smart row detection",
-      "Mistake detection",
-      "Photo-to-pattern",
-      "Advanced scan history",
-    ],
-  },
-];
+export const SUBSCRIPTION_TIERS: SubscriptionTier[] = BILLING_PLANS.map((plan) => ({
+  id: plan.tierId,
+  name: plan.name,
+  price: formatMonthlyPrice(plan.monthlyPriceCents),
+  annualPrice: formatAnnualPrice(plan.annualPriceCents),
+  description: plan.description,
+  features: plan.features,
+  highlighted: plan.highlighted,
+  promoEligible: plan.monthlyPriceCents > 0,
+}));
+
+export { BILLING_PROMO };
 
 export const PROJECT_STATUSES = [
   "Idea",

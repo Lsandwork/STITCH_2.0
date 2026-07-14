@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BRAND, NAV_ITEMS } from "@/lib/constants";
+import { formatMonthlyPrice, getBillingPlan } from "@/lib/billing";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/Button";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
@@ -17,6 +18,8 @@ function isNavActive(pathname: string, href: string): boolean {
 export function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  const plusPlan = getBillingPlan("stitch_plus");
 
   const navContent = (
     <>
@@ -66,7 +69,8 @@ export function Sidebar() {
           <div className="min-w-0 flex-1">
             <p className="text-sm font-semibold text-stitch-ink">Stitch Plus</p>
             <p className="mt-1 text-xs leading-relaxed text-stitch-muted">
-              Unlock AI patterns, voice player, and unlimited projects.
+              Unlock AI patterns, voice player, and unlimited projects from{" "}
+              {formatMonthlyPrice(plusPlan.monthlyPriceCents)}.
             </p>
             <Button href="/settings/subscription" size="sm" className="mt-3 w-full">
               Upgrade Now
