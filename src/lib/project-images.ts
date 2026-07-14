@@ -4,9 +4,10 @@
  */
 
 const BASE = "/assets";
+const ASSET_VERSION = "2";
 
 export const projectImage = {
-  dachshund: `${BASE}/projects/dachshund-plushie.jpg`,
+  dachshund: `${BASE}/projects/dachshund-plushie.jpg?v=${ASSET_VERSION}`,
   sunflower: `${BASE}/projects/sunflower-bag.jpg`,
   sunflowerCoasters: `${BASE}/projects/sunflower-coasters.jpg`,
   granny: `${BASE}/projects/granny-blanket.jpg`,
@@ -36,7 +37,7 @@ export const lessonImage = {
 } as const;
 
 export const scanImage = {
-  dachshund: `${BASE}/scans/scan-dachshund-wip.jpg`,
+  dachshund: `${BASE}/scans/scan-dachshund-wip.jpg?v=${ASSET_VERSION}`,
   sunflower: `${BASE}/scans/scan-sunflower-wip.jpg`,
   granny: `${BASE}/scans/scan-granny-wip.jpg`,
 } as const;
