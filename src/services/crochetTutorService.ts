@@ -73,7 +73,9 @@ function buildMockTutorResponse(input: TutorMessageInput): TutorResponse {
     },
     suggestedNextAction: {
       label: input.includePhoto ? "Rescan with Vision Mode" : "Open workspace",
-      href: input.includePhoto ? "/vision/scan" : project?.href ?? "/workspace",
+      href: input.includePhoto
+        ? "/vision/scan"
+        : project?.href ?? "/workspace/demo-dachshund",
       action: input.includePhoto ? "open_vision" : "open_workspace",
     },
     confidence: 0.82,

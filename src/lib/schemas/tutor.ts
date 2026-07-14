@@ -16,7 +16,7 @@ export const tutorNextActionSchema = z.object({
 });
 
 export const tutorRelatedLessonSchema = z.object({
-  lessonId: z.string().uuid().optional(),
+  lessonId: z.string().optional(),
   slug: z.string().optional(),
   title: z.string().min(1),
   href: z.string().optional(),
@@ -34,8 +34,8 @@ export const tutorResponseSchema = z.object({
 });
 
 export const tutorMessageInputSchema = z.object({
-  conversationId: z.string().uuid().optional(),
-  projectId: z.string().uuid().optional(),
+  conversationId: z.string().optional(),
+  projectId: z.string().optional(),
   message: z.string().min(1, "Ask the Tutor a question."),
   currentRow: z.number().int().positive().optional(),
   includePhoto: z.boolean().default(false),

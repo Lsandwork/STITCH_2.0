@@ -53,6 +53,16 @@ describe("tutor schemas", () => {
     expect(result.success).toBe(false);
   });
 
+  it("accepts demo-style project ids", () => {
+    const result = tutorMessageInputSchema.safeParse({
+      projectId: "demo-dachshund",
+      message: "How do I fix a magic ring?",
+      currentRow: 24,
+    });
+
+    expect(result.success).toBe(true);
+  });
+
   it("accepts optional conversation and project ids", () => {
     const result = tutorMessageInputSchema.safeParse({
       conversationId: "550e8400-e29b-41d4-a716-446655440000",
