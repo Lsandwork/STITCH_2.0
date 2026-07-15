@@ -5,9 +5,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { useState } from "react";
 import { AuthLayout } from "@/components/stitch/AuthLayout";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { signUpWithEmail } from "@/lib/auth-client";
 import { isDemoModeEnabled } from "@/lib/constants";
 import { setDemoSession } from "@/lib/demo-session";
 
@@ -28,6 +30,7 @@ type SignupForm = z.infer<typeof signupSchema>;
 export default function SignupPage() {
   const router = useRouter();
   const demoMode = isDemoModeEnabled();
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
@@ -38,18 +41,44 @@ export default function SignupPage() {
   });
 
   async function onSubmit(data: SignupForm) {
-    if (demoMode || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    setAuthError(null);
+
+    if (demoMode) {
       setDemoSession({ email: data.email, displayName: data.displayName });
       router.push("/onboarding");
       return;
     }
+
+    const result = await signUpWithEmail(
+      data.email,
+      data.password,
+      data.displayName,
+    );
+
+    if (!result.ok) {
+      setAuthError(result.error ?? "Could not create your account. Please try again.");
+      return;
+    }
+
+    if (result.requiresEmailConfirmation) {
+      router.push("/auth/login?message=confirm-email");
+      return;
+    }
+
     router.push("/onboarding");
+    router.refresh();
+
+    void fetch("/api/activity/log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ activityType: "signup" }),
+    });
   }
 
   return (
     <AuthLayout
-      title="Create your account"
-      subtitle="Join Stitch and start your next project."
+      title="Stitch Your Itch"
+      subtitle="Create your free account and start your next crochet project."
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
@@ -79,9 +108,17 @@ export default function SignupPage() {
           error={errors.confirmPassword?.message}
           {...register("confirmPassword")}
         />
+        {authError ? (
+          <p className="rounded-stitch-sm bg-stitch-rose/60 px-3 py-2 text-sm text-stitch-coral">
+            {authError}
+          </p>
+        ) : null}
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Creating account…" : "Create account"}
+          {isSubmitting ? "Creating account…" : "Create free account"}
         </Button>
+        <p className="text-center text-xs text-stitch-muted">
+          Free forever to start. No credit card required.
+        </p>
       </form>
       <p className="mt-6 text-center text-sm text-stitch-muted">
         Already have an account?{" "}

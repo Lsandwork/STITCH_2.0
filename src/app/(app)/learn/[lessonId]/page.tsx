@@ -5,21 +5,27 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Badge } from "@/components/ui/Badge";
-import { getDemoLesson } from "@/lib/demo-data";
+import { getLearnItem } from "@/lib/learn-content";
 
 type Props = { params: Promise<{ lessonId: string }> };
 
 export default async function LessonDetailPage({ params }: Props) {
   const { lessonId } = await params;
-  const lesson = getDemoLesson(lessonId);
+  const item = getLearnItem(lessonId);
 
-  if (!lesson) notFound();
+  if (!item) notFound();
+
+  const isKit = item.kind === "pattern_kit";
 
   return (
     <>
       <PageHeading
-        title={lesson.title}
-        description={`${lesson.category} · ${lesson.durationMinutes} min lesson`}
+        title={item.title}
+        description={
+          isKit
+            ? `${item.subtitle} · ${item.durationMinutes} min project`
+            : `${item.category} · ${item.durationMinutes} min lesson`
+        }
         backHref="/learn"
       />
 
@@ -27,30 +33,89 @@ export default async function LessonDetailPage({ params }: Props) {
         <Card padding="lg">
           <div className="overflow-hidden rounded-stitch-lg bg-stitch-cream">
             <Image
-              src={lesson.illustrationUrl}
-              alt={`${lesson.title} crochet technique`}
-              width={500}
-              height={400}
+              src={item.illustrationUrl}
+              alt={item.title}
+              width={600}
+              height={480}
               className="aspect-[5/4] w-full object-cover"
+              priority
             />
           </div>
+          {isKit ? (
+            <p className="mt-3 text-center text-xs text-stitch-muted">
+              Finished size: {item.finishedSize}
+            </p>
+          ) : null}
         </Card>
 
         <div className="space-y-4">
           <Card padding="lg" className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Badge variant="teal">{lesson.category}</Badge>
-              <Badge>{lesson.durationMinutes} min</Badge>
+            <div className="flex flex-wrap items-center gap-2">
+              {isKit ? (
+                <>
+                  <Badge variant="gold">Pattern Kit</Badge>
+                  <Badge variant="teal">{item.skillLevel}</Badge>
+                  <Badge>{item.category}</Badge>
+                </>
+              ) : (
+                <>
+                  <Badge variant="teal">{item.category}</Badge>
+                  <Badge>{item.durationMinutes} min</Badge>
+                </>
+              )}
             </div>
-            <ProgressBar value={lesson.progressPercent} label="Your progress" />
+            <ProgressBar value={item.progressPercent} label="Your progress" />
           </Card>
+
+          {isKit ? (
+            <>
+              <Card padding="lg" className="space-y-4">
+                <h3 className="text-base font-semibold text-stitch-ink">
+                  Yarn & materials
+                </h3>
+                <div className="rounded-stitch-md border border-stitch-border bg-stitch-cream/60 px-4 py-3 text-sm">
+                  <p className="font-medium text-stitch-ink">Yarn needed</p>
+                  <p className="mt-1 text-stitch-muted">{item.yarnSummary}</p>
+                  <p className="mt-3 font-medium text-stitch-ink">Hook</p>
+                  <p className="mt-1 text-stitch-muted">{item.hookSize}</p>
+                </div>
+                <ul className="space-y-2 text-sm text-stitch-ink">
+                  {item.materials.map((material) => (
+                    <li
+                      key={material.item}
+                      className="flex items-start justify-between gap-4 border-b border-stitch-border/60 pb-2 last:border-0 last:pb-0"
+                    >
+                      <span>{material.item}</span>
+                      <span className="shrink-0 text-right text-stitch-muted">
+                        {material.amount}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+
+              <Card padding="lg">
+                <h3 className="mb-3 text-base font-semibold text-stitch-ink">
+                  Before you start
+                </h3>
+                <ul className="space-y-2 text-sm leading-relaxed text-stitch-muted">
+                  {item.overview.map((line) => (
+                    <li key={line} className="flex gap-2">
+                      <span className="text-stitch-teal">•</span>
+                      <span>{line}</span>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            </>
+          ) : null}
 
           <Card padding="lg">
             <h3 className="mb-4 text-base font-semibold text-stitch-ink">
-              Step-by-step
+              {isKit ? "Step-by-step instructions" : "Step-by-step"}
             </h3>
             <ol className="space-y-3">
-              {lesson.steps.map((step, i) => (
+              {item.steps.map((step, i) => (
                 <li
                   key={step}
                   className="flex gap-3 text-sm leading-relaxed text-stitch-ink"
@@ -58,7 +123,7 @@ export default async function LessonDetailPage({ params }: Props) {
                   <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-stitch-teal text-xs font-bold text-white">
                     {i + 1}
                   </span>
-                  {step}
+                  <span className="pt-0.5">{step}</span>
                 </li>
               ))}
             </ol>
@@ -66,15 +131,21 @@ export default async function LessonDetailPage({ params }: Props) {
 
           <Card padding="md" className="border-stitch-teal/30 bg-stitch-mint/20">
             <p className="text-sm text-stitch-ink">
-              <strong className="text-stitch-teal-dark">Tip:</strong> {lesson.tip}
+              <strong className="text-stitch-teal-dark">Tip:</strong> {item.tip}
             </p>
           </Card>
 
           <div className="flex flex-wrap gap-2">
             <Button href="/tutor">Ask Tutor</Button>
-            <Button href="/workspace/demo-dachshund" variant="secondary">
-              Practice in workspace
-            </Button>
+            {isKit ? (
+              <Button href="/yarn" variant="secondary">
+                Check yarn vault
+              </Button>
+            ) : (
+              <Button href="/workspace/demo-dachshund" variant="secondary">
+                Practice in workspace
+              </Button>
+            )}
           </div>
         </div>
       </div>

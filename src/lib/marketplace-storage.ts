@@ -1,4 +1,8 @@
-import { MARKETPLACE_SEED_LISTINGS } from "@/lib/marketplace-seed";
+import {
+  FEATURED_MARKETPLACE_LISTING_ID,
+  MARKETPLACE_SEED_LISTINGS,
+} from "@/lib/marketplace-seed";
+import { normalizeMarketplaceListing } from "@/lib/marketplace-i18n";
 import {
   marketplaceListingSchema,
   type MarketplaceListing,
@@ -10,17 +14,114 @@ const SEED_BY_ID = Object.fromEntries(
   MARKETPLACE_SEED_LISTINGS.map((listing) => [listing.id, listing]),
 );
 
-function syncSeedThumbnails(listings: MarketplaceListing[]): MarketplaceListing[] {
+function isLegacyFeaturedHoodieListing(id: string): boolean {
+  return (
+    id.startsWith("mp-cozy-granny-square-hoodie") &&
+    id !== FEATURED_MARKETPLACE_LISTING_ID
+  );
+}
+
+function applyFeaturedListingDefaults(
+  listing: MarketplaceListing,
+): MarketplaceListing {
+  const seed = SEED_BY_ID[FEATURED_MARKETPLACE_LISTING_ID];
+  if (!seed || listing.id !== FEATURED_MARKETPLACE_LISTING_ID) {
+    return listing;
+  }
+
+  return {
+    ...listing,
+    title: seed.title,
+    description: seed.description,
+    aiDescription: seed.aiDescription,
+    previewText: seed.previewText,
+    patternContent: seed.patternContent,
+    thumbnailUrl: seed.thumbnailUrl,
+    languages: seed.languages,
+    tags: seed.tags,
+    priceCents: seed.priceCents,
+    downloads: Math.max(listing.downloads, seed.downloads),
+    rating: listing.rating > 0 ? listing.rating : seed.rating,
+    ratingCount: Math.max(listing.ratingCount, seed.ratingCount),
+  };
+}
+
+function mergeFeaturedListings(listings: MarketplaceListing[]): MarketplaceListing[] {
+  const featuredSeed = SEED_BY_ID[FEATURED_MARKETPLACE_LISTING_ID];
+  if (!featuredSeed) {
+    return listings;
+  }
+
+  const withoutLegacyHoodie = listings.filter(
+    (listing) => !isLegacyFeaturedHoodieListing(listing.id),
+  );
+  const hasFeatured = withoutLegacyHoodie.some(
+    (listing) => listing.id === FEATURED_MARKETPLACE_LISTING_ID,
+  );
+
+  if (hasFeatured) {
+    return withoutLegacyHoodie.map(applyFeaturedListingDefaults);
+  }
+
+  return [
+    normalizeMarketplaceListing(featuredSeed),
+    ...withoutLegacyHoodie,
+  ];
+}
+
+function listingContentEqual(
+  a: MarketplaceListing,
+  b: MarketplaceListing,
+): boolean {
+  return (
+    a.title === b.title &&
+    a.description === b.description &&
+    a.thumbnailUrl === b.thumbnailUrl &&
+    a.patternContent === b.patternContent &&
+    JSON.stringify(a.languages) === JSON.stringify(b.languages)
+  );
+}
+
+function listingNeedsSync(
+  a: MarketplaceListing,
+  b: MarketplaceListing,
+): boolean {
+  return (
+    !listingContentEqual(a, b) ||
+    a.downloads !== b.downloads ||
+    a.rating !== b.rating ||
+    a.ratingCount !== b.ratingCount ||
+    a.priceCents !== b.priceCents
+  );
+}
+
+function syncSeedListings(listings: MarketplaceListing[]): MarketplaceListing[] {
   let changed = false;
-  const synced = listings.map((listing) => {
+  const merged = mergeFeaturedListings(listings);
+  const synced = merged.map((listing) => {
     const seed = SEED_BY_ID[listing.id];
-    if (!seed || listing.thumbnailUrl === seed.thumbnailUrl) {
-      return listing;
+    let next = normalizeMarketplaceListing(listing);
+
+    if (seed) {
+      next = {
+        ...next,
+        ...(next.thumbnailUrl !== seed.thumbnailUrl
+          ? { thumbnailUrl: seed.thumbnailUrl }
+          : {}),
+        ...(next.patternContent !== seed.patternContent
+          ? { patternContent: seed.patternContent }
+          : {}),
+      };
+      next = applyFeaturedListingDefaults(next);
     }
-    changed = true;
-    return { ...listing, thumbnailUrl: seed.thumbnailUrl };
+
+    if (listingNeedsSync(next, listing)) {
+      changed = true;
+    }
+
+    return next;
   });
-  if (changed) {
+  if (changed || merged.length !== listings.length) {
     saveMarketplaceListings(synced);
   }
   return synced;
@@ -40,14 +141,16 @@ function parseListings(raw: string | null): MarketplaceListing[] {
 }
 
 export function getMarketplaceListings(): MarketplaceListing[] {
-  if (typeof window === "undefined") return MARKETPLACE_SEED_LISTINGS;
+  if (typeof window === "undefined") {
+    return MARKETPLACE_SEED_LISTINGS.map(normalizeMarketplaceListing);
+  }
   const raw = localStorage.getItem(MARKETPLACE_STORAGE_KEY);
   const listings = parseListings(raw);
   if (listings.length === 0) {
     saveMarketplaceListings(MARKETPLACE_SEED_LISTINGS);
-    return MARKETPLACE_SEED_LISTINGS;
+    return MARKETPLACE_SEED_LISTINGS.map(normalizeMarketplaceListing);
   }
-  return syncSeedThumbnails(listings);
+  return syncSeedListings(listings);
 }
 
 export function saveMarketplaceListings(listings: MarketplaceListing[]): void {
@@ -55,12 +158,21 @@ export function saveMarketplaceListings(listings: MarketplaceListing[]): void {
 }
 
 export function getMarketplaceListing(id: string): MarketplaceListing | null {
-  return getMarketplaceListings().find((l) => l.id === id) ?? null;
+  const listings = getMarketplaceListings();
+  const direct = listings.find((listing) => listing.id === id);
+  if (direct) return direct;
+  if (isLegacyFeaturedHoodieListing(id)) {
+    return (
+      listings.find((listing) => listing.id === FEATURED_MARKETPLACE_LISTING_ID) ??
+      null
+    );
+  }
+  return null;
 }
 
 export function addMarketplaceListing(listing: MarketplaceListing): void {
   const listings = getMarketplaceListings();
-  listings.unshift(listing);
+  listings.unshift(normalizeMarketplaceListing(listing));
   saveMarketplaceListings(listings);
 }
 
@@ -94,6 +206,34 @@ export function generateListingId(title: string): string {
     .replace(/^-|-$/g, "")
     .slice(0, 40);
   return `mp-${slug}-${Date.now().toString(36)}`;
+}
+
+const SAVED_MARKETPLACE_KEY = "stitch-saved-marketplace-listings";
+
+export function getSavedMarketplaceListingIds(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(SAVED_MARKETPLACE_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed)
+      ? parsed.filter((id): id is string => typeof id === "string")
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+export function isMarketplaceListingSaved(id: string): boolean {
+  return getSavedMarketplaceListingIds().includes(id);
+}
+
+export function toggleSavedMarketplaceListing(id: string): boolean {
+  const saved = getSavedMarketplaceListingIds();
+  const isSaved = saved.includes(id);
+  const next = isSaved ? saved.filter((item) => item !== id) : [...saved, id];
+  localStorage.setItem(SAVED_MARKETPLACE_KEY, JSON.stringify(next));
+  return !isSaved;
 }
 
 export function pickThumbnailForType(

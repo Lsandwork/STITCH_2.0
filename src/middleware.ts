@@ -8,8 +8,10 @@ const STATIC_FILE_PATTERN =
   /\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|woff2?|ttf|map)$/i;
 
 function isPublicPath(pathname: string): boolean {
+  if (pathname === "/") return true;
   if (pathname.startsWith("/assets")) return true;
   if (pathname.startsWith("/_next")) return true;
+  if (pathname.startsWith("/api/auth")) return true;
   if (pathname === "/favicon.ico") return true;
   if (pathname === "/manifest.webmanifest") return true;
   if (pathname === "/offline") return true;
@@ -63,6 +65,12 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  if (pathname === "/" && user) {
+    const dashboardUrl = request.nextUrl.clone();
+    dashboardUrl.pathname = "/dashboard";
+    return NextResponse.redirect(dashboardUrl);
+  }
 
   if (!user) {
     const loginUrl = request.nextUrl.clone();

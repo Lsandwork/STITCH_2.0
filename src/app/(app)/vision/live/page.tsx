@@ -6,10 +6,10 @@ import { FeatureGate } from "@/components/stitch/FeatureGate";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
-import { getSubscriptionTier } from "@/lib/demo-session";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 
 export default function VisionLivePage() {
-  const tier = getSubscriptionTier();
+  const { featureTier, lifetimeAccess } = useSubscription();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [result, setResult] = useState<string | null>(null);
@@ -63,7 +63,11 @@ export default function VisionLivePage() {
         description="Point your camera at your work for real-time feedback."
         backHref="/vision"
       />
-      <FeatureGate tier={tier} feature="camera_analysis">
+      <FeatureGate
+        tier={featureTier}
+        feature="camera_analysis"
+        hideUpgradePrompt={lifetimeAccess}
+      >
         <Card padding="lg" className="max-w-2xl">
           <div className="overflow-hidden rounded-stitch-lg bg-stitch-ink/5">
             <video ref={videoRef} autoPlay playsInline muted className="aspect-video w-full object-cover" />

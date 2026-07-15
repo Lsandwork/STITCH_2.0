@@ -7,11 +7,11 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { LoadingState } from "@/components/ui/LoadingState";
-import { getSubscriptionTier } from "@/lib/demo-session";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 import type { VisionScanResult } from "@/lib/schemas/vision";
 
 export default function VisionScanPage() {
-  const tier = getSubscriptionTier();
+  const { featureTier, lifetimeAccess } = useSubscription();
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<VisionScanResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -73,7 +73,11 @@ export default function VisionScanPage() {
         description="Upload or capture a photo for AI stitch analysis."
         backHref="/vision"
       />
-      <FeatureGate tier={tier} feature="camera_analysis">
+      <FeatureGate
+        tier={featureTier}
+        feature="camera_analysis"
+        hideUpgradePrompt={lifetimeAccess}
+      >
         <Card padding="lg" className="max-w-2xl">
           <input type="file" accept="image/*" capture="environment" onChange={handleFile} />
           {preview ? (

@@ -7,13 +7,19 @@ type AppShellProps = {
   children: React.ReactNode;
   rightRail?: React.ReactNode;
   className?: string;
+  isAdmin?: boolean;
 };
 
-export function AppShell({ children, rightRail, className }: AppShellProps) {
+export function AppShell({
+  children,
+  rightRail,
+  className,
+  isAdmin = false,
+}: AppShellProps) {
   return (
     <div className="min-h-dvh bg-stitch-cream">
       <OfflineIndicator />
-      <Sidebar />
+      <Sidebar isAdmin={isAdmin} />
 
       <div className="stitch-main-shell">
         <div className="mx-auto flex w-full max-w-[1600px] gap-6">

@@ -6,13 +6,13 @@ import { FeatureGate } from "@/components/stitch/FeatureGate";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
-import { getSubscriptionTier } from "@/lib/demo-session";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 import type { ColorPaletteResult } from "@/services/colorPaletteService";
 
 const MOODS = ["cozy", "playful", "earthy"] as const;
 
 export default function ColorStudioPage() {
-  const tier = getSubscriptionTier();
+  const { featureTier, lifetimeAccess } = useSubscription();
   const [mood, setMood] = useState<(typeof MOODS)[number]>("cozy");
   const [palette, setPalette] = useState<ColorPaletteResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -40,7 +40,11 @@ export default function ColorStudioPage() {
         backHref="/create"
       />
 
-      <FeatureGate tier={tier} feature="color_studio">
+      <FeatureGate
+        tier={featureTier}
+        feature="color_studio"
+        hideUpgradePrompt={lifetimeAccess}
+      >
         <Card padding="lg" className="max-w-2xl">
           <p className="mb-3 text-sm font-medium">Choose a mood</p>
           <div className="flex flex-wrap gap-2">

@@ -1,9 +1,26 @@
 import { AppLayoutClient } from "@/components/stitch/AppLayoutClient";
+import { getServerAppUser } from "@/lib/app-user";
 
-export default function AppGroupLayout({
+export default async function AppGroupLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return <AppLayoutClient>{children}</AppLayoutClient>;
+  const user = await getServerAppUser();
+
+  return (
+    <AppLayoutClient
+      isAdmin={user?.adminRole === "admin"}
+      initialSubscription={
+        user
+          ? {
+              subscriptionTier: user.subscriptionTier,
+              lifetimeAccess: user.lifetimeAccess,
+            }
+          : undefined
+      }
+    >
+      {children}
+    </AppLayoutClient>
+  );
 }

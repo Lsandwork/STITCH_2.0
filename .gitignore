@@ -39,3 +39,12 @@ next-env.d.ts
 # vercel
 .vercel
 .env*
+
+# local secrets
+.secrets/
+
+# supabase local cli cache
+supabase/.temp/
+
+# local tooling binaries
+.tools/

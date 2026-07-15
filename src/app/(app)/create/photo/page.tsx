@@ -10,10 +10,10 @@ import { FeatureGate } from "@/components/stitch/FeatureGate";
 import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
-import { getSubscriptionTier } from "@/lib/demo-session";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 
 export default function PhotoPatternPage() {
-  const tier = getSubscriptionTier();
+  const { featureTier, lifetimeAccess } = useSubscription();
   const [preview, setPreview] = useState<string | null>(null);
   const [result, setResult] = useState<PhotoPatternResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,7 +64,11 @@ export default function PhotoPatternPage() {
         backHref="/create"
       />
 
-      <FeatureGate tier={tier} feature="photo_to_pattern">
+      <FeatureGate
+        tier={featureTier}
+        feature="photo_to_pattern"
+        hideUpgradePrompt={lifetimeAccess}
+      >
         <div className="grid gap-6 lg:grid-cols-2">
           <Card padding="lg">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

@@ -5,9 +5,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
+import { useState } from "react";
 import { AuthLayout } from "@/components/stitch/AuthLayout";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
+import { signInWithEmail } from "@/lib/auth-client";
 import { isDemoModeEnabled } from "@/lib/constants";
 import { setDemoSession } from "@/lib/demo-session";
 
@@ -21,8 +23,9 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect") ?? "/";
+  const redirect = searchParams.get("redirect") ?? "/dashboard";
   const demoMode = isDemoModeEnabled();
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const {
     register,
@@ -30,20 +33,40 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "emma@demo.stitch.nuviobridge.com",
-      password: "demo1234",
-    },
+    defaultValues: demoMode
+      ? {
+          email: "lsand.work@gmail.com",
+          password: "password123",
+        }
+      : {
+          email: "",
+          password: "",
+        },
   });
 
   async function onSubmit(data: LoginFormValues) {
-    if (demoMode || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+    setAuthError(null);
+
+    if (demoMode) {
       setDemoSession({ email: data.email });
       router.push(redirect);
       return;
     }
 
+    const result = await signInWithEmail(data.email, data.password);
+    if (!result.ok) {
+      setAuthError(result.error ?? "Could not sign in. Check your email and password.");
+      return;
+    }
+
     router.push(redirect);
+    router.refresh();
+
+    void fetch("/api/activity/log", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ activityType: "login" }),
+    });
   }
 
   return (
@@ -51,6 +74,16 @@ export default function LoginForm() {
       title="Welcome back"
       subtitle="Sign in to continue your crochet projects."
     >
+      <div className="mb-5 rounded-stitch-md border border-stitch-border bg-stitch-peach/40 px-4 py-3 text-center text-sm">
+        <span className="text-stitch-muted">Don&apos;t have an account? </span>
+        <Link
+          href="/auth/signup"
+          className="font-semibold text-stitch-coral hover:underline"
+        >
+          Sign up free
+        </Link>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <Input
           label="Email"
@@ -74,6 +107,11 @@ export default function LoginForm() {
             Forgot password?
           </Link>
         </div>
+        {authError ? (
+          <p className="rounded-stitch-sm bg-stitch-rose/60 px-3 py-2 text-sm text-stitch-coral">
+            {authError}
+          </p>
+        ) : null}
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting ? "Signing in…" : "Sign in"}
         </Button>
@@ -86,7 +124,7 @@ export default function LoginForm() {
       <p className="mt-6 text-center text-sm text-stitch-muted">
         New to Stitch?{" "}
         <Link href="/auth/signup" className="font-medium text-stitch-coral hover:underline">
-          Create an account
+          Create a free account
         </Link>
       </p>
     </AuthLayout>

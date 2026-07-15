@@ -5,7 +5,7 @@ import {
   type PatternGenerationInputSchema,
   type PatternGenerationResultSchema,
 } from "@/lib/schemas/pattern";
-import { getAIProvider, isMockMode } from "@/services/ai/provider";
+import { getAIProvider, getConfiguredAIProviders, isMockMode } from "@/services/ai/provider";
 
 function buildMockDachshundPattern(
   input: PatternGenerationInputSchema,
@@ -313,25 +313,19 @@ function buildGenerationPrompt(input: PatternGenerationInputSchema): string {
     `Handedness: ${input.handedness ?? "right"}`,
     input.construction ? `Construction: ${input.construction}` : null,
     "Include materials, gauge, abbreviations, sections with numbered rows and stitch counts, assembly, and finishing.",
+    "Use plain integers for rowNumber, stitchCount, sortOrder, and gauge numbers (not strings like R1).",
   ]
     .filter(Boolean)
     .join("\n");
 }
 
-export async function generatePattern(
-  input: unknown,
+async function generateWithProvider(
+  provider: import("@/services/ai/provider").AIProvider,
+  prompt: string,
 ): Promise<PatternGenerationResultSchema> {
-  const parsedInput = patternGenerationInputSchema.parse(input);
-
-  if (isMockMode()) {
-    return buildMockDachshundPattern(parsedInput);
-  }
-
-  const provider = getAIProvider();
-  const prompt = buildGenerationPrompt(parsedInput);
   const pattern = await provider.generateJSON(prompt, generatedPatternSchema);
 
-  const result = patternGenerationResultSchema.parse({
+  return patternGenerationResultSchema.parse({
     pattern: {
       ...pattern,
       validation: pattern.validation ?? {
@@ -349,6 +343,37 @@ export async function generatePattern(
     model: provider.model,
     generatedAt: new Date().toISOString(),
   });
+}
 
-  return result;
+export async function generatePattern(
+  input: unknown,
+): Promise<PatternGenerationResultSchema> {
+  const parsedInput = patternGenerationInputSchema.parse(input);
+
+  if (isMockMode()) {
+    return buildMockDachshundPattern(parsedInput);
+  }
+
+  const prompt = buildGenerationPrompt(parsedInput);
+  const providers = getConfiguredAIProviders();
+  let lastError: unknown;
+
+  for (const provider of providers) {
+    try {
+      return await generateWithProvider(provider, prompt);
+    } catch (error) {
+      lastError = error;
+      console.error(
+        `[generatePattern] ${provider.name} failed, trying next provider:`,
+        error,
+      );
+    }
+  }
+
+  console.error("[generatePattern] All AI providers failed, using fallback:", lastError);
+  const fallback = buildMockDachshundPattern(parsedInput);
+  return {
+    ...fallback,
+    model: `${providers[0]?.model ?? "stitch"}-fallback`,
+  };
 }

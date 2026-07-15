@@ -8,48 +8,75 @@ import {
   getAnnualSavingsCents,
   getBillingPlan,
 } from "@/lib/billing";
+import { getTierConfig } from "@/lib/subscriptions";
 import { SUBSCRIPTION_TIERS } from "@/lib/constants";
-import { DEMO_USER } from "@/lib/demo-data";
 
-export default function SubscriptionSettingsPage() {
-  const currentTier = DEMO_USER.subscriptionTier;
+import { getServerAppUser } from "@/lib/app-user";
+
+export default async function SubscriptionSettingsPage() {
+  const user = await getServerAppUser();
+  const currentTier = user?.subscriptionTier ?? "free";
+  const lifetimeAccess = user?.lifetimeAccess === true;
+  const accessLabel = lifetimeAccess
+    ? `${getTierConfig(currentTier).label} (Lifetime)`
+    : getTierConfig(currentTier).label;
 
   return (
     <>
       <PageHeading
         title="Subscription"
-        description="Manage your Stitch plan and billing."
+        description={
+          lifetimeAccess
+            ? "You have lifetime access to Stitch features."
+            : "Manage your Stitch plan and billing."
+        }
         backHref="/settings"
       />
 
-      <Card
-        padding="lg"
-        className="mb-6 border-stitch-gold/40 bg-gradient-to-br from-stitch-peach/70 to-stitch-mint/30"
-      >
-        <div className="flex items-start gap-3">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-stitch-paper shadow-stitch-card">
-            <StitchIcon name="crown" tone="gold" size={24} />
-          </div>
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <h2 className="text-lg font-semibold text-stitch-ink">
-                {BILLING_PROMO.title}
-              </h2>
-              <Badge variant="gold">New member offer</Badge>
+      {lifetimeAccess ? (
+        <Card padding="lg" className="mb-6 border-stitch-teal/40 bg-stitch-mint/40">
+          <div className="flex items-center gap-3">
+            <StitchIcon name="crown" tone="teal" size={24} />
+            <div>
+              <h2 className="text-lg font-semibold text-stitch-ink">Lifetime access active</h2>
+              <p className="text-sm text-stitch-muted">
+                Your account has permanent {accessLabel} access granted by an administrator.
+              </p>
             </div>
-            <p className="mt-2 text-sm font-medium text-stitch-ink">
-              {BILLING_PROMO.headline}
-            </p>
-            <p className="mt-2 text-sm text-stitch-muted">{BILLING_PROMO.description}</p>
-            <p className="mt-3 text-xs text-stitch-muted">{BILLING_PROMO.lockInNote}</p>
           </div>
-        </div>
-      </Card>
+        </Card>
+      ) : null}
+
+      {!lifetimeAccess ? (
+        <Card
+          padding="lg"
+          className="mb-6 border-stitch-gold/40 bg-gradient-to-br from-stitch-peach/70 to-stitch-mint/30"
+        >
+          <div className="flex items-start gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-stitch-paper shadow-stitch-card">
+              <StitchIcon name="crown" tone="gold" size={24} />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-lg font-semibold text-stitch-ink">
+                  {BILLING_PROMO.title}
+                </h2>
+                <Badge variant="gold">New member offer</Badge>
+              </div>
+              <p className="mt-2 text-sm font-medium text-stitch-ink">
+                {BILLING_PROMO.headline}
+              </p>
+              <p className="mt-2 text-sm text-stitch-muted">{BILLING_PROMO.description}</p>
+              <p className="mt-3 text-xs text-stitch-muted">{BILLING_PROMO.lockInNote}</p>
+            </div>
+          </div>
+        </Card>
+      ) : null}
 
       <div className="grid gap-4 lg:grid-cols-3">
         {SUBSCRIPTION_TIERS.map((tier) => {
           const isCurrent = tier.id === currentTier;
-          const isHighlighted = tier.highlighted;
+          const isHighlighted = !lifetimeAccess && tier.highlighted;
           const plan = getBillingPlan(tier.id);
           const annualSavings = getAnnualSavingsCents(plan);
 
@@ -65,10 +92,18 @@ export default function SubscriptionSettingsPage() {
             >
               <div className="flex items-start justify-between gap-2">
                 <h3 className="text-lg font-semibold">{tier.name}</h3>
-                {isCurrent ? <Badge variant="teal">Current</Badge> : null}
+                {isCurrent ? (
+                  <Badge variant={lifetimeAccess ? "teal" : "default"}>
+                    {lifetimeAccess ? "Lifetime" : "Current"}
+                  </Badge>
+                ) : null}
               </div>
-              <p className="mt-1 text-2xl font-bold text-stitch-coral">{tier.price}</p>
-              {tier.promoEligible ? (
+              {lifetimeAccess ? (
+                <p className="mt-1 text-sm text-stitch-muted">Included with lifetime access</p>
+              ) : (
+                <p className="mt-1 text-2xl font-bold text-stitch-coral">{tier.price}</p>
+              )}
+              {!lifetimeAccess && tier.promoEligible ? (
                 <div className="mt-2 space-y-1">
                   <p className="text-sm text-stitch-muted">
                     or {tier.annualPrice} billed annually
@@ -92,7 +127,7 @@ export default function SubscriptionSettingsPage() {
                   </li>
                 ))}
               </ul>
-              {!isCurrent ? (
+              {!lifetimeAccess && !isCurrent ? (
                 <div className="mt-6 space-y-2">
                   {tier.promoEligible ? (
                     <>
@@ -113,12 +148,12 @@ export default function SubscriptionSettingsPage() {
                     </Button>
                   )}
                 </div>
-              ) : (
+              ) : isCurrent && !lifetimeAccess ? (
                 <p className="mt-6 text-center text-xs text-stitch-muted">
                   Demo mode — billing not connected. Standard pricing begins{" "}
                   {BILLING_PROMO.standardPricingStarts}.
                 </p>
-              )}
+              ) : null}
             </Card>
           );
         })}

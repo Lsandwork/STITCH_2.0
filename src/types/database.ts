@@ -12,6 +12,8 @@ export type ProjectStatus =
 
 export type SkillLevel = "beginner" | "intermediate" | "advanced";
 
+export type AdminRole = "user" | "admin";
+
 export type Json =
   | string
   | number
@@ -31,6 +33,7 @@ export interface Database {
           avatar_url: string | null;
           bio: string | null;
           skill_level: SkillLevel | null;
+          admin_role: AdminRole;
           created_at: string;
           updated_at: string;
         };
@@ -41,6 +44,7 @@ export interface Database {
           avatar_url?: string | null;
           bio?: string | null;
           skill_level?: SkillLevel | null;
+          admin_role?: AdminRole;
           created_at?: string;
           updated_at?: string;
         };
@@ -51,6 +55,7 @@ export interface Database {
           avatar_url?: string | null;
           bio?: string | null;
           skill_level?: SkillLevel | null;
+          admin_role?: AdminRole;
           created_at?: string;
           updated_at?: string;
         };
@@ -110,6 +115,10 @@ export interface Database {
           stripe_subscription_id: string | null;
           current_period_start: string | null;
           current_period_end: string | null;
+          lifetime_access: boolean;
+          access_granted_by: string | null;
+          access_granted_at: string | null;
+          access_notes: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -122,6 +131,10 @@ export interface Database {
           stripe_subscription_id?: string | null;
           current_period_start?: string | null;
           current_period_end?: string | null;
+          lifetime_access?: boolean;
+          access_granted_by?: string | null;
+          access_granted_at?: string | null;
+          access_notes?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -134,6 +147,10 @@ export interface Database {
           stripe_subscription_id?: string | null;
           current_period_start?: string | null;
           current_period_end?: string | null;
+          lifetime_access?: boolean;
+          access_granted_by?: string | null;
+          access_granted_at?: string | null;
+          access_notes?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -780,6 +797,44 @@ export interface Database {
             columns: ["collection_id"];
             isOneToOne: false;
             referencedRelation: "pattern_collections";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      user_activity: {
+        Row: {
+          id: string;
+          user_id: string;
+          activity_type: string;
+          entity_type: string | null;
+          entity_id: string | null;
+          payload: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          activity_type: string;
+          entity_type?: string | null;
+          entity_id?: string | null;
+          payload?: Json;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          activity_type?: string;
+          entity_type?: string | null;
+          entity_id?: string | null;
+          payload?: Json;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "profiles";
             referencedColumns: ["id"];
           },
         ];

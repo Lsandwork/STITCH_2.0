@@ -20,14 +20,14 @@ import {
   getDemoWorkspacePattern,
   getTotalRows,
 } from "@/lib/demo-patterns";
-import { getSubscriptionTier } from "@/lib/demo-session";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 import { cn } from "@/lib/utils";
 
 export default function WorkspaceClient() {
   const params = useParams<{ projectId: string }>();
   const searchParams = useSearchParams();
   const projectId = params.projectId;
-  const tier = getSubscriptionTier();
+  const { featureTier, lifetimeAccess } = useSubscription();
   const pattern = getDemoWorkspacePattern(projectId);
   const rows = useMemo(
     () => (pattern ? flattenPatternRows(pattern) : []),
@@ -251,7 +251,11 @@ export default function WorkspaceClient() {
             onRowChange={setCurrentRow}
           />
 
-          <FeatureGate tier={tier} feature="voice_pattern_player">
+          <FeatureGate
+            tier={featureTier}
+            feature="voice_pattern_player"
+            hideUpgradePrompt={lifetimeAccess}
+          >
             <div id="voice-controls">
               <VoiceControls
                 onCommand={handleVoiceCommand}

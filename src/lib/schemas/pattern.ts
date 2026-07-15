@@ -9,6 +9,26 @@ const validationStatusSchema = z.enum([
   "not_physically_tested",
 ]);
 
+/** AI models often return numeric fields as strings — coerce safely. */
+const coercedPositiveInt = z.coerce.number().int().positive();
+const coercedNonNegativeInt = z.coerce.number().int().nonnegative();
+const coercedPositive = z.coerce.number().positive();
+
+const nullableCoercedNonNegativeInt = z.preprocess((val) => {
+  if (val === null || val === undefined || val === "null" || val === "") {
+    return null;
+  }
+  return val;
+}, z.union([z.coerce.number().int().nonnegative(), z.null()]));
+
+const isoDateTime = z.preprocess((val) => {
+  if (typeof val === "string" && !Number.isNaN(Date.parse(val))) {
+    return new Date(val).toISOString();
+  }
+  if (typeof val === "string") return val;
+  return new Date().toISOString();
+}, z.string().datetime());
+
 export const patternGenerationInputSchema = z.object({
   description: z.string().min(10, "Describe your project in more detail."),
   projectType: z.string().min(1, "Select a project type."),
@@ -26,15 +46,15 @@ export const patternGenerationInputSchema = z.object({
 });
 
 export const patternRowSchema = z.object({
-  rowNumber: z.number().int().positive(),
+  rowNumber: coercedPositiveInt,
   instruction: z.string().min(1),
-  stitchCount: z.number().int().nonnegative().nullable(),
+  stitchCount: nullableCoercedNonNegativeInt,
   notes: z.string().optional(),
 });
 
 export const patternSectionSchema = z.object({
   name: z.string().min(1),
-  sortOrder: z.number().int().nonnegative(),
+  sortOrder: coercedNonNegativeInt,
   instructions: z.string().optional(),
   rows: z.array(patternRowSchema).min(1),
 });
@@ -43,8 +63,8 @@ export const yarnRequirementSchema = z.object({
   colorName: z.string().min(1),
   weight: z.string().min(1),
   fiber: z.string().optional(),
-  yardage: z.number().positive().optional(),
-  skeins: z.number().positive().optional(),
+  yardage: coercedPositive.optional(),
+  skeins: coercedPositive.optional(),
   notes: z.string().optional(),
 });
 
@@ -52,16 +72,16 @@ export const patternValidationIssueSchema = z.object({
   code: z.string().min(1),
   severity: z.enum(["error", "warning", "info"]),
   message: z.string().min(1),
-  rowNumber: z.number().int().positive().optional(),
+  rowNumber: coercedPositiveInt.optional(),
   section: z.string().optional(),
 });
 
 export const patternValidationResultSchema = z.object({
   status: validationStatusSchema,
-  isValid: z.boolean(),
-  score: z.number().min(0).max(100),
+  isValid: z.coerce.boolean(),
+  score: z.coerce.number().min(0).max(100),
   issues: z.array(patternValidationIssueSchema),
-  checkedAt: z.string().datetime(),
+  checkedAt: isoDateTime,
 });
 
 export const generatedPatternSchema = z.object({
@@ -71,7 +91,7 @@ export const generatedPatternSchema = z.object({
   skillLevel: difficultySchema,
   terminology: terminologySchema,
   difficulty: difficultySchema,
-  estimatedTimeMinutes: z.number().int().positive().optional(),
+  estimatedTimeMinutes: coercedPositiveInt.optional(),
   previewImageUrl: z.string().url().optional(),
   materials: z.object({
     yarns: z.array(yarnRequirementSchema).min(1),
@@ -80,8 +100,8 @@ export const generatedPatternSchema = z.object({
     safetyNotes: z.array(z.string()).optional(),
   }),
   gauge: z.object({
-    stitches: z.number().positive(),
-    rows: z.number().positive(),
+    stitches: coercedPositive,
+    rows: coercedPositive,
     measurement: z.string().min(1),
     notes: z.string().optional(),
   }),

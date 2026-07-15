@@ -28,8 +28,13 @@ export type NavItem = {
   icon: string;
 };
 
+export const ADMIN_NAV_ITEMS: NavItem[] = [
+  { label: "Users", href: "/admin/users", icon: "users" },
+  { label: "Settings", href: "/admin/settings", icon: "settings" },
+];
+
 export const NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "/", icon: "home" },
+  { label: "Home", href: "/dashboard", icon: "home" },
   { label: "Create Studio", href: "/create", icon: "create" },
   { label: "Pattern Workspace", href: "/workspace", icon: "pattern" },
   { label: "Vision Mode", href: "/vision", icon: "vision" },
@@ -60,7 +65,7 @@ export const QUICK_ACTIONS: QuickAction[] = [
 ];
 
 export const MOBILE_NAV_ITEMS: NavItem[] = [
-  { label: "Home", href: "/", icon: "home" },
+  { label: "Home", href: "/dashboard", icon: "home" },
   { label: "Social", href: "/social", icon: "users" },
   { label: "Create", href: "/create", icon: "sparkles" },
   { label: "Market", href: "/marketplace", icon: "star" },

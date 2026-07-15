@@ -4,22 +4,24 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BRAND, NAV_ITEMS } from "@/lib/constants";
+import { BRAND, ADMIN_NAV_ITEMS, NAV_ITEMS } from "@/lib/constants";
 import { formatMonthlyPrice, getBillingPlan } from "@/lib/billing";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/Button";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 
 function isNavActive(pathname: string, href: string): boolean {
-  if (href === "/") return pathname === "/";
+  if (href === "/dashboard") return pathname === "/dashboard";
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function Sidebar() {
+export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-
+  const { showUpgradePrompts } = useSubscription();
   const plusPlan = getBillingPlan("stitch_plus");
+
+  const navItems = isAdmin ? [...NAV_ITEMS, ...ADMIN_NAV_ITEMS] : NAV_ITEMS;
 
   const navContent = (
     <>
@@ -37,7 +39,7 @@ export function Sidebar() {
       </div>
 
       <nav className="flex flex-1 flex-col gap-1">
-        {NAV_ITEMS.map((item) => {
+        {navItems.map((item) => {
           const active = isNavActive(pathname, item.href);
           return (
             <Link
@@ -63,21 +65,26 @@ export function Sidebar() {
         })}
       </nav>
 
-      <div className="mt-6 rounded-stitch-lg border border-stitch-border bg-stitch-peach p-4">
-        <div className="flex items-start gap-3">
-          <StitchIcon name="crown" tone="gold" size={28} />
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-stitch-ink">Stitch Plus</p>
-            <p className="mt-1 text-xs leading-relaxed text-stitch-muted">
-              Unlock AI patterns, voice player, and unlimited projects from{" "}
-              {formatMonthlyPrice(plusPlan.monthlyPriceCents)}.
-            </p>
-            <Button href="/settings/subscription" size="sm" className="mt-3 w-full">
-              Upgrade Now
-            </Button>
+      {showUpgradePrompts ? (
+        <div className="mt-6 rounded-stitch-lg border border-stitch-border bg-stitch-peach p-4">
+          <div className="flex items-start gap-3">
+            <StitchIcon name="crown" tone="gold" size={28} />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-stitch-ink">Stitch Plus</p>
+              <p className="mt-1 text-xs leading-relaxed text-stitch-muted">
+                Unlock AI patterns, voice player, and unlimited projects from{" "}
+                {formatMonthlyPrice(plusPlan.monthlyPriceCents)}.
+              </p>
+              <Link
+                href="/settings/subscription"
+                className="mt-3 inline-flex w-full items-center justify-center rounded-stitch-md bg-stitch-coral px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+              >
+                Upgrade Now
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      ) : null}
 
       <p className="mt-6 text-center text-[11px] text-stitch-muted">
         {BRAND.domain}

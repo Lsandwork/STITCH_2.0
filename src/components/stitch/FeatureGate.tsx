@@ -16,6 +16,7 @@ type FeatureGateProps = {
   children: ReactNode;
   fallback?: ReactNode;
   upgradeHref?: string;
+  hideUpgradePrompt?: boolean;
 };
 
 export function FeatureGate({
@@ -24,6 +25,7 @@ export function FeatureGate({
   children,
   fallback,
   upgradeHref = "/settings/subscription",
+  hideUpgradePrompt = false,
 }: FeatureGateProps) {
   if (hasFeature(tier, feature)) {
     return <>{children}</>;
@@ -31,6 +33,16 @@ export function FeatureGate({
 
   if (fallback) {
     return <>{fallback}</>;
+  }
+
+  if (hideUpgradePrompt) {
+    return (
+      <Card className="border-stitch-border bg-stitch-cream/60 text-center">
+        <p className="text-sm text-stitch-muted">
+          This feature is not included in your current access level.
+        </p>
+      </Card>
+    );
   }
 
   const requiredTier = getMinimumTierForFeature(feature);

@@ -12,6 +12,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "db:seed": "tsx scripts/seed.ts",
+    "db:create-admin": "tsx scripts/create-admin.ts",
+    "db:confirm-users": "tsx scripts/confirm-unconfirmed-users.ts",
     "db:types": "echo 'Configure SUPABASE_PROJECT_ID to generate types'"
   },
   "dependencies": {
@@ -29,6 +31,7 @@
     "jspdf": "^3.0.1",
     "lucide-react": "^0.514.0",
     "next": "^15.3.3",
+    "pg": "^8.22.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.57.0",
@@ -41,6 +44,7 @@
     "@playwright/test": "^1.52.0",
     "@tailwindcss/postcss": "^4.1.10",
     "@types/node": "^22.15.30",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.1.6",
     "@types/react-dom": "^19.1.6",
     "eslint": "^9.28.0",
@@ -48,6 +52,7 @@
     "tailwindcss": "^4.1.10",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
+    "vercel": "^56.1.0",
     "vitest": "^3.2.3"
   }
 }

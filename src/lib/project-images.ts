@@ -41,3 +41,12 @@ export const scanImage = {
   sunflower: `${BASE}/scans/scan-sunflower-wip.jpg`,
   granny: `${BASE}/scans/scan-granny-wip.jpg`,
 } as const;
+
+/** Learn pattern kit photography — unique to /learn (not used elsewhere on site). */
+export const learnImage = {
+  jellyfish: `${BASE}/learn/jellyfish-amigurumi.jpg`,
+  rippleBlanket: `${BASE}/learn/ripple-baby-blanket.jpg`,
+  bucketHat: `${BASE}/learn/bucket-hat.jpg`,
+  hexagonCoasters: `${BASE}/learn/hexagon-coasters.jpg`,
+  grannySquareHoodie: `${BASE}/learn/womens-granny-square-hoodie.png`,
+} as const;

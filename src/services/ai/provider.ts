@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { normalizeGeneratedPatternJson } from "@/lib/ai-pattern-normalize";
 import { withJsonSchemaInstruction } from "@/lib/ai-prompt-utils";
 import type { ParsedImageData } from "@/lib/ai-image-utils";
 
@@ -141,7 +142,13 @@ function parseModelJson<T extends z.ZodTypeAny>(
   schema: T,
   providerLabel: string,
 ): z.infer<T> {
-  const json = JSON.parse(content) as unknown;
+  const trimmed = content.trim();
+  const fenceMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
+  const jsonText = fenceMatch ? fenceMatch[1].trim() : trimmed;
+  let json = JSON.parse(jsonText) as unknown;
+  if (typeof json === "object" && json !== null && "sections" in json) {
+    json = normalizeGeneratedPatternJson(json);
+  }
   const parsed = schema.safeParse(json);
   if (!parsed.success) {
     throw new Error(
@@ -427,8 +434,8 @@ export function isMockMode(): boolean {
   return !keyMap[provider];
 }
 
-export function getAIProvider(): AIProvider {
-  const provider = (process.env.AI_PROVIDER ?? "openai").toLowerCase();
+export function getAIProvider(name?: AIProviderName): AIProvider {
+  const provider = (name ?? process.env.AI_PROVIDER ?? "openai").toLowerCase();
 
   switch (provider) {
     case "anthropic":
@@ -439,4 +446,29 @@ export function getAIProvider(): AIProvider {
     default:
       return new OpenAIProvider(process.env.OPENAI_MODEL);
   }
+}
+
+/** Ordered list of configured providers for retry/fallback chains. */
+export function getConfiguredAIProviders(): AIProvider[] {
+  const preferred = (process.env.AI_PROVIDER ?? "openai").toLowerCase() as AIProviderName;
+  const order: AIProviderName[] = [preferred, "openai", "gemini", "anthropic"];
+  const seen = new Set<AIProviderName>();
+  const providers: AIProvider[] = [];
+
+  for (const name of order) {
+    if (seen.has(name)) continue;
+    seen.add(name);
+
+    const hasKey =
+      (name === "openai" && Boolean(process.env.OPENAI_API_KEY)) ||
+      (name === "anthropic" && Boolean(process.env.ANTHROPIC_API_KEY)) ||
+      (name === "gemini" &&
+        Boolean(process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY));
+
+    if (hasKey) {
+      providers.push(getAIProvider(name));
+    }
+  }
+
+  return providers;
 }

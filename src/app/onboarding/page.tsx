@@ -72,7 +72,7 @@ export default function OnboardingPage() {
       completedAt: new Date().toISOString(),
     };
     saveOnboardingProfile(completed);
-    router.push("/");
+    router.push("/dashboard");
   }
 
   function toggleProjectType(type: string) {

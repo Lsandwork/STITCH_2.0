@@ -12,10 +12,10 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { Badge } from "@/components/ui/Badge";
-import { getSubscriptionTier } from "@/lib/demo-session";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 
 export default function PatternGeneratorPage() {
-  const tier = getSubscriptionTier();
+  const { featureTier, lifetimeAccess } = useSubscription();
   const [result, setResult] = useState<PatternGenerationResultSchema | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -72,7 +72,11 @@ export default function PatternGeneratorPage() {
         backHref="/create"
       />
 
-      <FeatureGate tier={tier} feature="ai_pattern_generation">
+      <FeatureGate
+        tier={featureTier}
+        feature="ai_pattern_generation"
+        hideUpgradePrompt={lifetimeAccess}
+      >
         <div className="grid gap-6 lg:grid-cols-2">
           <Card padding="lg">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

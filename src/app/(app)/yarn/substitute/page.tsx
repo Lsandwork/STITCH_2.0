@@ -14,10 +14,10 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
-import { getSubscriptionTier } from "@/lib/demo-session";
+import { useSubscription } from "@/components/providers/SubscriptionProvider";
 
 export default function YarnSubstitutePage() {
-  const tier = getSubscriptionTier();
+  const { featureTier, lifetimeAccess } = useSubscription();
   const [result, setResult] = useState<YarnSubstitutionResult | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -52,7 +52,11 @@ export default function YarnSubstitutePage() {
         description="Find compatible yarns from your vault or recommendations."
         backHref="/yarn"
       />
-      <FeatureGate tier={tier} feature="yarn_substitution">
+      <FeatureGate
+        tier={featureTier}
+        feature="yarn_substitution"
+        hideUpgradePrompt={lifetimeAccess}
+      >
         <div className="grid gap-6 lg:grid-cols-2">
           <Card padding="lg">
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

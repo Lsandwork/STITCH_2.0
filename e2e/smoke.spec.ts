@@ -24,6 +24,8 @@ test.describe("Stitch smoke tests", () => {
     await expect(
       page.getByRole("button", { name: "Generate pattern" }),
     ).toBeVisible();
+  });
+
   test("vocabulary page renders with search", async ({ page }) => {
     await page.goto("/vocab?category=crochet");
 
