@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 const variantStyles = {
   primary:
     "bg-stitch-coral text-white hover:bg-stitch-coral-dark shadow-sm",
+  olive:
+    "bg-stitch-olive text-white hover:bg-stitch-olive-dark shadow-sm",
   secondary:
     "border border-stitch-border bg-stitch-paper text-stitch-ink hover:border-stitch-coral hover:text-stitch-coral",
   ghost:

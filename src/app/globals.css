@@ -5,18 +5,30 @@
   --color-stitch-coral-dark: #d95b50;
   --color-stitch-teal: #2c9a95;
   --color-stitch-teal-dark: #237b77;
-  --color-stitch-cream: #fff9f3;
+  --color-stitch-cream: #fffdf9;
+  --color-stitch-warm-white: #faf7f2;
   --color-stitch-paper: #ffffff;
-  --color-stitch-ink: #202124;
-  --color-stitch-muted: #77736f;
-  --color-stitch-border: #e8ddd3;
-  --color-stitch-peach: #fce7dd;
+  --color-stitch-ink: #1a1a1a;
+  --color-stitch-text: #1a1a1a;
+  --color-stitch-muted: #6d6862;
+  --color-stitch-muted-text: #6d6862;
+  --color-stitch-border: #e9e1d8;
+  --color-stitch-olive: #596847;
+  --color-stitch-olive-dark: #435238;
+  --color-stitch-blush: #ffb6c1;
+  --color-stitch-rose: #e8a7c7;
+  --color-stitch-lavender: #c8bce7;
+  --color-stitch-lavender-soft: #e8e0f5;
+  --color-stitch-mint: #b6e3d6;
+  --color-stitch-mint-soft: #d4f0e8;
+  --color-stitch-peach: #f7e1b5;
+  --color-stitch-peach-soft: #faf0d8;
+  --color-stitch-sage-soft: #d8e4d0;
   --color-stitch-gold: #e7a63b;
-  --color-stitch-lavender: #8e67c6;
-  --color-stitch-mint: #ddf2ee;
-  --color-stitch-rose: #f9d9d2;
   --color-stitch-sky: #dceaf7;
   --color-stitch-sand: #f0e4d6;
+  --color-stitch-surface: #ffffff;
+  --color-stitch-shadow: rgba(52, 43, 35, 0.08);
 
   --radius-stitch-xs: 6px;
   --radius-stitch-sm: 10px;
@@ -25,11 +37,12 @@
   --radius-stitch-xl: 32px;
   --radius-stitch-pill: 999px;
 
-  --shadow-stitch-card: 0 8px 24px rgba(78, 53, 38, 0.08);
-  --shadow-stitch-floating: 0 16px 48px rgba(78, 53, 38, 0.14);
+  --shadow-stitch-card: 0 8px 24px rgba(52, 43, 35, 0.08);
+  --shadow-stitch-floating: 0 16px 48px rgba(52, 43, 35, 0.12);
 
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
 }
 
 :root {
@@ -37,22 +50,28 @@
   --stitch-coral-dark: #d95b50;
   --stitch-teal: #2c9a95;
   --stitch-teal-dark: #237b77;
-  --stitch-cream: #fff9f3;
+  --stitch-cream: #fffdf9;
+  --stitch-warm-white: #faf7f2;
   --stitch-paper: #ffffff;
-  --stitch-ink: #202124;
-  --stitch-muted: #77736f;
-  --stitch-border: #e8ddd3;
-  --stitch-peach: #fce7dd;
+  --stitch-ink: #1a1a1a;
+  --stitch-muted: #6d6862;
+  --stitch-border: #e9e1d8;
+  --stitch-olive: #596847;
+  --stitch-olive-dark: #435238;
+  --stitch-blush: #ffb6c1;
+  --stitch-rose: #e8a7c7;
+  --stitch-lavender: #c8bce7;
+  --stitch-mint: #b6e3d6;
+  --stitch-peach: #f7e1b5;
   --stitch-gold: #e7a63b;
-  --stitch-lavender: #8e67c6;
-  --stitch-mint: #ddf2ee;
-  --stitch-rose: #f9d9d2;
   --stitch-sky: #dceaf7;
   --stitch-sand: #f0e4d6;
-  --stitch-shadow-card: 0 8px 24px rgba(78, 53, 38, 0.08);
-  --stitch-shadow-floating: 0 16px 48px rgba(78, 53, 38, 0.14);
+  --stitch-shadow-card: 0 8px 24px rgba(52, 43, 35, 0.08);
+  --stitch-shadow-floating: 0 16px 48px rgba(52, 43, 35, 0.12);
   --stitch-sidebar-width: 272px;
   --stitch-insight-rail-width: 300px;
+  --stitch-home-left-width: 210px;
+  --stitch-home-right-width: 260px;
 }
 
 @layer base {
@@ -70,9 +89,13 @@
   body {
     margin: 0;
     min-height: 100dvh;
-    background-color: var(--stitch-cream);
+    background-color: var(--stitch-warm-white);
     color: var(--stitch-ink);
     font-family: var(--font-sans);
+  }
+
+  .font-serif {
+    font-family: var(--font-serif);
   }
 
   img,
@@ -244,6 +267,10 @@
 
   .bg-stitch-peach {
     background-color: var(--stitch-peach);
+  }
+
+  .bg-stitch-warm-white {
+    background-color: var(--stitch-warm-white);
   }
 
   .border-stitch {
