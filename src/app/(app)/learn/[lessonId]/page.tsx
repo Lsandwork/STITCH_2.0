@@ -1,21 +1,43 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { PageHeading } from "@/components/stitch/PageHeading";
+import { MarkdownContent } from "@/components/stitch/patterns/MarkdownContent";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { Badge } from "@/components/ui/Badge";
-import { getLearnItem } from "@/lib/learn-content";
+import {
+  getLearnItemAsync,
+  type StitchOriginalLearnItem,
+} from "@/lib/learn-content";
+import { getAllPatternSlugs } from "@/lib/patterns/catalog";
+import { PATTERN_KITS } from "@/lib/pattern-kits";
+import { DEMO_LESSONS } from "@/lib/demo-data";
 
 type Props = { params: Promise<{ lessonId: string }> };
 
+export function generateStaticParams() {
+  return [
+    ...getAllPatternSlugs().map((slug) => ({ lessonId: slug })),
+    ...PATTERN_KITS.map((kit) => ({ lessonId: kit.slug })),
+    ...DEMO_LESSONS.map((lesson) => ({ lessonId: lesson.slug })),
+  ];
+}
+
+function isStitchOriginal(
+  item: Awaited<ReturnType<typeof getLearnItemAsync>>,
+): item is StitchOriginalLearnItem {
+  return item?.kind === "stitch_original";
+}
+
 export default async function LessonDetailPage({ params }: Props) {
   const { lessonId } = await params;
-  const item = getLearnItem(lessonId);
+  const item = await getLearnItemAsync(lessonId);
 
   if (!item) notFound();
 
-  const isKit = item.kind === "pattern_kit";
+  const isKit = item.kind === "pattern_kit" || item.kind === "stitch_original";
+  const isOriginal = isStitchOriginal(item);
 
   return (
     <>
@@ -53,7 +75,9 @@ export default async function LessonDetailPage({ params }: Props) {
             <div className="flex flex-wrap items-center gap-2">
               {isKit ? (
                 <>
-                  <Badge variant="gold">Pattern Kit</Badge>
+                  <Badge variant="gold">
+                    {isOriginal ? "Stitch Original" : "Pattern Kit"}
+                  </Badge>
                   <Badge variant="teal">{item.skillLevel}</Badge>
                   <Badge>{item.category}</Badge>
                 </>
@@ -110,24 +134,42 @@ export default async function LessonDetailPage({ params }: Props) {
             </>
           ) : null}
 
-          <Card padding="lg">
-            <h3 className="mb-4 text-base font-semibold text-stitch-ink">
-              {isKit ? "Step-by-step instructions" : "Step-by-step"}
-            </h3>
-            <ol className="space-y-3">
-              {item.steps.map((step, i) => (
-                <li
-                  key={step}
-                  className="flex gap-3 text-sm leading-relaxed text-stitch-ink"
-                >
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-stitch-teal text-xs font-bold text-white">
-                    {i + 1}
-                  </span>
-                  <span className="pt-0.5">{step}</span>
-                </li>
-              ))}
-            </ol>
-          </Card>
+          {isOriginal ? (
+            <>
+              <Card padding="lg">
+                <h3 className="mb-4 text-base font-semibold text-stitch-ink">
+                  Full pattern instructions
+                </h3>
+                <MarkdownContent content={item.fullInstructionsMarkdown} />
+              </Card>
+
+              <Card padding="lg">
+                <h3 className="mb-4 text-base font-semibold text-stitch-ink">
+                  Maker checklist
+                </h3>
+                <MarkdownContent content={item.checklistMarkdown} />
+              </Card>
+            </>
+          ) : (
+            <Card padding="lg">
+              <h3 className="mb-4 text-base font-semibold text-stitch-ink">
+                {isKit ? "Step-by-step instructions" : "Step-by-step"}
+              </h3>
+              <ol className="space-y-3">
+                {item.steps.map((step, i) => (
+                  <li
+                    key={step}
+                    className="flex gap-3 text-sm leading-relaxed text-stitch-ink"
+                  >
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-stitch-teal text-xs font-bold text-white">
+                      {i + 1}
+                    </span>
+                    <span className="pt-0.5">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </Card>
+          )}
 
           <Card padding="md" className="border-stitch-teal/30 bg-stitch-mint/20">
             <p className="text-sm text-stitch-ink">

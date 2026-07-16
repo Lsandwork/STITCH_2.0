@@ -1,0 +1,32 @@
+{
+  "id": "05_WILDFLOWER_DREAMS",
+  "title": "Wildflower Dreams",
+  "craft": "Hand embroidery",
+  "difficulty": "Confident beginner",
+  "sizes": [
+    "6-inch hoop design",
+    "Scalable to 8-inch"
+  ],
+  "tags": [
+    "embroidery",
+    "floral",
+    "hoop art",
+    "wildflower",
+    "beginner"
+  ],
+  "materials": [
+    "Linen-cotton fabric",
+    "6-inch hoop",
+    "10 floss colors",
+    "needles",
+    "transfer pen"
+  ],
+  "gauge": "Not applicable; design fits a 6-inch hoop",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "12_BLUSH_CLOUD_THROW",
+  "title": "Blush Cloud Throw",
+  "craft": "Knitting",
+  "difficulty": "Advanced beginner",
+  "sizes": [
+    "Crib 34 x 42 in",
+    "Throw 48 x 60 in",
+    "Large 60 x 72 in"
+  ],
+  "tags": [
+    "blanket",
+    "chunky",
+    "pink",
+    "knitting",
+    "home"
+  ],
+  "materials": [
+    "Super bulky yarn 900-2250 yd",
+    "12 mm circular needle",
+    "needle",
+    "optional tassels"
+  ],
+  "gauge": "7 sts x 10 rows = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

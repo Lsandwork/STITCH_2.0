@@ -1,0 +1,451 @@
+[
+  {
+    "id": "01_SUNSET_MARKET_BAG",
+    "slug": "sunset-market-bag",
+    "title": "Sunset Market Bag",
+    "craft": "Crochet",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "One size: approximately 15 in wide x 14 in tall, excluding handles"
+    ],
+    "tags": [
+      "bag",
+      "granny squares",
+      "floral",
+      "cotton",
+      "market tote"
+    ],
+    "materials": [
+      "Worsted cotton 960 yd total",
+      "4.5 mm crochet hook",
+      "needle",
+      "markers",
+      "optional lining"
+    ],
+    "gauge": "One blocked flower square = 4.75 in",
+    "summary": "A structured cotton tote made from raised-flower granny squares, a solid base, and reinforced crocheted handles.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/sunset-market-bag.jpg",
+    "imageAlt": "Sunset Market Bag — Crochet pattern",
+    "isTrending": true,
+    "isFeatured": false,
+    "durationMinutes": 360
+  },
+  {
+    "id": "02_RETRO_GARDEN_CARDIGAN",
+    "slug": "retro-garden-cardigan",
+    "title": "Retro Garden Cardigan",
+    "craft": "Crochet",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "XS/S",
+      "M/L",
+      "XL/2X",
+      "3X/4X",
+      "5X"
+    ],
+    "tags": [
+      "cardigan",
+      "granny square",
+      "size inclusive",
+      "crochet garment",
+      "retro floral"
+    ],
+    "materials": [
+      "DK washable wool blend 1650-3100 yd",
+      "4 mm and 3.5 mm hooks",
+      "5-7 buttons",
+      "needle",
+      "markers"
+    ],
+    "gauge": "One blocked motif = 4 in; 18 dc x 9 rows = 4 in",
+    "summary": "A relaxed drop-shoulder cardigan built from floral granny squares with solid side, cuff, and button bands.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/retro-garden-cardigan.jpg",
+    "imageAlt": "Retro Garden Cardigan — Crochet pattern",
+    "isTrending": true,
+    "isFeatured": false,
+    "durationMinutes": 360
+  },
+  {
+    "id": "03_CLOUD_COMFORT_BLANKET",
+    "slug": "cloud-comfort-blanket",
+    "title": "Cloud Comfort Blanket",
+    "craft": "Crochet",
+    "difficulty": "Advanced beginner",
+    "skillLevel": "beginner",
+    "sizes": [
+      "Baby 36 x 42 in",
+      "Throw 50 x 60 in",
+      "Large 60 x 72 in"
+    ],
+    "tags": [
+      "blanket",
+      "textured",
+      "neutral",
+      "crochet",
+      "home"
+    ],
+    "materials": [
+      "Bulky yarn 1150-2900 yd",
+      "8 mm hook",
+      "needle"
+    ],
+    "gauge": "10 hdc x 7 rows = 4 in",
+    "summary": "A soft neutral blanket alternating mesh, puff, and ribbed texture bands.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/cloud-comfort-blanket.jpg",
+    "imageAlt": "Cloud Comfort Blanket — Crochet pattern",
+    "isTrending": true,
+    "isFeatured": false,
+    "durationMinutes": 480
+  },
+  {
+    "id": "04_BOHO_GRANNY_TOP",
+    "slug": "boho-granny-top",
+    "title": "Boho Granny Top",
+    "craft": "Crochet",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2X",
+      "3X",
+      "4X",
+      "5X"
+    ],
+    "tags": [
+      "top",
+      "granny stitch",
+      "summer",
+      "size inclusive",
+      "crochet garment"
+    ],
+    "materials": [
+      "Sport cotton 650-1300 yd",
+      "3.5 mm hook",
+      "needle",
+      "optional lining"
+    ],
+    "gauge": "22 dc x 11 rows = 4 in",
+    "summary": "A cropped lace-up camisole with triangular cups, granny-stitch body, and adjustable shoulder and back ties.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/boho-granny-top.jpg",
+    "imageAlt": "Boho Granny Top — Crochet pattern",
+    "isTrending": true,
+    "isFeatured": false,
+    "durationMinutes": 360
+  },
+  {
+    "id": "05_WILDFLOWER_DREAMS",
+    "slug": "wildflower-dreams",
+    "title": "Wildflower Dreams",
+    "craft": "Hand embroidery",
+    "difficulty": "Confident beginner",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "6-inch hoop design",
+      "Scalable to 8-inch"
+    ],
+    "tags": [
+      "embroidery",
+      "floral",
+      "hoop art",
+      "wildflower",
+      "beginner"
+    ],
+    "materials": [
+      "Linen-cotton fabric",
+      "6-inch hoop",
+      "10 floss colors",
+      "needles",
+      "transfer pen"
+    ],
+    "gauge": "Not applicable; design fits a 6-inch hoop",
+    "summary": "A balanced wildflower bouquet designed for a 6 in hoop.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/wildflower-dreams.jpg",
+    "imageAlt": "Wildflower Dreams — Hand embroidery pattern",
+    "isTrending": true,
+    "isFeatured": false,
+    "durationMinutes": 180
+  },
+  {
+    "id": "06_CITY_STRIPES_BEANIE",
+    "slug": "city-stripes-beanie",
+    "title": "City Stripes Beanie",
+    "craft": "Knitting",
+    "difficulty": "Advanced beginner",
+    "skillLevel": "beginner",
+    "sizes": [
+      "Toddler",
+      "Child",
+      "Adult S/M",
+      "Adult L/XL"
+    ],
+    "tags": [
+      "beanie",
+      "stripes",
+      "knitting",
+      "pom pom",
+      "winter"
+    ],
+    "materials": [
+      "Worsted yarn 180-305 yd total",
+      "4 mm and 4.5 mm needles",
+      "marker",
+      "needle",
+      "pom maker"
+    ],
+    "gauge": "18 sts x 24 rounds = 4 in",
+    "summary": "A bottom-up ribbed beanie with clean color blocks and a removable pom-pom.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/city-stripes-beanie.jpg",
+    "imageAlt": "City Stripes Beanie — Knitting pattern",
+    "isTrending": true,
+    "isFeatured": false,
+    "durationMinutes": 540
+  },
+  {
+    "id": "07_HERITAGE_PATCHWORK_PILLOW",
+    "slug": "heritage-patchwork-pillow",
+    "title": "Heritage Patchwork Pillow",
+    "craft": "Crochet",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "18 x 18 in pillow"
+    ],
+    "tags": [
+      "pillow",
+      "granny square",
+      "home decor",
+      "patchwork",
+      "crochet"
+    ],
+    "materials": [
+      "Worsted yarn 650 yd",
+      "4 mm hook",
+      "18-inch insert",
+      "5 buttons"
+    ],
+    "gauge": "One motif = 4.25 in; 16 dc x 9 rows = 4 in",
+    "summary": "A removable 18 in cushion cover made from sixteen small motifs on the front and an envelope-style solid back.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/heritage-patchwork-pillow.jpg",
+    "imageAlt": "Heritage Patchwork Pillow — Crochet pattern",
+    "isTrending": false,
+    "isFeatured": true,
+    "durationMinutes": 360
+  },
+  {
+    "id": "08_COASTAL_RIB_SWEATER",
+    "slug": "coastal-rib-sweater",
+    "title": "Coastal Rib Sweater",
+    "craft": "Knitting",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2X",
+      "3X",
+      "4X",
+      "5X"
+    ],
+    "tags": [
+      "sweater",
+      "ribbed",
+      "knitting",
+      "size inclusive",
+      "minimal"
+    ],
+    "materials": [
+      "Aran yarn 1150-2650 yd",
+      "5 mm and 5.5 mm needles",
+      "holders",
+      "markers"
+    ],
+    "gauge": "16 sts x 22 rows = 4 in",
+    "summary": "A relaxed drop-shoulder sweater with broken rib texture, wide sleeves, and clean crew neck.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/coastal-rib-sweater.jpg",
+    "imageAlt": "Coastal Rib Sweater — Knitting pattern",
+    "isTrending": false,
+    "isFeatured": true,
+    "durationMinutes": 420
+  },
+  {
+    "id": "09_SAGE_POCKET_DINO",
+    "slug": "sage-pocket-dino",
+    "title": "Sage Pocket Dino",
+    "craft": "Crochet amigurumi",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "Approximately 9 in tall"
+    ],
+    "tags": [
+      "amigurumi",
+      "dinosaur",
+      "toy",
+      "crochet",
+      "gift"
+    ],
+    "materials": [
+      "DK yarn 305 yd total",
+      "3 mm hook",
+      "stuffing",
+      "eyes or floss",
+      "needle"
+    ],
+    "gauge": "Work tight; gauge not critical",
+    "summary": "A seated green dinosaur with a rounded head, cream belly, small arms, tail, and soft dorsal spikes.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/sage-pocket-dino.jpg",
+    "imageAlt": "Sage Pocket Dino — Crochet amigurumi pattern",
+    "isTrending": false,
+    "isFeatured": true,
+    "durationMinutes": 360
+  },
+  {
+    "id": "10_HEIRLOOM_ROSE_GARDEN",
+    "slug": "heirloom-rose-garden",
+    "title": "Heirloom Rose Garden",
+    "craft": "Hand embroidery",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "7-inch hoop design"
+    ],
+    "tags": [
+      "embroidery",
+      "rose",
+      "floral",
+      "hoop art",
+      "heirloom"
+    ],
+    "materials": [
+      "Linen",
+      "7-inch hoop",
+      "12 floss colors",
+      "needles",
+      "transfer method"
+    ],
+    "gauge": "Not applicable; design fits 7-inch hoop",
+    "summary": "A layered central rose surrounded by small flowers, buds, and curved foliage.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/heirloom-rose-garden.jpg",
+    "imageAlt": "Heirloom Rose Garden — Hand embroidery pattern",
+    "isTrending": false,
+    "isFeatured": true,
+    "durationMinutes": 240
+  },
+  {
+    "id": "11_SUNDAY_GRID_CARDIGAN",
+    "slug": "sunday-grid-cardigan",
+    "title": "Sunday Grid Cardigan",
+    "craft": "Crochet",
+    "difficulty": "Intermediate",
+    "skillLevel": "intermediate",
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2X",
+      "3X",
+      "4X",
+      "5X"
+    ],
+    "tags": [
+      "cardigan",
+      "grid",
+      "pastel",
+      "crochet garment",
+      "size inclusive"
+    ],
+    "materials": [
+      "DK yarn 1400-3000 yd total",
+      "4 mm and 3.5 mm hooks",
+      "5 buttons",
+      "markers"
+    ],
+    "gauge": "18 hdc x 14 rows = 4 in",
+    "summary": "A cropped button cardigan with a clean patchwork grid, ribbed bands, and softly dropped shoulders.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/sunday-grid-cardigan.jpg",
+    "imageAlt": "Sunday Grid Cardigan — Crochet pattern",
+    "isTrending": false,
+    "isFeatured": true,
+    "durationMinutes": 360
+  },
+  {
+    "id": "12_BLUSH_CLOUD_THROW",
+    "slug": "blush-cloud-throw",
+    "title": "Blush Cloud Throw",
+    "craft": "Knitting",
+    "difficulty": "Advanced beginner",
+    "skillLevel": "beginner",
+    "sizes": [
+      "Crib 34 x 42 in",
+      "Throw 48 x 60 in",
+      "Large 60 x 72 in"
+    ],
+    "tags": [
+      "blanket",
+      "chunky",
+      "pink",
+      "knitting",
+      "home"
+    ],
+    "materials": [
+      "Super bulky yarn 900-2250 yd",
+      "12 mm circular needle",
+      "needle",
+      "optional tassels"
+    ],
+    "gauge": "7 sts x 10 rows = 4 in",
+    "summary": "A plush pink blanket combining garter borders with an oversized broken-basket texture.",
+    "source": "Original pattern authored for Stitch",
+    "publicationStatus": "sample-test recommended before commercial release",
+    "authorName": "Stitch Originals",
+    "imageUrl": "/assets/stitch/patterns/blush-cloud-throw.jpg",
+    "imageAlt": "Blush Cloud Throw — Knitting pattern",
+    "isTrending": false,
+    "isFeatured": true,
+    "durationMinutes": 540
+  }
+]

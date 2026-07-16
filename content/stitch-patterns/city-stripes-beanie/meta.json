@@ -1,0 +1,34 @@
+{
+  "id": "06_CITY_STRIPES_BEANIE",
+  "title": "City Stripes Beanie",
+  "craft": "Knitting",
+  "difficulty": "Advanced beginner",
+  "sizes": [
+    "Toddler",
+    "Child",
+    "Adult S/M",
+    "Adult L/XL"
+  ],
+  "tags": [
+    "beanie",
+    "stripes",
+    "knitting",
+    "pom pom",
+    "winter"
+  ],
+  "materials": [
+    "Worsted yarn 180-305 yd total",
+    "4 mm and 4.5 mm needles",
+    "marker",
+    "needle",
+    "pom maker"
+  ],
+  "gauge": "18 sts x 24 rounds = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

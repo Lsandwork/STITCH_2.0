@@ -25,9 +25,23 @@ const isoDateTime = z.preprocess((val) => {
   if (typeof val === "string" && !Number.isNaN(Date.parse(val))) {
     return new Date(val).toISOString();
   }
-  if (typeof val === "string") return val;
+  if (val instanceof Date && !Number.isNaN(val.getTime())) {
+    return val.toISOString();
+  }
   return new Date().toISOString();
 }, z.string().datetime());
+
+const optionalHttpUrl = z.preprocess((val) => {
+  if (val === null || val === undefined || val === "") return undefined;
+  if (typeof val !== "string") return undefined;
+  try {
+    const url = new URL(val);
+    if (url.protocol === "http:" || url.protocol === "https:") return val;
+  } catch {
+    // ignore invalid urls from model output
+  }
+  return undefined;
+}, z.string().url().optional());
 
 export const patternGenerationInputSchema = z.object({
   description: z.string().min(10, "Describe your project in more detail."),
@@ -92,7 +106,7 @@ export const generatedPatternSchema = z.object({
   terminology: terminologySchema,
   difficulty: difficultySchema,
   estimatedTimeMinutes: coercedPositiveInt.optional(),
-  previewImageUrl: z.string().url().optional(),
+  previewImageUrl: optionalHttpUrl,
   materials: z.object({
     yarns: z.array(yarnRequirementSchema).min(1),
     hookSize: z.string().min(1),

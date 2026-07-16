@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { normalizeGeneratedPatternJson } from "@/lib/ai-pattern-normalize";
+import { parseAiJson, repairAiJson } from "@/lib/ai-json-repair";
 import { withJsonSchemaInstruction } from "@/lib/ai-prompt-utils";
 import type { ParsedImageData } from "@/lib/ai-image-utils";
 
@@ -146,16 +147,11 @@ function parseModelJson<T extends z.ZodTypeAny>(
   const fenceMatch = trimmed.match(/```(?:json)?\s*([\s\S]*?)```/i);
   const jsonText = fenceMatch ? fenceMatch[1].trim() : trimmed;
   let json = JSON.parse(jsonText) as unknown;
+  json = repairAiJson(json);
   if (typeof json === "object" && json !== null && "sections" in json) {
     json = normalizeGeneratedPatternJson(json);
   }
-  const parsed = schema.safeParse(json);
-  if (!parsed.success) {
-    throw new Error(
-      `${providerLabel} JSON failed validation: ${parsed.error.message}`,
-    );
-  }
-  return parsed.data;
+  return parseAiJson(schema, json, providerLabel);
 }
 
 class MockAIProvider implements AIProvider {

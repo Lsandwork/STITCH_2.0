@@ -17,10 +17,10 @@ export const yarnInventoryInputSchema = z.object({
   brand: z.string().optional(),
   name: z.string().min(1, "Yarn name is required."),
   colorName: z.string().optional(),
-  colorHex: z
-    .string()
-    .regex(/^#([0-9A-Fa-f]{6})$/, "Use a valid hex color.")
-    .optional(),
+  colorHex: z.preprocess((val) => {
+    if (typeof val !== "string" || !val.trim()) return undefined;
+    return val.trim();
+  }, z.string().regex(/^#([0-9A-Fa-f]{6})$/, "Use a valid hex color like #AABBCC.").optional()),
   weight: z.string().optional(),
   fiberContent: z.string().optional(),
   yardage: z.number().positive().optional(),

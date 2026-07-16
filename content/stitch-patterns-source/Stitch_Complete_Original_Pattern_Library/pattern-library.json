@@ -1,0 +1,408 @@
+{
+  "library": "Stitch Complete Original Pattern Library",
+  "version": "1.0.0",
+  "pattern_count": 12,
+  "patterns": [
+    {
+      "id": "01_SUNSET_MARKET_BAG",
+      "title": "Sunset Market Bag",
+      "craft": "Crochet",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "One size: approximately 15 in wide x 14 in tall, excluding handles"
+      ],
+      "tags": [
+        "bag",
+        "granny squares",
+        "floral",
+        "cotton",
+        "market tote"
+      ],
+      "materials": [
+        "Worsted cotton 960 yd total",
+        "4.5 mm crochet hook",
+        "needle",
+        "markers",
+        "optional lining"
+      ],
+      "gauge": "One blocked flower square = 4.75 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "02_RETRO_GARDEN_CARDIGAN",
+      "title": "Retro Garden Cardigan",
+      "craft": "Crochet",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "XS/S",
+        "M/L",
+        "XL/2X",
+        "3X/4X",
+        "5X"
+      ],
+      "tags": [
+        "cardigan",
+        "granny square",
+        "size inclusive",
+        "crochet garment",
+        "retro floral"
+      ],
+      "materials": [
+        "DK washable wool blend 1650-3100 yd",
+        "4 mm and 3.5 mm hooks",
+        "5-7 buttons",
+        "needle",
+        "markers"
+      ],
+      "gauge": "One blocked motif = 4 in; 18 dc x 9 rows = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "03_CLOUD_COMFORT_BLANKET",
+      "title": "Cloud Comfort Blanket",
+      "craft": "Crochet",
+      "difficulty": "Advanced beginner",
+      "sizes": [
+        "Baby 36 x 42 in",
+        "Throw 50 x 60 in",
+        "Large 60 x 72 in"
+      ],
+      "tags": [
+        "blanket",
+        "textured",
+        "neutral",
+        "crochet",
+        "home"
+      ],
+      "materials": [
+        "Bulky yarn 1150-2900 yd",
+        "8 mm hook",
+        "needle"
+      ],
+      "gauge": "10 hdc x 7 rows = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "04_BOHO_GRANNY_TOP",
+      "title": "Boho Granny Top",
+      "craft": "Crochet",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2X",
+        "3X",
+        "4X",
+        "5X"
+      ],
+      "tags": [
+        "top",
+        "granny stitch",
+        "summer",
+        "size inclusive",
+        "crochet garment"
+      ],
+      "materials": [
+        "Sport cotton 650-1300 yd",
+        "3.5 mm hook",
+        "needle",
+        "optional lining"
+      ],
+      "gauge": "22 dc x 11 rows = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "05_WILDFLOWER_DREAMS",
+      "title": "Wildflower Dreams",
+      "craft": "Hand embroidery",
+      "difficulty": "Confident beginner",
+      "sizes": [
+        "6-inch hoop design",
+        "Scalable to 8-inch"
+      ],
+      "tags": [
+        "embroidery",
+        "floral",
+        "hoop art",
+        "wildflower",
+        "beginner"
+      ],
+      "materials": [
+        "Linen-cotton fabric",
+        "6-inch hoop",
+        "10 floss colors",
+        "needles",
+        "transfer pen"
+      ],
+      "gauge": "Not applicable; design fits a 6-inch hoop",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "06_CITY_STRIPES_BEANIE",
+      "title": "City Stripes Beanie",
+      "craft": "Knitting",
+      "difficulty": "Advanced beginner",
+      "sizes": [
+        "Toddler",
+        "Child",
+        "Adult S/M",
+        "Adult L/XL"
+      ],
+      "tags": [
+        "beanie",
+        "stripes",
+        "knitting",
+        "pom pom",
+        "winter"
+      ],
+      "materials": [
+        "Worsted yarn 180-305 yd total",
+        "4 mm and 4.5 mm needles",
+        "marker",
+        "needle",
+        "pom maker"
+      ],
+      "gauge": "18 sts x 24 rounds = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "07_HERITAGE_PATCHWORK_PILLOW",
+      "title": "Heritage Patchwork Pillow",
+      "craft": "Crochet",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "18 x 18 in pillow"
+      ],
+      "tags": [
+        "pillow",
+        "granny square",
+        "home decor",
+        "patchwork",
+        "crochet"
+      ],
+      "materials": [
+        "Worsted yarn 650 yd",
+        "4 mm hook",
+        "18-inch insert",
+        "5 buttons"
+      ],
+      "gauge": "One motif = 4.25 in; 16 dc x 9 rows = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "08_COASTAL_RIB_SWEATER",
+      "title": "Coastal Rib Sweater",
+      "craft": "Knitting",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2X",
+        "3X",
+        "4X",
+        "5X"
+      ],
+      "tags": [
+        "sweater",
+        "ribbed",
+        "knitting",
+        "size inclusive",
+        "minimal"
+      ],
+      "materials": [
+        "Aran yarn 1150-2650 yd",
+        "5 mm and 5.5 mm needles",
+        "holders",
+        "markers"
+      ],
+      "gauge": "16 sts x 22 rows = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "09_SAGE_POCKET_DINO",
+      "title": "Sage Pocket Dino",
+      "craft": "Crochet amigurumi",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "Approximately 9 in tall"
+      ],
+      "tags": [
+        "amigurumi",
+        "dinosaur",
+        "toy",
+        "crochet",
+        "gift"
+      ],
+      "materials": [
+        "DK yarn 305 yd total",
+        "3 mm hook",
+        "stuffing",
+        "eyes or floss",
+        "needle"
+      ],
+      "gauge": "Work tight; gauge not critical",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "10_HEIRLOOM_ROSE_GARDEN",
+      "title": "Heirloom Rose Garden",
+      "craft": "Hand embroidery",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "7-inch hoop design"
+      ],
+      "tags": [
+        "embroidery",
+        "rose",
+        "floral",
+        "hoop art",
+        "heirloom"
+      ],
+      "materials": [
+        "Linen",
+        "7-inch hoop",
+        "12 floss colors",
+        "needles",
+        "transfer method"
+      ],
+      "gauge": "Not applicable; design fits 7-inch hoop",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "11_SUNDAY_GRID_CARDIGAN",
+      "title": "Sunday Grid Cardigan",
+      "craft": "Crochet",
+      "difficulty": "Intermediate",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2X",
+        "3X",
+        "4X",
+        "5X"
+      ],
+      "tags": [
+        "cardigan",
+        "grid",
+        "pastel",
+        "crochet garment",
+        "size inclusive"
+      ],
+      "materials": [
+        "DK yarn 1400-3000 yd total",
+        "4 mm and 3.5 mm hooks",
+        "5 buttons",
+        "markers"
+      ],
+      "gauge": "18 hdc x 14 rows = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    },
+    {
+      "id": "12_BLUSH_CLOUD_THROW",
+      "title": "Blush Cloud Throw",
+      "craft": "Knitting",
+      "difficulty": "Advanced beginner",
+      "sizes": [
+        "Crib 34 x 42 in",
+        "Throw 48 x 60 in",
+        "Large 60 x 72 in"
+      ],
+      "tags": [
+        "blanket",
+        "chunky",
+        "pink",
+        "knitting",
+        "home"
+      ],
+      "materials": [
+        "Super bulky yarn 900-2250 yd",
+        "12 mm circular needle",
+        "needle",
+        "optional tassels"
+      ],
+      "gauge": "7 sts x 10 rows = 4 in",
+      "source": "Original pattern authored for Stitch",
+      "status": "sample-test recommended before commercial release",
+      "files": [
+        "PATTERN.md",
+        "checklist.md",
+        "image_prompt.txt"
+      ]
+    }
+  ]
+}

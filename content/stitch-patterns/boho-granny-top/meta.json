@@ -1,0 +1,38 @@
+{
+  "id": "04_BOHO_GRANNY_TOP",
+  "title": "Boho Granny Top",
+  "craft": "Crochet",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2X",
+    "3X",
+    "4X",
+    "5X"
+  ],
+  "tags": [
+    "top",
+    "granny stitch",
+    "summer",
+    "size inclusive",
+    "crochet garment"
+  ],
+  "materials": [
+    "Sport cotton 650-1300 yd",
+    "3.5 mm hook",
+    "needle",
+    "optional lining"
+  ],
+  "gauge": "22 dc x 11 rows = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

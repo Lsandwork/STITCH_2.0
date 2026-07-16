@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { yarnInventoryInputSchema, type YarnInventoryInput } from "@/lib/schemas/yarn";
@@ -11,6 +12,7 @@ import { Card } from "@/components/ui/Card";
 
 export default function AddYarnPage() {
   const router = useRouter();
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -21,12 +23,23 @@ export default function AddYarnPage() {
     defaultValues: { quantitySkeins: 1 },
   });
 
-  function onSubmit(data: YarnInventoryInput) {
-    const key = "stitch-yarn-vault";
-    const existing = JSON.parse(localStorage.getItem(key) ?? "[]") as unknown[];
-    existing.unshift({ ...data, id: crypto.randomUUID(), addedAt: new Date().toISOString() });
-    localStorage.setItem(key, JSON.stringify(existing));
-    router.push("/yarn");
+  async function onSubmit(data: YarnInventoryInput) {
+    setError(null);
+    try {
+      const response = await fetch("/api/yarn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const payload = (await response.json()) as { error?: string };
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Could not save yarn to your vault.");
+      }
+      router.push("/yarn");
+      router.refresh();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not save yarn to your vault.");
+    }
   }
 
   return (
@@ -37,6 +50,7 @@ export default function AddYarnPage() {
           <Input label="Yarn name" error={errors.name?.message} {...register("name")} />
           <Input label="Brand" {...register("brand")} />
           <Input label="Color name" {...register("colorName")} />
+          <Input label="Color hex (optional)" placeholder="#AABBCC" {...register("colorHex")} />
           <Input label="Weight" placeholder="worsted, dk…" {...register("weight")} />
           <Input label="Fiber content" {...register("fiberContent")} />
           <Input label="Recommended hook" {...register("recommendedHook")} />
@@ -47,9 +61,22 @@ export default function AddYarnPage() {
             error={errors.quantitySkeins?.message}
             {...register("quantitySkeins", { valueAsNumber: true })}
           />
+          <Input
+            label="Yardage per skein (optional)"
+            type="number"
+            step="1"
+            {...register("yardage", { valueAsNumber: true })}
+          />
+          <textarea
+            className="w-full rounded-stitch-md border border-stitch-border px-4 py-3 text-sm"
+            rows={3}
+            placeholder="Notes (optional)"
+            {...register("notes")}
+          />
           <Button type="submit" disabled={isSubmitting} className="w-full">
-            Save to vault
+            {isSubmitting ? "Saving…" : "Save to vault"}
           </Button>
+          {error ? <p className="text-sm text-red-500">{error}</p> : null}
         </form>
       </Card>
     </>

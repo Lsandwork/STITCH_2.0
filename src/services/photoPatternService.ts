@@ -43,24 +43,39 @@ export const photoPatternResultSchema = z.object({
 export type PhotoPatternInput = z.infer<typeof photoPatternInputSchema>;
 export type PhotoPatternResult = z.infer<typeof photoPatternResultSchema>;
 
+function defaultPhotoAnalysis(description?: string) {
+  return photoAnalysisSchema.parse({
+    projectType: "amigurumi",
+    description:
+      description ??
+      "Amigurumi plushie inspired by uploaded photo — long body, short legs, floppy ears.",
+    construction: "low_sew",
+    colors: ["Brown", "Cream"],
+    inspirationNotes: [
+      "Photo could not be analyzed in detail — using maker description.",
+    ],
+    confidence: 0.45,
+  });
+}
+
+function mapConstruction(
+  value?: string,
+): "sewn" | "low_sew" | "seamless" | undefined {
+  if (!value) return "low_sew";
+  const lower = value.toLowerCase();
+  if (lower.includes("seamless")) return "seamless";
+  if (lower.includes("low")) return "low_sew";
+  if (lower.includes("seam") || lower.includes("sew")) return "sewn";
+  return "low_sew";
+}
+
 async function analyzePhotoInspiration(
   imageDataUrl: string,
   description?: string,
 ): Promise<z.infer<typeof photoAnalysisSchema>> {
   const image = parseImageDataUrl(imageDataUrl);
   if (!image || !isSupportedVisionMimeType(image.mimeType)) {
-    return photoAnalysisSchema.parse({
-      projectType: "amigurumi",
-      description:
-        description ??
-        "Amigurumi plushie inspired by uploaded photo — long body, short legs, floppy ears.",
-      construction: "low_sew",
-      colors: ["Brown", "Cream"],
-      inspirationNotes: [
-        "Photo could not be analyzed in detail — using maker description.",
-      ],
-      confidence: 0.45,
-    });
+    return defaultPhotoAnalysis(description);
   }
 
   if (isMockMode()) {
@@ -90,7 +105,12 @@ async function analyzePhotoInspiration(
     .filter(Boolean)
     .join("\n");
 
-  return provider.generateJSONWithImage(prompt, photoAnalysisSchema, image);
+  try {
+    return await provider.generateJSONWithImage(prompt, photoAnalysisSchema, image);
+  } catch (error) {
+    console.error("[analyzePhotoInspiration] Vision analysis failed:", error);
+    return defaultPhotoAnalysis(description);
+  }
 }
 
 export async function generatePatternFromPhoto(
@@ -122,13 +142,13 @@ export async function generatePatternFromPhoto(
         : analysis.colors.length
           ? analysis.colors
           : ["Brown", "Cream"],
-    construction: (analysis.construction?.includes("seam")
-      ? "seamed"
-      : "low_sew") as "low_sew" | "seamed",
+    construction: mapConstruction(analysis.construction),
     eyeType: "embroidered" as const,
   };
 
   const result = await generatePattern(generationInput);
+  const generatedAt = new Date().toISOString();
+
   const pattern = generatedPatternSchema.parse({
     ...result.pattern,
     title: `${result.pattern.title} (Photo-Inspired)`,
@@ -136,10 +156,13 @@ export async function generatePatternFromPhoto(
     metadata: {
       ...result.pattern.metadata,
       source: "photo" as const,
+      construction:
+        result.pattern.metadata?.construction ?? mapConstruction(analysis.construction),
     },
     validation: {
       ...result.pattern.validation,
       status: "ai_generated" as const,
+      checkedAt: result.pattern.validation.checkedAt ?? generatedAt,
       issues: [
         ...result.pattern.validation.issues,
         {
@@ -154,7 +177,7 @@ export async function generatePatternFromPhoto(
   patternGenerationResultSchema.parse({
     pattern,
     model: result.model,
-    generatedAt: result.generatedAt,
+    generatedAt: result.generatedAt ?? generatedAt,
   });
 
   return photoPatternResultSchema.parse({
@@ -162,7 +185,7 @@ export async function generatePatternFromPhoto(
     disclaimer: PHOTO_PATTERN_DISCLAIMER,
     confidence: analysis.confidence,
     inspirationNotes: analysis.inspirationNotes,
-    generatedAt: new Date().toISOString(),
+    generatedAt,
     model: result.model,
   });
 }

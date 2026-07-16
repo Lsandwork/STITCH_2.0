@@ -1,0 +1,31 @@
+{
+  "id": "03_CLOUD_COMFORT_BLANKET",
+  "title": "Cloud Comfort Blanket",
+  "craft": "Crochet",
+  "difficulty": "Advanced beginner",
+  "sizes": [
+    "Baby 36 x 42 in",
+    "Throw 50 x 60 in",
+    "Large 60 x 72 in"
+  ],
+  "tags": [
+    "blanket",
+    "textured",
+    "neutral",
+    "crochet",
+    "home"
+  ],
+  "materials": [
+    "Bulky yarn 1150-2900 yd",
+    "8 mm hook",
+    "needle"
+  ],
+  "gauge": "10 hdc x 7 rows = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

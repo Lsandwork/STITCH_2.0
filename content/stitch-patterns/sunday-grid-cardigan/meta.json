@@ -1,0 +1,38 @@
+{
+  "id": "11_SUNDAY_GRID_CARDIGAN",
+  "title": "Sunday Grid Cardigan",
+  "craft": "Crochet",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2X",
+    "3X",
+    "4X",
+    "5X"
+  ],
+  "tags": [
+    "cardigan",
+    "grid",
+    "pastel",
+    "crochet garment",
+    "size inclusive"
+  ],
+  "materials": [
+    "DK yarn 1400-3000 yd total",
+    "4 mm and 3.5 mm hooks",
+    "5 buttons",
+    "markers"
+  ],
+  "gauge": "18 hdc x 14 rows = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

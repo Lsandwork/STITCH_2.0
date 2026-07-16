@@ -1,0 +1,31 @@
+{
+  "id": "09_SAGE_POCKET_DINO",
+  "title": "Sage Pocket Dino",
+  "craft": "Crochet amigurumi",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "Approximately 9 in tall"
+  ],
+  "tags": [
+    "amigurumi",
+    "dinosaur",
+    "toy",
+    "crochet",
+    "gift"
+  ],
+  "materials": [
+    "DK yarn 305 yd total",
+    "3 mm hook",
+    "stuffing",
+    "eyes or floss",
+    "needle"
+  ],
+  "gauge": "Work tight; gauge not critical",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

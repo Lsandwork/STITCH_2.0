@@ -4,6 +4,7 @@ import { PageHeading } from "@/components/stitch/PageHeading";
 import { Badge } from "@/components/ui/Badge";
 import { DEMO_LESSONS } from "@/lib/demo-data";
 import { PATTERN_KITS } from "@/lib/pattern-kits";
+import { getStitchOriginalKits } from "@/lib/patterns/learn";
 
 function formatDuration(minutes: number): string {
   if (minutes >= 120) {
@@ -22,12 +23,62 @@ function skillBadgeVariant(
 }
 
 export default function LearnPage() {
+  const stitchOriginals = getStitchOriginalKits();
+
   return (
     <>
       <PageHeading
         title="Learn"
         description="Complete pattern kits with yarn guides and step-by-step instructions, plus technique lessons."
       />
+
+      <section className="mb-10">
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-semibold text-stitch-ink">
+              Stitch Originals
+            </h2>
+            <p className="text-sm text-stitch-muted">
+              The full Stitch pattern library — crochet, knit, and embroidery
+              projects with complete instructions.
+            </p>
+          </div>
+          <Badge variant="gold">{stitchOriginals.length} patterns</Badge>
+        </div>
+
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {stitchOriginals.map((kit) => (
+            <Link key={kit.id} href={kit.href}>
+              <article className="stitch-card group overflow-hidden transition-transform hover:-translate-y-0.5">
+                <div className="relative aspect-[16/10] overflow-hidden bg-stitch-cream">
+                  <Image
+                    src={kit.illustrationUrl}
+                    alt={kit.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                  />
+                </div>
+                <div className="space-y-2 p-4">
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <h3 className="font-semibold text-stitch-ink">{kit.title}</h3>
+                    <Badge variant="gold">Stitch Original</Badge>
+                  </div>
+                  <p className="text-sm text-stitch-muted">{kit.subtitle}</p>
+                  <div className="flex flex-wrap gap-2 text-xs text-stitch-muted">
+                    <Badge variant={skillBadgeVariant(kit.skillLevel)}>
+                      {kit.skillLevel}
+                    </Badge>
+                    <span>{formatDuration(kit.durationMinutes)}</span>
+                    <span>·</span>
+                    <span>{kit.category.split(" · ")[0]}</span>
+                  </div>
+                </div>
+              </article>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       <section className="mb-10">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-3">

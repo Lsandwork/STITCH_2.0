@@ -1,0 +1,31 @@
+{
+  "id": "10_HEIRLOOM_ROSE_GARDEN",
+  "title": "Heirloom Rose Garden",
+  "craft": "Hand embroidery",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "7-inch hoop design"
+  ],
+  "tags": [
+    "embroidery",
+    "rose",
+    "floral",
+    "hoop art",
+    "heirloom"
+  ],
+  "materials": [
+    "Linen",
+    "7-inch hoop",
+    "12 floss colors",
+    "needles",
+    "transfer method"
+  ],
+  "gauge": "Not applicable; design fits 7-inch hoop",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

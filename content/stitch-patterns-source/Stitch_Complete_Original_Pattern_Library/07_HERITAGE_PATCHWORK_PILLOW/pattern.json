@@ -1,0 +1,30 @@
+{
+  "id": "07_HERITAGE_PATCHWORK_PILLOW",
+  "title": "Heritage Patchwork Pillow",
+  "craft": "Crochet",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "18 x 18 in pillow"
+  ],
+  "tags": [
+    "pillow",
+    "granny square",
+    "home decor",
+    "patchwork",
+    "crochet"
+  ],
+  "materials": [
+    "Worsted yarn 650 yd",
+    "4 mm hook",
+    "18-inch insert",
+    "5 buttons"
+  ],
+  "gauge": "One motif = 4.25 in; 16 dc x 9 rows = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

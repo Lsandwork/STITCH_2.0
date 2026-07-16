@@ -71,7 +71,7 @@ export function PatternGridSection({
   subtitle,
   icon,
   patterns,
-  seeAllHref = "/marketplace",
+  seeAllHref = "/learn",
 }: PatternGridSectionProps) {
   return (
     <section aria-labelledby={id} className="space-y-4">

@@ -1,0 +1,31 @@
+{
+  "id": "01_SUNSET_MARKET_BAG",
+  "title": "Sunset Market Bag",
+  "craft": "Crochet",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "One size: approximately 15 in wide x 14 in tall, excluding handles"
+  ],
+  "tags": [
+    "bag",
+    "granny squares",
+    "floral",
+    "cotton",
+    "market tote"
+  ],
+  "materials": [
+    "Worsted cotton 960 yd total",
+    "4.5 mm crochet hook",
+    "needle",
+    "markers",
+    "optional lining"
+  ],
+  "gauge": "One blocked flower square = 4.75 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

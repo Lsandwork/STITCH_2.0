@@ -8,6 +8,7 @@ import {
   DEMO_RECOMMENDATIONS,
 } from "@/lib/demo-data";
 import { QUICK_ACTIONS } from "@/lib/constants";
+import { CATALOG_SEARCH_RESULTS } from "@/lib/patterns/search-results";
 import { cn } from "@/lib/utils";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
 
@@ -28,6 +29,7 @@ type SearchOverlayProps = {
 };
 
 const ALL_RESULTS: SearchResult[] = [
+  ...CATALOG_SEARCH_RESULTS,
   ...DEMO_PROJECTS.map((project) => ({
     id: project.id,
     title: project.title,

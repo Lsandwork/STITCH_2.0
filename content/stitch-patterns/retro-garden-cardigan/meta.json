@@ -1,0 +1,35 @@
+{
+  "id": "02_RETRO_GARDEN_CARDIGAN",
+  "title": "Retro Garden Cardigan",
+  "craft": "Crochet",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "XS/S",
+    "M/L",
+    "XL/2X",
+    "3X/4X",
+    "5X"
+  ],
+  "tags": [
+    "cardigan",
+    "granny square",
+    "size inclusive",
+    "crochet garment",
+    "retro floral"
+  ],
+  "materials": [
+    "DK washable wool blend 1650-3100 yd",
+    "4 mm and 3.5 mm hooks",
+    "5-7 buttons",
+    "needle",
+    "markers"
+  ],
+  "gauge": "One blocked motif = 4 in; 18 dc x 9 rows = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}

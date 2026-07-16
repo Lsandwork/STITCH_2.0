@@ -1,0 +1,38 @@
+{
+  "id": "08_COASTAL_RIB_SWEATER",
+  "title": "Coastal Rib Sweater",
+  "craft": "Knitting",
+  "difficulty": "Intermediate",
+  "sizes": [
+    "XS",
+    "S",
+    "M",
+    "L",
+    "XL",
+    "2X",
+    "3X",
+    "4X",
+    "5X"
+  ],
+  "tags": [
+    "sweater",
+    "ribbed",
+    "knitting",
+    "size inclusive",
+    "minimal"
+  ],
+  "materials": [
+    "Aran yarn 1150-2650 yd",
+    "5 mm and 5.5 mm needles",
+    "holders",
+    "markers"
+  ],
+  "gauge": "16 sts x 22 rows = 4 in",
+  "source": "Original pattern authored for Stitch",
+  "status": "sample-test recommended before commercial release",
+  "files": [
+    "PATTERN.md",
+    "checklist.md",
+    "image_prompt.txt"
+  ]
+}
