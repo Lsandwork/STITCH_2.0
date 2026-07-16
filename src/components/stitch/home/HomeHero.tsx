@@ -31,7 +31,7 @@ const CATEGORY_STYLES: Record<string, string> = {
 function MakeTodayCard({ className = "" }: { className?: string }) {
   return (
     <div
-      className={`rounded-[24px] border border-white/70 bg-white/75 px-5 py-5 shadow-[0_12px_40px_rgba(52,43,35,0.1)] backdrop-blur-xl sm:px-6 ${className}`}
+      className={`rounded-[24px] border border-white/55 bg-white/40 px-5 py-5 shadow-[0_12px_40px_rgba(52,43,35,0.08)] backdrop-blur-2xl supports-[backdrop-filter]:bg-white/35 sm:px-6 ${className}`}
     >
       <h2 className="font-serif text-[1.45rem] font-semibold leading-snug text-stitch-ink sm:text-[1.6rem]">
         What will you make today?
@@ -56,7 +56,7 @@ function MakeTodayCard({ className = "" }: { className?: string }) {
         ))}
       </div>
 
-      <div className="mt-5 grid grid-cols-4 gap-2 border-t border-[#E8E0D6]/90 pt-4">
+      <div className="mt-5 grid grid-cols-4 gap-2 border-t border-[#E8E0D6]/70 pt-4">
         {HERO_STATS.map((stat) => (
           <div key={stat.label} className="flex flex-col items-center text-center">
             <StitchIcon name={stat.icon} tone="muted" size={14} />
@@ -75,11 +75,12 @@ export function HomeHero() {
   return (
     <section className="relative isolate overflow-hidden border-b border-stitch-border bg-[#FAF7F2]">
       {/*
-        Photo lives on the LEFT and soft-fades into cream toward the right,
-        so the card sits on the blend — never opaque-blocking the image.
+        Photo plate stays LEFT so Monstera + yarn frame the card.
+        Cream dissolve owns the center-right — card sits on glass over cream,
+        never as an opaque slab over photo subjects.
       */}
       <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-full max-w-[920px] lg:w-[62%]"
+        className="pointer-events-none absolute inset-y-0 left-0 w-[min(100%,560px)] sm:w-[52%] lg:w-[46%] xl:w-[44%]"
         aria-hidden
       >
         <Image
@@ -87,18 +88,35 @@ export function HomeHero() {
           alt=""
           fill
           priority
-          className="object-cover object-left"
-          sizes="(max-width: 1024px) 100vw, 62vw"
+          className="object-cover object-[left_center]"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 52vw, 46vw"
         />
-        {/* Soft dissolve into page cream — the key “blend” from the mockup */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#FAF7F2]/25 to-[#FAF7F2]" />
-        <div className="absolute inset-y-0 right-0 w-[55%] bg-gradient-to-r from-transparent to-[#FAF7F2]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FAF7F2]/30 via-transparent to-[#FAF7F2]/50" />
+        {/* Soft dissolve: crisp left subjects → cream before the card zone */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, transparent 18%, rgba(250,247,242,0.15) 32%, rgba(250,247,242,0.55) 52%, rgba(250,247,242,0.92) 72%, #FAF7F2 88%)",
+          }}
+        />
+        <div className="absolute inset-y-0 right-0 w-[45%] bg-gradient-to-r from-transparent via-[#FAF7F2]/70 to-[#FAF7F2]" />
+        <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-[#FAF7F2]/45 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#FAF7F2]/55 to-transparent" />
       </div>
 
-      <div className="relative mx-auto flex min-h-[420px] max-w-[1440px] flex-col justify-center gap-8 px-4 py-10 sm:px-6 lg:min-h-[480px] lg:flex-row lg:items-center lg:justify-between lg:gap-10 lg:px-10 lg:py-14">
-        {/* Left copy — over the photo/cream blend */}
-        <div className="relative z-10 max-w-[360px] shrink-0">
+      {/* Solid cream veil from mid-right so the glass card never sits on busy photo */}
+      <div
+        className="pointer-events-none absolute inset-y-0 left-[38%] right-0 sm:left-[42%] lg:left-[40%]"
+        style={{
+          background:
+            "linear-gradient(90deg, transparent 0%, rgba(250,247,242,0.55) 12%, #FAF7F2 36%, #FAF7F2 100%)",
+        }}
+        aria-hidden
+      />
+
+      <div className="relative mx-auto grid min-h-[420px] max-w-[1440px] grid-cols-1 items-center gap-8 px-4 py-10 sm:px-6 lg:min-h-[500px] lg:grid-cols-[minmax(300px,400px)_minmax(0,1fr)] lg:gap-12 lg:px-10 lg:py-14">
+        {/* Left copy — over the photo / early blend */}
+        <div className="relative z-10 max-w-[360px]">
           <h1 className="font-serif text-[2.35rem] font-semibold leading-[1.05] tracking-[-0.02em] text-stitch-ink sm:text-[2.85rem] lg:text-[3.15rem]">
             Create more.
             <br />
@@ -129,7 +147,7 @@ export function HomeHero() {
               href="/learn"
               variant="secondary"
               size="md"
-              className="rounded-full border-[#D8D0C6] bg-white/80 px-6 text-stitch-ink backdrop-blur-sm hover:border-stitch-olive hover:text-stitch-olive"
+              className="rounded-full border-[#D8D0C6] bg-white/55 px-6 text-stitch-ink backdrop-blur-md hover:border-stitch-olive hover:text-stitch-olive"
             >
               Explore Patterns
             </Button>
@@ -159,8 +177,8 @@ export function HomeHero() {
           </div>
         </div>
 
-        {/* Glass card on the cream/blend side — not covering photo subjects */}
-        <div className="relative z-10 w-full max-w-[440px] shrink-0 lg:ml-auto">
+        {/* Glass card on cream/blend — right column, clear of plant + yarn */}
+        <div className="relative z-10 w-full max-w-[440px] justify-self-start lg:justify-self-end lg:pr-2 xl:pr-6">
           <MakeTodayCard />
         </div>
       </div>
