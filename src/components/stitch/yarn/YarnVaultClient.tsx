@@ -74,24 +74,37 @@ export function YarnVaultClient({
       return;
     }
 
+    const remaining: LegacyYarn[] = [];
+
     for (const item of legacyItems) {
       if (!item.name?.trim()) continue;
-      await fetch("/api/yarn", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: item.name,
-          brand: item.brand,
-          colorName: item.colorName,
-          weight: item.weight,
-          fiberContent: item.fiberContent,
-          recommendedHook: item.recommendedHook,
-          quantitySkeins: item.quantitySkeins ?? 1,
-        }),
-      });
+      try {
+        const response = await fetch("/api/yarn", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: item.name,
+            brand: item.brand,
+            colorName: item.colorName,
+            weight: item.weight,
+            fiberContent: item.fiberContent,
+            recommendedHook: item.recommendedHook,
+            quantitySkeins: item.quantitySkeins ?? 1,
+          }),
+        });
+        if (!response.ok) {
+          remaining.push(item);
+        }
+      } catch {
+        remaining.push(item);
+      }
     }
 
-    localStorage.removeItem(LEGACY_STORAGE_KEY);
+    if (remaining.length === 0) {
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
+    } else {
+      localStorage.setItem(LEGACY_STORAGE_KEY, JSON.stringify(remaining));
+    }
   }, []);
 
   useEffect(() => {

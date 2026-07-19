@@ -1548,9 +1548,260 @@ export interface Database {
           },
         ];
       };
+      marketplace_listings: {
+        Row: {
+          id: string;
+          designer_id: string;
+          title: string;
+          description: string;
+          ai_description: string;
+          preview_text: string;
+          pattern_content: string;
+          price_cents: number;
+          skill_level: SkillLevel;
+          project_type: string;
+          yarn_weight: string | null;
+          hook_size: string | null;
+          thumbnail_url: string | null;
+          thumbnail_style: Json | null;
+          languages: Json;
+          tags: string[];
+          downloads: number;
+          rating: number;
+          rating_count: number;
+          duplicate_score: number;
+          duplicate_of_id: string | null;
+          duplicate_note: string | null;
+          status: "published" | "pending" | "flagged";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          designer_id: string;
+          title: string;
+          description: string;
+          ai_description: string;
+          preview_text: string;
+          pattern_content: string;
+          price_cents?: number;
+          skill_level: SkillLevel;
+          project_type: string;
+          yarn_weight?: string | null;
+          hook_size?: string | null;
+          thumbnail_url?: string | null;
+          thumbnail_style?: Json | null;
+          languages?: Json;
+          tags?: string[];
+          downloads?: number;
+          rating?: number;
+          rating_count?: number;
+          duplicate_score?: number;
+          duplicate_of_id?: string | null;
+          duplicate_note?: string | null;
+          status?: "published" | "pending" | "flagged";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          designer_id?: string;
+          title?: string;
+          description?: string;
+          ai_description?: string;
+          preview_text?: string;
+          pattern_content?: string;
+          price_cents?: number;
+          skill_level?: SkillLevel;
+          project_type?: string;
+          yarn_weight?: string | null;
+          hook_size?: string | null;
+          thumbnail_url?: string | null;
+          thumbnail_style?: Json | null;
+          languages?: Json;
+          tags?: string[];
+          downloads?: number;
+          rating?: number;
+          rating_count?: number;
+          duplicate_score?: number;
+          duplicate_of_id?: string | null;
+          duplicate_note?: string | null;
+          status?: "published" | "pending" | "flagged";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      saved_marketplace_listings: {
+        Row: {
+          user_id: string;
+          listing_id: string;
+          created_at: string;
+        };
+        Insert: {
+          user_id: string;
+          listing_id: string;
+          created_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          listing_id?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      social_posts: {
+        Row: {
+          id: string;
+          user_id: string;
+          content: string;
+          image_url: string | null;
+          project_title: string | null;
+          pattern_ref: string | null;
+          likes: string[];
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          content: string;
+          image_url?: string | null;
+          project_title?: string | null;
+          pattern_ref?: string | null;
+          likes?: string[];
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          content?: string;
+          image_url?: string | null;
+          project_title?: string | null;
+          pattern_ref?: string | null;
+          likes?: string[];
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      social_comments: {
+        Row: {
+          id: string;
+          post_id: string;
+          user_id: string;
+          content: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          post_id: string;
+          user_id: string;
+          content: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          post_id?: string;
+          user_id?: string;
+          content?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      social_post_likes: {
+        Row: {
+          post_id: string;
+          user_id: string;
+          created_at: string;
+        };
+        Insert: {
+          post_id: string;
+          user_id: string;
+          created_at?: string;
+        };
+        Update: {
+          post_id?: string;
+          user_id?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      social_groups: {
+        Row: {
+          id: string;
+          name: string;
+          description: string;
+          category: string;
+          image_url: string | null;
+          member_count: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          description: string;
+          category: string;
+          image_url?: string | null;
+          member_count?: number;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          description?: string;
+          category?: string;
+          image_url?: string | null;
+          member_count?: number;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      social_group_members: {
+        Row: {
+          group_id: string;
+          user_id: string;
+          joined_at: string;
+        };
+        Insert: {
+          group_id: string;
+          user_id: string;
+          joined_at?: string;
+        };
+        Update: {
+          group_id?: string;
+          user_id?: string;
+          joined_at?: string;
+        };
+        Relationships: [];
+      };
+      social_follows: {
+        Row: {
+          follower_id: string;
+          following_id: string;
+          created_at: string;
+        };
+        Insert: {
+          follower_id: string;
+          following_id: string;
+          created_at?: string;
+        };
+        Update: {
+          follower_id?: string;
+          following_id?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      increment_marketplace_downloads: {
+        Args: { p_listing_id: string };
+        Returns: number;
+      };
+    };
     Enums: {
       subscription_tier: SubscriptionTier;
     };

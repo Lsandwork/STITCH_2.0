@@ -82,6 +82,7 @@ function buildMockVisionResult(
           ]
         : ["Continue to the next round — stitch pattern looks consistent."],
     summary: qualifySummary(baseSummary, confidence),
+    analysisSource: "mock",
   });
 }
 
@@ -112,7 +113,10 @@ function buildVisionPrompt(submission: VisionScanSubmission): string {
     .join("\n");
 }
 
-function normalizeVisionResult(result: VisionScanResult): VisionScanResult {
+function normalizeVisionResult(
+  result: VisionScanResult,
+  analysisSource: "ai" | "mock" = "ai",
+): VisionScanResult {
   return visionScanResultSchema.parse({
     ...result,
     confidence: Math.min(1, Math.max(0, result.confidence)),
@@ -126,6 +130,7 @@ function normalizeVisionResult(result: VisionScanResult): VisionScanResult {
           ? finding.description
           : `Possible: ${finding.description}`,
     })),
+    analysisSource,
   });
 }
 
@@ -154,10 +159,15 @@ export async function analyzeVisionImage(
       visionScanResultSchema,
       image,
     );
-    return normalizeVisionResult(result);
+    return normalizeVisionResult(result, "ai");
   } catch (error) {
     console.error("[visionAnalysisService] Vision AI failed, using mock fallback:", error);
-    return buildMockVisionResult(parsed);
+    const fallback = buildMockVisionResult(parsed);
+    return {
+      ...fallback,
+      summary: `Demo fallback (live analysis unavailable): ${fallback.summary ?? "Review your stitches manually."}`,
+      analysisSource: "mock",
+    };
   }
 }
 

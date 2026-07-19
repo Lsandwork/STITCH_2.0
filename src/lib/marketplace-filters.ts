@@ -26,8 +26,16 @@ export const MARKETPLACE_SORT_OPTIONS = [
 
 export type MarketplaceSortId = (typeof MARKETPLACE_SORT_OPTIONS)[number]["id"];
 
+export type MarketplaceCraftId =
+  | "crochet"
+  | "knitting"
+  | "embroidery"
+  | "weaving"
+  | "punch-needle";
+
 export type MarketplaceFilterState = {
   category: string;
+  craft: MarketplaceCraftId | null;
   sort: MarketplaceSortId;
   search: string;
   skillLevels: MarketplaceListing["skillLevel"][];
@@ -36,11 +44,51 @@ export type MarketplaceFilterState = {
 
 export const DEFAULT_MARKETPLACE_FILTERS: MarketplaceFilterState = {
   category: "all",
+  craft: null,
   sort: "popular",
   search: "",
   skillLevels: [],
   maxPriceCents: null,
 };
+
+const CRAFT_MATCHERS: Record<MarketplaceCraftId, string[]> = {
+  crochet: ["crochet", "amigurumi", "granny", "hook", "sc ", "dc ", "hdc"],
+  knitting: ["knit", "knitting", "needles", "garter", "stockinette"],
+  embroidery: ["embroider", "embroidery", "cross stitch", "needlework"],
+  weaving: ["weave", "weaving", "loom", "tapestry"],
+  "punch-needle": ["punch needle", "punch-needle", "rug hook"],
+};
+
+export function parseMarketplaceCraftParam(
+  value: string | null | undefined,
+): MarketplaceCraftId | null {
+  if (!value) return null;
+  const normalized = value.trim().toLowerCase();
+  if (normalized in CRAFT_MATCHERS) {
+    return normalized as MarketplaceCraftId;
+  }
+  return null;
+}
+
+export function listingMatchesCraft(
+  listing: MarketplaceListing,
+  craft: MarketplaceCraftId,
+): boolean {
+  const needles = CRAFT_MATCHERS[craft];
+  const haystack = [
+    listing.title,
+    listing.description,
+    listing.previewText,
+    listing.projectType,
+    listing.yarnWeight ?? "",
+    listing.hookSize ?? "",
+    ...listing.tags,
+  ]
+    .join(" ")
+    .toLowerCase();
+
+  return needles.some((needle) => haystack.includes(needle));
+}
 
 const PRIMARY_TYPES = new Set([
   "amigurumi",
@@ -101,6 +149,12 @@ export function filterMarketplaceListings(
   if (filters.category !== "all") {
     result = result.filter((listing) =>
       listingMatchesCategory(listing, filters.category),
+    );
+  }
+
+  if (filters.craft) {
+    result = result.filter((listing) =>
+      listingMatchesCraft(listing, filters.craft!),
     );
   }
 

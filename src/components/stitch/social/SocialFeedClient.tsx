@@ -10,10 +10,7 @@ import { StitchIcon } from "@/components/stitch/StitchIcon";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { useCurrentUser } from "@/components/providers/SubscriptionProvider";
-import {
-  addSocialPost,
-  getSocialPosts,
-} from "@/lib/social-storage";
+import { createSocialPost, fetchSocialPosts } from "@/lib/social-api";
 import type { SocialPost } from "@/lib/schemas/social";
 import { cn } from "@/lib/utils";
 
@@ -31,12 +28,19 @@ export function SocialFeedClient() {
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setPosts(getSocialPosts());
-    setLoaded(true);
+    let cancelled = false;
+    void fetchSocialPosts().then((next) => {
+      if (cancelled) return;
+      setPosts(next);
+      setLoaded(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function refreshPosts() {
-    setPosts(getSocialPosts());
+    void fetchSocialPosts().then(setPosts);
   }
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -47,15 +51,11 @@ export function SocialFeedClient() {
     reader.readAsDataURL(file);
   }
 
-  function handlePost(e: React.FormEvent) {
+  async function handlePost(e: React.FormEvent) {
     e.preventDefault();
-    if (!content.trim()) return;
+    if (!content.trim() || !currentUser) return;
 
-    addSocialPost({
-      userId: currentUser.id,
-      userName: currentUser.displayName,
-      userHandle: currentUser.handle,
-      userAvatarUrl: currentUser.avatarUrl,
+    await createSocialPost({
       content: content.trim(),
       imageUrl: imagePreview ?? undefined,
       projectTitle: projectTitle.trim() || undefined,
@@ -73,7 +73,8 @@ export function SocialFeedClient() {
     tab === "following"
       ? posts.filter(
           (p) =>
-            followingIds.includes(p.userId) || p.userId === currentUser.id,
+            followingIds.includes(p.userId) ||
+            (currentUser != null && p.userId === currentUser.id),
         )
       : posts;
 
@@ -148,7 +149,16 @@ export function SocialFeedClient() {
         <div className="space-y-4">
           <div id="compose">
           <Card padding="lg">
-            {!showComposer ? (
+            {!currentUser ? (
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-sm text-stitch-muted">
+                  Sign in to share WIPs and comment on the feed.
+                </p>
+                <Button href="/auth/login?redirect=/social" size="sm">
+                  Sign in
+                </Button>
+              </div>
+            ) : !showComposer ? (
               <button
                 type="button"
                 onClick={() => setShowComposer(true)}
@@ -166,7 +176,7 @@ export function SocialFeedClient() {
                 </span>
               </button>
             ) : (
-              <form onSubmit={handlePost} className="space-y-3">
+              <form onSubmit={(event) => void handlePost(event)} className="space-y-3">
                 <textarea
                   value={content}
                   onChange={(e) => setContent(e.target.value)}

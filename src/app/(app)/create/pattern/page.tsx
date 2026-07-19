@@ -13,6 +13,11 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { Badge } from "@/components/ui/Badge";
 import { useSubscription } from "@/components/providers/SubscriptionProvider";
+import {
+  createSavedPatternId,
+  readSavedPatterns,
+  writeSavedPatterns,
+} from "@/lib/saved-patterns";
 
 export default function PatternGeneratorPage() {
   const { featureTier, lifetimeAccess } = useSubscription();
@@ -57,10 +62,13 @@ export default function PatternGeneratorPage() {
 
   function savePattern() {
     if (!result) return;
-    const key = "stitch-saved-patterns";
-    const existing = JSON.parse(localStorage.getItem(key) ?? "[]") as unknown[];
-    existing.unshift({ ...result, savedAt: new Date().toISOString() });
-    localStorage.setItem(key, JSON.stringify(existing.slice(0, 20)));
+    const existing = readSavedPatterns();
+    existing.unshift({
+      ...result,
+      id: createSavedPatternId(result),
+      savedAt: new Date().toISOString(),
+    });
+    writeSavedPatterns(existing);
     setSaved(true);
   }
 

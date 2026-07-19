@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
 import { Button } from "@/components/ui/Button";
-import { toggleGroupJoin } from "@/lib/social-storage";
+import { setGroupJoined } from "@/lib/social-api";
 import type { SocialGroup } from "@/lib/schemas/social";
 import { cn } from "@/lib/utils";
 
@@ -15,11 +15,24 @@ type GroupCardProps = {
 
 export function GroupCard({ group, onUpdate, compact }: GroupCardProps) {
   function handleJoin() {
-    toggleGroupJoin(group.id);
+    const nextJoined = !group.isJoined;
     onUpdate({
       ...group,
-      isJoined: !group.isJoined,
-      memberCount: group.isJoined ? group.memberCount - 1 : group.memberCount + 1,
+      isJoined: nextJoined,
+      memberCount: nextJoined
+        ? group.memberCount + 1
+        : Math.max(0, group.memberCount - 1),
+    });
+    void setGroupJoined(group.id, nextJoined).then((result) => {
+      onUpdate({
+        ...group,
+        isJoined: result.joined,
+        memberCount:
+          result.memberCount ??
+          (result.joined
+            ? group.memberCount + 1
+            : Math.max(0, group.memberCount - 1)),
+      });
     });
   }
 

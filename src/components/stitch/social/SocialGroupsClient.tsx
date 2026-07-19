@@ -3,14 +3,14 @@
 import { useEffect, useState } from "react";
 import { PageHeading } from "@/components/stitch/PageHeading";
 import { GroupCard } from "@/components/stitch/social/GroupCard";
-import { getSocialGroups } from "@/lib/social-storage";
+import { fetchSocialGroups } from "@/lib/social-api";
 import type { SocialGroup } from "@/lib/schemas/social";
 
 export function SocialGroupsClient() {
   const [groups, setGroups] = useState<SocialGroup[]>([]);
 
   useEffect(() => {
-    setGroups(getSocialGroups());
+    void fetchSocialGroups().then(setGroups);
   }, []);
 
   function handleUpdate(updated: SocialGroup) {

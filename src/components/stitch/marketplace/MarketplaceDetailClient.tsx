@@ -9,10 +9,10 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import {
-  formatPrice,
-  getMarketplaceListing,
-  incrementListingDownload,
-} from "@/lib/marketplace-storage";
+  fetchMarketplaceListing,
+  recordMarketplaceDownload,
+} from "@/lib/marketplace-api";
+import { formatPrice, incrementListingDownload } from "@/lib/marketplace-storage";
 import {
   DEFAULT_SITE_LANGUAGE,
   getListingLanguages,
@@ -93,13 +93,21 @@ export function MarketplaceDetailClient({ listingId }: MarketplaceDetailClientPr
   const [downloaded, setDownloaded] = useState(false);
 
   useEffect(() => {
-    setListing(getMarketplaceListing(listingId));
-    setLoaded(true);
+    let cancelled = false;
+    void fetchMarketplaceListing(listingId).then((next) => {
+      if (cancelled) return;
+      setListing(next);
+      setLoaded(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, [listingId]);
 
   function handleDownload() {
     if (!listing) return;
     incrementListingDownload(listing.id);
+    void recordMarketplaceDownload(listing.id);
     setDownloaded(true);
 
     const blob = new Blob(

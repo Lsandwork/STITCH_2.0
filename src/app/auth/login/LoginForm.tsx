@@ -33,15 +33,10 @@ export default function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    defaultValues: demoMode
-      ? {
-          email: "lsand.work@gmail.com",
-          password: "password123",
-        }
-      : {
-          email: "",
-          password: "",
-        },
+    defaultValues: {
+      email: demoMode ? "demo@stitch.local" : "",
+      password: demoMode ? "demo-password" : "",
+    },
   });
 
   async function onSubmit(data: LoginFormValues) {

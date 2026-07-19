@@ -142,10 +142,22 @@ export async function POST(request: NextRequest) {
   const setupSecret = process.env.SETUP_SECRET ?? process.env.CRON_SECRET;
   const providedSecret = request.headers.get("x-setup-secret");
 
-  if (setupSecret) {
-    if (providedSecret !== setupSecret) {
-      return jsonError("Invalid setup secret", 401);
-    }
+  if (!setupSecret) {
+    return jsonError(
+      "SETUP_SECRET (or CRON_SECRET) must be configured before bootstrap.",
+      503,
+    );
+  }
+
+  if (providedSecret !== setupSecret) {
+    return jsonError("Invalid setup secret", 401);
+  }
+
+  if (!ADMIN_BOOTSTRAP_PASSWORD) {
+    return jsonError(
+      "ADMIN_BOOTSTRAP_PASSWORD must be configured before bootstrap.",
+      503,
+    );
   }
 
   try {

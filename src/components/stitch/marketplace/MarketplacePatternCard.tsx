@@ -8,10 +8,8 @@ import { MarketplacePatternStats } from "@/components/stitch/marketplace/Marketp
 import {
   formatSkillLevel,
 } from "@/lib/marketplace-filters";
-import {
-  formatPrice,
-  toggleSavedMarketplaceListing,
-} from "@/lib/marketplace-storage";
+import { setMarketplaceListingSaved } from "@/lib/marketplace-api";
+import { formatPrice } from "@/lib/marketplace-storage";
 import type { MarketplaceListing } from "@/lib/schemas/marketplace";
 import { cn } from "@/lib/utils";
 
@@ -46,9 +44,14 @@ export function MarketplacePatternCard({
   function handleBookmark(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     event.stopPropagation();
-    const nextSaved = toggleSavedMarketplaceListing(listing.id);
+    const nextSaved = !saved;
     setSaved(nextSaved);
     onSavedChange?.(listing.id, nextSaved);
+    void setMarketplaceListingSaved(listing.id, nextSaved).then((ids) => {
+      const confirmed = ids.includes(listing.id);
+      setSaved(confirmed);
+      onSavedChange?.(listing.id, confirmed);
+    });
   }
 
   return (

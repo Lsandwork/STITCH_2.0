@@ -10,8 +10,8 @@ import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { Badge } from "@/components/ui/Badge";
+import { publishMarketplaceListing } from "@/lib/marketplace-api";
 import {
-  addMarketplaceListing,
   generateListingId,
   getMarketplaceListings,
 } from "@/lib/marketplace-storage";
@@ -79,48 +79,57 @@ export function MarketplaceUploadClient() {
     }
   }
 
-  function publishListing() {
-    if (!aiResult) return;
+  async function publishListing() {
+    if (!aiResult || !currentUser) {
+      setError("Sign in to publish a marketplace listing.");
+      return;
+    }
     setPublishing(true);
+    setError(null);
 
     const now = new Date().toISOString();
     const id = generateListingId(title);
     const priceCents = Math.round(parseFloat(priceDollars || "0") * 100);
 
-    addMarketplaceListing({
-      id,
-      designerId: currentUser.id,
-      designerName: currentUser.displayName,
-      designerAvatarUrl: currentUser.avatarUrl,
-      title,
-      description: aiResult.aiDescription.slice(0, 200),
-      aiDescription: aiResult.aiDescription,
-      previewText: aiResult.previewText,
-      patternContent,
-      priceCents,
-      skillLevel,
-      projectType,
-      yarnWeight,
-      hookSize,
-      thumbnailUrl: imagePreview ?? "",
-      thumbnailStyle: imagePreview ? undefined : aiResult.thumbnailStyle,
-      languages: normalizeListingLanguages(aiResult.languages, {
+    try {
+      const listing = await publishMarketplaceListing({
+        id,
+        designerId: currentUser.id,
+        designerName: currentUser.displayName,
+        designerAvatarUrl: currentUser.avatarUrl,
         title,
         description: aiResult.aiDescription.slice(0, 200),
-      }),
-      tags: aiResult.tags,
-      downloads: 0,
-      rating: 0,
-      ratingCount: 0,
-      duplicateScore: aiResult.duplicateScore,
-      duplicateOfId: aiResult.duplicateScore >= 80 ? "possible-duplicate" : null,
-      duplicateNote: aiResult.duplicateNote,
-      status: aiResult.duplicateScore >= 80 ? "flagged" : "published",
-      createdAt: now,
-      updatedAt: now,
-    });
+        aiDescription: aiResult.aiDescription,
+        previewText: aiResult.previewText,
+        patternContent,
+        priceCents,
+        skillLevel,
+        projectType,
+        yarnWeight,
+        hookSize,
+        thumbnailUrl: imagePreview || "/assets/projects/color-studio.jpg",
+        thumbnailStyle: imagePreview ? undefined : aiResult.thumbnailStyle,
+        languages: normalizeListingLanguages(aiResult.languages, {
+          title,
+          description: aiResult.aiDescription.slice(0, 200),
+        }),
+        tags: aiResult.tags,
+        downloads: 0,
+        rating: 0,
+        ratingCount: 0,
+        duplicateScore: aiResult.duplicateScore,
+        duplicateOfId: null,
+        duplicateNote: aiResult.duplicateNote,
+        status: aiResult.duplicateScore >= 80 ? "flagged" : "published",
+        createdAt: now,
+        updatedAt: now,
+      });
 
-    router.push(`/marketplace/${id}`);
+      router.push(`/marketplace/${listing.id}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to publish listing");
+      setPublishing(false);
+    }
   }
 
   return (
@@ -326,7 +335,7 @@ export function MarketplaceUploadClient() {
               </Card>
 
               <Button
-                onClick={publishListing}
+                onClick={() => void publishListing()}
                 disabled={publishing}
                 className="w-full"
               >

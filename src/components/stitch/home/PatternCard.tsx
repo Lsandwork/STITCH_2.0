@@ -1,10 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { HomePattern } from "@/lib/home-patterns";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
+
+const HOME_SAVED_KEY = "stitch-home-saved-pattern-ids";
+
+function readSavedIds(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(HOME_SAVED_KEY);
+    if (!raw) return [];
+    const parsed = JSON.parse(raw) as unknown;
+    return Array.isArray(parsed)
+      ? parsed.filter((id): id is string => typeof id === "string")
+      : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeSavedIds(ids: string[]): void {
+  localStorage.setItem(HOME_SAVED_KEY, JSON.stringify(ids));
+}
 
 type PatternCardProps = {
   pattern: HomePattern;
@@ -12,6 +32,23 @@ type PatternCardProps = {
 
 export function PatternCard({ pattern }: PatternCardProps) {
   const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    setSaved(readSavedIds().includes(pattern.id));
+  }, [pattern.id]);
+
+  function toggleSaved(event: React.MouseEvent) {
+    event.preventDefault();
+    const current = new Set(readSavedIds());
+    if (current.has(pattern.id)) {
+      current.delete(pattern.id);
+      setSaved(false);
+    } else {
+      current.add(pattern.id);
+      setSaved(true);
+    }
+    writeSavedIds([...current]);
+  }
 
   return (
     <article className="group">
@@ -26,10 +63,7 @@ export function PatternCard({ pattern }: PatternCardProps) {
           />
           <button
             type="button"
-            onClick={(event) => {
-              event.preventDefault();
-              setSaved((value) => !value);
-            }}
+            onClick={toggleSaved}
             className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-stitch-paper/90 shadow-sm backdrop-blur-sm transition-colors hover:bg-stitch-paper"
             aria-label={saved ? "Remove from saved" : "Save pattern"}
           >

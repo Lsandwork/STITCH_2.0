@@ -6,40 +6,85 @@ import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { EmptyState } from "@/components/ui/EmptyState";
-import type { PatternGenerationResultSchema } from "@/lib/schemas/pattern";
+import {
+  findSavedPattern,
+  type SavedPattern,
+} from "@/lib/saved-patterns";
 
 type Props = { params: Promise<{ patternId: string }> };
-
-type SavedPattern = PatternGenerationResultSchema & { savedAt?: string };
 
 export default function PatternDetailPage({ params }: Props) {
   const [pattern, setPattern] = useState<SavedPattern | null>(null);
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   useEffect(() => {
     params.then(({ patternId: id }) => {
-      const match = id.match(/^demo-(\d+)$/);
-      if (!match) {
-        setMissing(true);
+      // Support legacy index URLs like demo-0 for one release.
+      const legacyMatch = id.match(/^demo-(\d+)$/);
+      if (legacyMatch) {
+        const index = Number(legacyMatch[1]);
+        const raw = localStorage.getItem("stitch-saved-patterns");
+        const patterns = raw ? (JSON.parse(raw) as SavedPattern[]) : [];
+        const found = patterns[index] ?? null;
+        setPattern(found);
+        setMissing(!found);
         setLoading(false);
         return;
       }
-      const index = Number(match[1]);
-      const raw = localStorage.getItem("stitch-saved-patterns");
-      const patterns = raw ? (JSON.parse(raw) as SavedPattern[]) : [];
-      setPattern(patterns[index] ?? null);
-      setMissing(!patterns[index]);
+
+      const found = findSavedPattern(id);
+      setPattern(found);
+      setMissing(!found);
       setLoading(false);
     });
   }, [params]);
+
+  async function handleExportPdf() {
+    if (!pattern) return;
+    setExportError(null);
+    setExporting(true);
+
+    try {
+      const response = await fetch("/api/export/pattern-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pattern.pattern),
+      });
+
+      const payload = (await response.json()) as {
+        error?: string;
+        dataUrl?: string;
+        filename?: string;
+      };
+
+      if (!response.ok || !payload.dataUrl) {
+        throw new Error(payload.error ?? "Failed to export PDF");
+      }
+
+      const link = document.createElement("a");
+      link.href = payload.dataUrl;
+      link.download = payload.filename ?? "pattern.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      setExportError(
+        error instanceof Error ? error.message : "Failed to export PDF",
+      );
+    } finally {
+      setExporting(false);
+    }
+  }
 
   if (loading) return <LoadingState label="Loading pattern…" />;
   if (missing || !pattern) {
     return (
       <EmptyState
         title="Pattern not found"
-        description="This pattern may have been removed from local storage."
+        description="This pattern may have been removed from this device."
         actionLabel="Browse patterns"
         actionHref="/patterns"
       />
@@ -84,15 +129,20 @@ export default function PatternDetailPage({ params }: Props) {
           </div>
         ))}
 
-        <div className="flex gap-2">
-          <Button href="/workspace/demo-dachshund">Open in workspace</Button>
+        <div className="flex flex-wrap gap-2">
+          <Button href="/workspace">Open workspace</Button>
           <Button
-            href={`/api/export/pattern-pdf?title=${encodeURIComponent(pattern.pattern.title)}`}
+            type="button"
             variant="secondary"
+            disabled={exporting}
+            onClick={() => void handleExportPdf()}
           >
-            Export PDF
+            {exporting ? "Exporting…" : "Export PDF"}
           </Button>
         </div>
+        {exportError ? (
+          <p className="text-sm text-stitch-coral">{exportError}</p>
+        ) : null}
       </Card>
     </>
   );

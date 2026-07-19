@@ -44,6 +44,8 @@ export const visionScanResultSchema = z.object({
   findings: z.array(visionScanFindingSchema).default([]),
   suggestedCorrections: z.array(z.string()).default([]),
   summary: z.string().optional(),
+  /** Whether the result came from a live model or a mock/fallback path. */
+  analysisSource: z.enum(["ai", "mock"]).optional(),
 });
 
 export const visionScanSubmissionSchema = z.object({

@@ -48,17 +48,21 @@ export function useRowCounter({
     [projectId, storageKeyPrefix],
   );
 
+  // Always start with defaults so SSR and the first client paint match.
   const [state, setState] = useState<RowCounterState>(() =>
-    loadState(key, initialRow),
+    createInitialState(initialRow),
   );
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     setState(loadState(key, initialRow));
+    setHydrated(true);
   }, [key, initialRow]);
 
   useEffect(() => {
+    if (!hydrated) return;
     localStorage.setItem(key, JSON.stringify(state));
-  }, [key, state]);
+  }, [key, state, hydrated]);
 
   const setCurrentRow = useCallback(
     (row: number) => {

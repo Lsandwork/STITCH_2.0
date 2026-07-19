@@ -199,13 +199,11 @@ export function formatPrice(cents: number): string {
   return `$${(cents / 100).toFixed(2)}`;
 }
 
-export function generateListingId(title: string): string {
-  const slug = title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "")
-    .slice(0, 40);
-  return `mp-${slug}-${Date.now().toString(36)}`;
+export function generateListingId(_title?: string): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `mp-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
 const SAVED_MARKETPLACE_KEY = "stitch-saved-marketplace-listings";

@@ -9,6 +9,7 @@ import { AuthLayout } from "@/components/stitch/AuthLayout";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
+import { requestPasswordReset } from "@/lib/auth-client";
 
 const forgotSchema = z.object({
   email: z.string().email("Enter a valid email"),
@@ -18,6 +19,7 @@ type ForgotForm = z.infer<typeof forgotSchema>;
 
 export default function ForgotPasswordPage() {
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const {
     register,
@@ -27,7 +29,13 @@ export default function ForgotPasswordPage() {
     resolver: zodResolver(forgotSchema),
   });
 
-  async function onSubmit() {
+  async function onSubmit(data: ForgotForm) {
+    setError(null);
+    const result = await requestPasswordReset(data.email);
+    if (!result.ok) {
+      setError(result.error ?? "Could not send a reset link. Try again.");
+      return;
+    }
     setSent(true);
   }
 
@@ -57,8 +65,13 @@ export default function ForgotPasswordPage() {
             error={errors.email?.message}
             {...register("email")}
           />
+          {error ? (
+            <p className="rounded-stitch-sm bg-stitch-rose/60 px-3 py-2 text-sm text-stitch-coral">
+              {error}
+            </p>
+          ) : null}
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            Send reset link
+            {isSubmitting ? "Sending…" : "Send reset link"}
           </Button>
         </form>
       )}

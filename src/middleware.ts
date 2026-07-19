@@ -35,6 +35,13 @@ export async function middleware(request: NextRequest) {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   if (!supabaseUrl || !supabaseAnonKey) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json(
+        { error: "Authentication is not configured" },
+        { status: 503 },
+      );
+    }
+
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/auth/login";
     loginUrl.searchParams.set("redirect", pathname);
@@ -73,6 +80,13 @@ export async function middleware(request: NextRequest) {
   }
 
   if (!user) {
+    if (pathname.startsWith("/api/")) {
+      return NextResponse.json(
+        { error: "Authentication required" },
+        { status: 401 },
+      );
+    }
+
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/auth/login";
     loginUrl.searchParams.set("redirect", pathname);

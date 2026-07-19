@@ -7,10 +7,10 @@ import { StitchIcon } from "@/components/stitch/StitchIcon";
 import { Button } from "@/components/ui/Button";
 import { useCurrentUser } from "@/components/providers/SubscriptionProvider";
 import {
-  addComment,
-  getCurrentUserId,
-  togglePostLike,
-} from "@/lib/social-storage";
+  addSocialPostComment,
+  toggleSocialPostLike,
+} from "@/lib/social-api";
+import { getCurrentUserId } from "@/lib/social-storage";
 import type { SocialPost } from "@/lib/schemas/social";
 import { cn } from "@/lib/utils";
 
@@ -32,29 +32,33 @@ function timeAgo(iso: string): string {
 export function FeedPost({ post, onUpdate }: FeedPostProps) {
   const currentUser = useCurrentUser();
   const userId = getCurrentUserId();
-  const liked = post.likes.includes(userId);
+  const liked = userId ? post.likes.includes(userId) : false;
   const [commentText, setCommentText] = useState("");
   const [showComments, setShowComments] = useState(false);
 
   function handleLike() {
-    const updated = togglePostLike(post.id, userId);
-    if (updated) onUpdate(updated);
+    if (!userId) return;
+    void toggleSocialPostLike(post.id, userId).then((result) => {
+      if (!result) return;
+      onUpdate({ ...post, likes: result.likes });
+    });
   }
 
   function handleComment(e: React.FormEvent) {
     e.preventDefault();
-    if (!commentText.trim()) return;
-    const updated = addComment(post.id, {
+    if (!commentText.trim() || !userId || !currentUser) return;
+    const content = commentText.trim();
+    void addSocialPostComment(post.id, {
       userId,
       userName: currentUser.displayName,
       userAvatarUrl: currentUser.avatarUrl,
-      content: commentText.trim(),
-    });
-    if (updated) {
-      onUpdate(updated);
+      content,
+    }).then((comment) => {
+      if (!comment) return;
+      onUpdate({ ...post, comments: [...post.comments, comment] });
       setCommentText("");
       setShowComments(true);
-    }
+    });
   }
 
   return (
@@ -146,18 +150,27 @@ export function FeedPost({ post, onUpdate }: FeedPostProps) {
                 </div>
               </div>
             ))}
-            <form onSubmit={handleComment} className="flex gap-2">
-              <input
-                type="text"
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Add a comment…"
-                className="min-w-0 flex-1 rounded-stitch-pill border border-stitch-border bg-stitch-paper px-4 py-2 text-sm"
-              />
-              <Button type="submit" size="sm" disabled={!commentText.trim()}>
-                Post
-              </Button>
-            </form>
+            {currentUser && userId ? (
+              <form onSubmit={handleComment} className="flex gap-2">
+                <input
+                  type="text"
+                  value={commentText}
+                  onChange={(e) => setCommentText(e.target.value)}
+                  placeholder="Add a comment…"
+                  className="min-w-0 flex-1 rounded-stitch-pill border border-stitch-border bg-stitch-paper px-4 py-2 text-sm"
+                />
+                <Button type="submit" size="sm" disabled={!commentText.trim()}>
+                  Post
+                </Button>
+              </form>
+            ) : (
+              <p className="text-xs text-stitch-muted">
+                <Link href="/auth/login?redirect=/social" className="font-medium text-stitch-coral hover:underline">
+                  Sign in
+                </Link>{" "}
+                to comment.
+              </p>
+            )}
           </div>
         ) : null}
       </footer>

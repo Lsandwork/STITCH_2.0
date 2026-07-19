@@ -3,7 +3,7 @@ import Link from "next/link";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
 import { Button } from "@/components/ui/Button";
 import { BILLING_PLANS, formatMonthlyPrice } from "@/lib/billing";
-import { BRAND, assetPath } from "@/lib/constants";
+import { BRAND } from "@/lib/constants";
 import { HeroPromoVideo } from "@/components/marketing/HeroPromoVideo";
 import { cn } from "@/lib/utils";
 

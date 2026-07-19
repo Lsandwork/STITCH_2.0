@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { MarketplaceCardSkeleton } from "@/components/stitch/marketplace/MarketplaceCardSkeleton";
 import { MarketplaceCategoryChips } from "@/components/stitch/marketplace/MarketplaceCategoryChips";
 import { MarketplaceCTA } from "@/components/stitch/marketplace/MarketplaceCTA";
@@ -13,41 +14,71 @@ import { StitchIcon } from "@/components/stitch/StitchIcon";
 import {
   DEFAULT_MARKETPLACE_FILTERS,
   filterMarketplaceListings,
+  parseMarketplaceCraftParam,
   type MarketplaceFilterState,
 } from "@/lib/marketplace-filters";
 import {
-  getMarketplaceListings,
-  getSavedMarketplaceListingIds,
-} from "@/lib/marketplace-storage";
+  fetchMarketplaceListings,
+  fetchSavedMarketplaceIds,
+} from "@/lib/marketplace-api";
 import type { MarketplaceListing } from "@/lib/schemas/marketplace";
 
 function countActiveFilters(filters: MarketplaceFilterState): number {
   let count = 0;
   if (filters.skillLevels.length > 0) count += 1;
   if (filters.maxPriceCents !== null) count += 1;
+  if (filters.craft) count += 1;
   return count;
 }
 
 export function MarketplaceClient() {
+  const searchParams = useSearchParams();
+  const craftFromUrl = parseMarketplaceCraftParam(searchParams.get("craft"));
+
   const [listings, setListings] = useState<MarketplaceListing[]>([]);
   const [savedIds, setSavedIds] = useState<string[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [filters, setFilters] = useState<MarketplaceFilterState>(
-    DEFAULT_MARKETPLACE_FILTERS,
-  );
+  const [filters, setFilters] = useState<MarketplaceFilterState>(() => ({
+    ...DEFAULT_MARKETPLACE_FILTERS,
+    craft: craftFromUrl,
+  }));
 
   useEffect(() => {
-    try {
-      setListings(getMarketplaceListings());
-      setSavedIds(getSavedMarketplaceListingIds());
-      setError(null);
-    } catch {
-      setError("We couldn't load marketplace patterns. Please try again.");
-    } finally {
-      setLoaded(true);
+    setFilters((current) =>
+      current.craft === craftFromUrl
+        ? current
+        : { ...current, craft: craftFromUrl },
+    );
+  }, [craftFromUrl]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      try {
+        const [nextListings, nextSaved] = await Promise.all([
+          fetchMarketplaceListings(),
+          fetchSavedMarketplaceIds(),
+        ]);
+        if (cancelled) return;
+        setListings(nextListings);
+        setSavedIds(nextSaved);
+        setError(null);
+      } catch {
+        if (!cancelled) {
+          setError("We couldn't load marketplace patterns. Please try again.");
+        }
+      } finally {
+        if (!cancelled) setLoaded(true);
+      }
     }
+
+    void load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const filtered = useMemo(
@@ -62,7 +93,7 @@ export function MarketplaceClient() {
   }
 
   function clearAdvancedFilters() {
-    updateFilters({ skillLevels: [], maxPriceCents: null });
+    updateFilters({ skillLevels: [], maxPriceCents: null, craft: null });
   }
 
   function handleSavedChange(listingId: string, saved: boolean) {
@@ -93,6 +124,21 @@ export function MarketplaceClient() {
       <MarketplaceHero />
 
       <MarketplaceFeatureCards />
+
+      {filters.craft ? (
+        <p className="text-sm text-stitch-muted">
+          Showing{" "}
+          <span className="font-medium text-stitch-ink">{filters.craft}</span>{" "}
+          patterns.{" "}
+          <button
+            type="button"
+            className="font-medium text-stitch-coral hover:underline"
+            onClick={() => updateFilters({ craft: null })}
+          >
+            Clear craft filter
+          </button>
+        </p>
+      ) : null}
 
       <MarketplaceToolbar
         filters={filters}

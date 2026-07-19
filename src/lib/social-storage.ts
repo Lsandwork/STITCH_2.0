@@ -12,6 +12,7 @@ import {
   type SocialPost,
 } from "@/lib/schemas/social";
 import { AUTH_USER_ID_KEY } from "@/lib/auth-client";
+import { isDemoModeEnabled } from "@/lib/constants";
 import { DEMO_USER } from "@/lib/demo-data";
 
 export const SOCIAL_POSTS_KEY = "stitch-social-posts";
@@ -19,12 +20,13 @@ export const SOCIAL_GROUPS_KEY = "stitch-social-groups";
 export const SOCIAL_MAKERS_KEY = "stitch-social-makers";
 export const SOCIAL_FOLLOWS_KEY = "stitch-social-follows";
 
-export function getCurrentUserId(): string {
+export function getCurrentUserId(): string | null {
   if (typeof window !== "undefined") {
     const authUserId = localStorage.getItem(AUTH_USER_ID_KEY);
     if (authUserId) return authUserId;
   }
-  return DEMO_USER.id;
+  if (isDemoModeEnabled()) return DEMO_USER.id;
+  return null;
 }
 
 function parsePosts(raw: string | null): SocialPost[] {

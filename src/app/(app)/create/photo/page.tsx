@@ -60,6 +60,7 @@ export default function PhotoPatternPage() {
   const [result, setResult] = useState<PhotoPatternResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [demoMode, setDemoMode] = useState(false);
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
     setError(null);
@@ -101,6 +102,7 @@ export default function PhotoPatternPage() {
       const payload = (await response.json()) as {
         error?: string;
         result?: PhotoPatternResult;
+        demoMode?: boolean;
       };
       if (!response.ok) {
         throw new Error(payload.error ?? "Generation failed");
@@ -108,6 +110,9 @@ export default function PhotoPatternPage() {
       if (!payload.result) {
         throw new Error("The server returned an empty pattern.");
       }
+      setDemoMode(
+        Boolean(payload.demoMode) || payload.result.analysisSource === "mock",
+      );
       setResult(payload.result);
     } catch (err) {
       setError(
@@ -210,6 +215,13 @@ export default function PhotoPatternPage() {
                 <CardHeader>
                   <CardTitle>{result.pattern.title}</CardTitle>
                 </CardHeader>
+                {demoMode ? (
+                  <p className="mb-3 rounded-stitch-sm bg-stitch-peach/50 px-3 py-2 text-xs text-stitch-ink">
+                    Demo / fallback analysis — AI keys were missing or vision
+                    failed. Treat this as an approximate mock, not a live photo
+                    read.
+                  </p>
+                ) : null}
                 <p className="text-xs text-stitch-muted">{result.disclaimer}</p>
                 <p className="mt-3 text-sm">
                   Confidence: {Math.round(result.confidence * 100)}%

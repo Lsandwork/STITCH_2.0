@@ -93,3 +93,29 @@ export async function signUpWithEmail(
     requiresEmailConfirmation: data.requiresEmailConfirmation,
   };
 }
+
+export async function requestPasswordReset(email: string): Promise<AuthResult> {
+  if (!isSupabaseConfigured()) {
+    return { ok: false, error: "Authentication is not configured." };
+  }
+
+  const supabase = createClient();
+  if (!supabase) {
+    return { ok: false, error: "Authentication is not configured." };
+  }
+
+  const redirectTo =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/auth/login`
+      : undefined;
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo,
+  });
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  return { ok: true };
+}

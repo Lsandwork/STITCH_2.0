@@ -11,7 +11,10 @@ import {
 } from "react";
 import { isDemoModeEnabled } from "@/lib/constants";
 import { DEMO_USER } from "@/lib/demo-data";
-import { getDemoSession } from "@/lib/demo-session";
+import {
+  clearStaleDemoSessionIfDisabled,
+  getDemoSession,
+} from "@/lib/demo-session";
 import {
   resolveFeatureTier,
   shouldShowUpgradePrompts,
@@ -127,6 +130,7 @@ export function SubscriptionProvider({
   }, []);
 
   useEffect(() => {
+    clearStaleDemoSessionIfDisabled();
     void refresh();
   }, [refresh]);
 
@@ -158,19 +162,15 @@ export function useSubscription(): SubscriptionState {
 }
 
 /** Signed-in maker profile for posts, comments, uploads, etc. */
-export function useCurrentUser(): CurrentUser {
-  const { user } = useSubscription();
+export function useCurrentUser(): CurrentUser | null {
+  const { user, isLoading } = useSubscription();
   if (user) return user;
 
   if (isDemoModeEnabled()) {
     return getDemoCurrentUser();
   }
 
-  return {
-    id: DEMO_USER.id,
-    displayName: DEMO_USER.displayName,
-    email: DEMO_USER.email,
-    avatarUrl: DEMO_USER.avatarUrl,
-    handle: buildUserHandle(DEMO_USER.email),
-  };
+  // Never invent a signed-in identity outside demo mode.
+  if (isLoading) return null;
+  return null;
 }

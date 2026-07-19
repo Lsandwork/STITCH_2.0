@@ -38,6 +38,7 @@ export const photoPatternResultSchema = z.object({
   inspirationNotes: z.array(z.string()),
   generatedAt: z.string().datetime(),
   model: z.string().optional(),
+  analysisSource: z.enum(["ai", "mock"]).optional(),
 });
 
 export type PhotoPatternInput = z.infer<typeof photoPatternInputSchema>;
@@ -72,26 +73,35 @@ function mapConstruction(
 async function analyzePhotoInspiration(
   imageDataUrl: string,
   description?: string,
-): Promise<z.infer<typeof photoAnalysisSchema>> {
+): Promise<{
+  analysis: z.infer<typeof photoAnalysisSchema>;
+  analysisSource: "ai" | "mock";
+}> {
   const image = parseImageDataUrl(imageDataUrl);
   if (!image || !isSupportedVisionMimeType(image.mimeType)) {
-    return defaultPhotoAnalysis(description);
+    return {
+      analysis: defaultPhotoAnalysis(description),
+      analysisSource: "mock",
+    };
   }
 
   if (isMockMode()) {
-    return photoAnalysisSchema.parse({
-      projectType: "amigurumi",
-      description:
-        description ??
-        "Amigurumi plushie inspired by uploaded photo with segmented body parts.",
-      construction: "low_sew",
-      colors: ["Brown", "Cream"],
-      inspirationNotes: [
-        "Silhouette suggests a small amigurumi with segmented body parts.",
-        "Color blocking appears to use 2–3 main yarn colors.",
-      ],
-      confidence: 0.55,
-    });
+    return {
+      analysis: photoAnalysisSchema.parse({
+        projectType: "amigurumi",
+        description:
+          description ??
+          "Amigurumi plushie inspired by uploaded photo with segmented body parts.",
+        construction: "low_sew",
+        colors: ["Brown", "Cream"],
+        inspirationNotes: [
+          "Demo mode: AI keys are not configured — using an approximate mock analysis.",
+          "Silhouette suggests a small amigurumi with segmented body parts.",
+        ],
+        confidence: 0.55,
+      }),
+      analysisSource: "mock",
+    };
   }
 
   const provider = getAIProvider();
@@ -106,10 +116,20 @@ async function analyzePhotoInspiration(
     .join("\n");
 
   try {
-    return await provider.generateJSONWithImage(prompt, photoAnalysisSchema, image);
+    return {
+      analysis: await provider.generateJSONWithImage(
+        prompt,
+        photoAnalysisSchema,
+        image,
+      ),
+      analysisSource: "ai",
+    };
   } catch (error) {
     console.error("[analyzePhotoInspiration] Vision analysis failed:", error);
-    return defaultPhotoAnalysis(description);
+    return {
+      analysis: defaultPhotoAnalysis(description),
+      analysisSource: "mock",
+    };
   }
 }
 
@@ -118,18 +138,25 @@ export async function generatePatternFromPhoto(
 ): Promise<PhotoPatternResult> {
   const parsed = photoPatternInputSchema.parse(input);
 
-  const analysis = parsed.imageDataUrl
+  const photoAnalysis = parsed.imageDataUrl
     ? await analyzePhotoInspiration(parsed.imageDataUrl, parsed.description)
-    : photoAnalysisSchema.parse({
-        projectType: "amigurumi",
-        description:
-          parsed.description ??
-          "Amigurumi plushie inspired by uploaded photo — long body, short legs, floppy ears.",
-        construction: "low_sew",
-        colors: parsed.preferredColors ?? ["Brown", "Cream"],
-        inspirationNotes: ["No photo provided — generated from text description only."],
-        confidence: 0.45,
-      });
+    : {
+        analysis: photoAnalysisSchema.parse({
+          projectType: "amigurumi",
+          description:
+            parsed.description ??
+            "Amigurumi plushie inspired by uploaded photo — long body, short legs, floppy ears.",
+          construction: "low_sew",
+          colors: parsed.preferredColors ?? ["Brown", "Cream"],
+          inspirationNotes: [
+            "No photo provided — generated from text description only.",
+          ],
+          confidence: 0.45,
+        }),
+        analysisSource: "mock" as const,
+      };
+
+  const analysis = photoAnalysis.analysis;
 
   const generationInput = {
     description: parsed.description ?? analysis.description,
@@ -187,5 +214,6 @@ export async function generatePatternFromPhoto(
     inspirationNotes: analysis.inspirationNotes,
     generatedAt,
     model: result.model,
+    analysisSource: photoAnalysis.analysisSource,
   });
 }

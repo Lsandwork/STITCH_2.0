@@ -6,7 +6,7 @@ import { PageHeading } from "@/components/stitch/PageHeading";
 import { StitchIcon } from "@/components/stitch/StitchIcon";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
-import { getFollows, getSocialMakers, toggleFollow } from "@/lib/social-storage";
+import { fetchSocialMakers, setMakerFollowing } from "@/lib/social-api";
 import type { SocialMaker } from "@/lib/schemas/social";
 
 export function SocialDiscoverClient() {
@@ -14,13 +14,34 @@ export function SocialDiscoverClient() {
   const [follows, setFollows] = useState<string[]>([]);
 
   useEffect(() => {
-    setMakers(getSocialMakers());
-    setFollows(getFollows());
+    void fetchSocialMakers().then(({ makers: nextMakers, followingIds }) => {
+      setMakers(nextMakers);
+      setFollows(followingIds);
+    });
   }, []);
 
   function handleFollow(makerId: string) {
-    toggleFollow(makerId);
-    setFollows(getFollows());
+    const currentlyFollowing = follows.includes(makerId);
+    const nextFollowing = !currentlyFollowing;
+    setFollows((current) =>
+      nextFollowing
+        ? [...new Set([...current, makerId])]
+        : current.filter((id) => id !== makerId),
+    );
+    void setMakerFollowing(makerId, nextFollowing).then((confirmed) => {
+      setFollows((current) =>
+        confirmed
+          ? [...new Set([...current, makerId])]
+          : current.filter((id) => id !== makerId),
+      );
+      setMakers((current) =>
+        current.map((maker) =>
+          maker.id === makerId
+            ? { ...maker, isFollowing: confirmed }
+            : maker,
+        ),
+      );
+    });
   }
 
   const sorted = [...makers].sort((a, b) => {
