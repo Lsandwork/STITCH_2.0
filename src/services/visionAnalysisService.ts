@@ -9,7 +9,10 @@ import {
   parseImageDataUrl,
 } from "@/lib/ai-image-utils";
 import { buildProjectContextBlock } from "@/lib/ai-user-context";
-import { getAIProvider, isMockMode } from "@/services/ai/provider";
+import {
+  generateJSONWithImageFallback,
+  isMockMode,
+} from "@/services/ai/provider";
 
 const CONFIDENCE_THRESHOLD = 0.85;
 
@@ -142,32 +145,32 @@ export async function analyzeVisionImage(
     ? parseImageDataUrl(parsed.imageDataUrl)
     : null;
 
-  if (
-    isMockMode() ||
-    !image ||
-    !isSupportedVisionMimeType(image.mimeType)
-  ) {
+  if (!image) {
+    throw new Error("Upload a clear photo of your crochet work to scan.");
+  }
+
+  if (!isSupportedVisionMimeType(image.mimeType)) {
+    throw new Error("Use a JPEG, PNG, WebP, or GIF photo.");
+  }
+
+  if (isMockMode()) {
     return buildMockVisionResult(parsed);
   }
 
-  const provider = getAIProvider();
-  const prompt = buildVisionPrompt(parsed);
-
   try {
-    const result = await provider.generateJSONWithImage(
-      prompt,
+    const { data } = await generateJSONWithImageFallback(
+      buildVisionPrompt(parsed),
       visionScanResultSchema,
       image,
     );
-    return normalizeVisionResult(result, "ai");
+    return normalizeVisionResult(data, "ai");
   } catch (error) {
-    console.error("[visionAnalysisService] Vision AI failed, using mock fallback:", error);
-    const fallback = buildMockVisionResult(parsed);
-    return {
-      ...fallback,
-      summary: `Demo fallback (live analysis unavailable): ${fallback.summary ?? "Review your stitches manually."}`,
-      analysisSource: "mock",
-    };
+    console.error("[visionAnalysisService] Vision AI failed:", error);
+    throw new Error(
+      error instanceof Error
+        ? `Live vision analysis failed: ${error.message}`
+        : "Live vision analysis failed. Try again with a clearer, smaller photo.",
+    );
   }
 }
 

@@ -8,7 +8,10 @@ import {
   parseImageDataUrl,
 } from "@/lib/ai-image-utils";
 import { generatePattern } from "@/services/patternGenerationService";
-import { getAIProvider, isMockMode } from "@/services/ai/provider";
+import {
+  generateJSONWithImageFallback,
+  isMockMode,
+} from "@/services/ai/provider";
 
 export const PHOTO_PATTERN_DISCLAIMER =
   "This pattern is an approximate reconstruction inspired by your photo. It is not a copy of any original design and may require adjustments to match your yarn, gauge, and finished size.";
@@ -104,7 +107,6 @@ async function analyzePhotoInspiration(
     };
   }
 
-  const provider = getAIProvider();
   const prompt = [
     "Analyze this crochet or craft photo for pattern reconstruction.",
     description ? `Maker notes: ${description}` : null,
@@ -116,20 +118,22 @@ async function analyzePhotoInspiration(
     .join("\n");
 
   try {
+    const { data } = await generateJSONWithImageFallback(
+      prompt,
+      photoAnalysisSchema,
+      image,
+    );
     return {
-      analysis: await provider.generateJSONWithImage(
-        prompt,
-        photoAnalysisSchema,
-        image,
-      ),
+      analysis: data,
       analysisSource: "ai",
     };
   } catch (error) {
     console.error("[analyzePhotoInspiration] Vision analysis failed:", error);
-    return {
-      analysis: defaultPhotoAnalysis(description),
-      analysisSource: "mock",
-    };
+    throw new Error(
+      error instanceof Error
+        ? `Photo analysis failed: ${error.message}`
+        : "Photo analysis failed. Try a clearer, smaller photo.",
+    );
   }
 }
 

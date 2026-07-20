@@ -197,10 +197,7 @@ class OpenAIProvider implements AIProvider {
   ): Promise<z.infer<T>> {
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      const mock = new MockAIProvider();
-      return image
-        ? mock.generateJSONWithImage(prompt, schema, image)
-        : mock.generateJSON(prompt, schema);
+      throw new Error("OPENAI_API_KEY is not configured.");
     }
 
     const userContent = image
@@ -281,10 +278,7 @@ class AnthropicProvider implements AIProvider {
   ): Promise<z.infer<T>> {
     const apiKey = process.env.ANTHROPIC_API_KEY;
     if (!apiKey) {
-      const mock = new MockAIProvider();
-      return image
-        ? mock.generateJSONWithImage(prompt, schema, image)
-        : mock.generateJSON(prompt, schema);
+      throw new Error("ANTHROPIC_API_KEY is not configured.");
     }
 
     const content = image
@@ -368,10 +362,7 @@ class GeminiProvider implements AIProvider {
   ): Promise<z.infer<T>> {
     const apiKey = process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY;
     if (!apiKey) {
-      const mock = new MockAIProvider();
-      return image
-        ? mock.generateJSONWithImage(prompt, schema, image)
-        : mock.generateJSON(prompt, schema);
+      throw new Error("GEMINI_API_KEY is not configured.");
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
@@ -420,28 +411,27 @@ class GeminiProvider implements AIProvider {
   }
 }
 
-export function isMockMode(): boolean {
-  const provider = (process.env.AI_PROVIDER ?? "openai").toLowerCase();
-  const keyMap: Record<string, string | undefined> = {
-    openai: process.env.OPENAI_API_KEY,
-    anthropic: process.env.ANTHROPIC_API_KEY,
-    gemini: process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY,
-  };
-  return !keyMap[provider];
-}
-
-export function getAIProvider(name?: AIProviderName): AIProvider {
-  const provider = (name ?? process.env.AI_PROVIDER ?? "openai").toLowerCase();
-
-  switch (provider) {
+function createProvider(name: AIProviderName): AIProvider {
+  switch (name) {
     case "anthropic":
       return new AnthropicProvider(process.env.ANTHROPIC_MODEL);
     case "gemini":
       return new GeminiProvider(process.env.GEMINI_MODEL);
+    case "mock":
+      return new MockAIProvider();
     case "openai":
     default:
       return new OpenAIProvider(process.env.OPENAI_MODEL);
   }
+}
+
+function providerHasKey(name: AIProviderName): boolean {
+  if (name === "openai") return Boolean(process.env.OPENAI_API_KEY);
+  if (name === "anthropic") return Boolean(process.env.ANTHROPIC_API_KEY);
+  if (name === "gemini") {
+    return Boolean(process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY);
+  }
+  return false;
 }
 
 /** Ordered list of configured providers for retry/fallback chains. */
@@ -452,19 +442,93 @@ export function getConfiguredAIProviders(): AIProvider[] {
   const providers: AIProvider[] = [];
 
   for (const name of order) {
-    if (seen.has(name)) continue;
+    if (seen.has(name) || name === "mock") continue;
     seen.add(name);
-
-    const hasKey =
-      (name === "openai" && Boolean(process.env.OPENAI_API_KEY)) ||
-      (name === "anthropic" && Boolean(process.env.ANTHROPIC_API_KEY)) ||
-      (name === "gemini" &&
-        Boolean(process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY));
-
-    if (hasKey) {
-      providers.push(getAIProvider(name));
+    if (providerHasKey(name)) {
+      providers.push(createProvider(name));
     }
   }
 
   return providers;
+}
+
+export function isMockMode(): boolean {
+  // Mock only when no provider credentials are available at all.
+  return getConfiguredAIProviders().length === 0;
+}
+
+export function getAIProvider(name?: AIProviderName): AIProvider {
+  const preferred = (name ?? process.env.AI_PROVIDER ?? "openai").toLowerCase() as AIProviderName;
+  const configured = getConfiguredAIProviders();
+  const match = configured.find((provider) => provider.name === preferred);
+  if (match) return match;
+  if (configured[0]) return configured[0];
+  return createProvider(preferred === "mock" ? "openai" : preferred);
+}
+
+export async function generateJSONWithFallback<T extends z.ZodTypeAny>(
+  prompt: string,
+  schema: T,
+): Promise<{ data: z.infer<T>; provider: AIProvider }> {
+  const providers = getConfiguredAIProviders();
+  if (providers.length === 0) {
+    throw new Error(
+      "No AI provider is configured. Add GEMINI_API_KEY or OPENAI_API_KEY.",
+    );
+  }
+
+  let lastError: unknown;
+  for (const provider of providers) {
+    try {
+      const data = await provider.generateJSON(prompt, schema);
+      return { data, provider };
+    } catch (error) {
+      lastError = error;
+      console.error(
+        `[ai] ${provider.name} generateJSON failed, trying next:`,
+        error,
+      );
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("All AI providers failed.");
+}
+
+export async function generateJSONWithImageFallback<T extends z.ZodTypeAny>(
+  prompt: string,
+  schema: T,
+  image: ParsedImageData,
+): Promise<{ data: z.infer<T>; provider: AIProvider }> {
+  const providers = getConfiguredAIProviders();
+  if (providers.length === 0) {
+    throw new Error(
+      "No AI provider is configured. Add GEMINI_API_KEY or OPENAI_API_KEY.",
+    );
+  }
+
+  if (image.base64.length > 4_000_000) {
+    throw new Error(
+      "Image is too large for AI analysis. Please use a smaller photo (under ~3MB).",
+    );
+  }
+
+  let lastError: unknown;
+  for (const provider of providers) {
+    try {
+      const data = await provider.generateJSONWithImage(prompt, schema, image);
+      return { data, provider };
+    } catch (error) {
+      lastError = error;
+      console.error(
+        `[ai] ${provider.name} vision failed, trying next:`,
+        error,
+      );
+    }
+  }
+
+  throw lastError instanceof Error
+    ? lastError
+    : new Error("All AI vision providers failed.");
 }

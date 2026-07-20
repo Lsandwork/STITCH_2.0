@@ -182,20 +182,121 @@ export function repairAiJson(data: unknown): unknown {
     } else {
       obj.inspirationNotes = [];
     }
-    if (typeof obj.confidence !== "number") {
-      obj.confidence = Number(obj.confidence);
-    }
-    if (
-      typeof obj.confidence !== "number" ||
-      Number.isNaN(obj.confidence) ||
-      obj.confidence < 0 ||
-      obj.confidence > 1
-    ) {
-      obj.confidence = 0.5;
-    }
+    obj.confidence = normalizeConfidence(obj.confidence);
     return obj;
   }
 
+  // Vision scan / stitch analysis payloads
+  if (
+    "confidence" in obj &&
+    ("findings" in obj ||
+      "detectedStitchType" in obj ||
+      "suggestedCorrections" in obj ||
+      "problemAreas" in obj)
+  ) {
+    return repairVisionJson(obj);
+  }
+
+  // Tutor responses
+  if ("likelyIssue" in obj && "howToFix" in obj) {
+    obj.confidence = normalizeConfidence(obj.confidence);
+    obj.likelyIssue = coerceAiString(obj.likelyIssue) ?? "Needs review";
+    obj.howToConfirm = coerceAiString(obj.howToConfirm) ?? "Check your stitch count.";
+    obj.howToFix = coerceAiString(obj.howToFix) ?? "Rip back carefully and rework.";
+    obj.howToPrevent =
+      coerceAiString(obj.howToPrevent) ?? "Count stitches at the end of each row.";
+    obj.suggestedNextAction =
+      coerceAiString(obj.suggestedNextAction) ?? "Continue with the next round.";
+    if (!Array.isArray(obj.followUpQuestions)) obj.followUpQuestions = [];
+    return obj;
+  }
+
+  return obj;
+}
+
+function normalizeConfidence(value: unknown): number {
+  const num = typeof value === "number" ? value : Number(value);
+  if (Number.isNaN(num)) return 0.5;
+  if (num > 1 && num <= 100) return Math.min(1, Math.max(0, num / 100));
+  return Math.min(1, Math.max(0, num));
+}
+
+function normalizeUnitInterval(value: unknown, fallback = 0): number {
+  const num = typeof value === "number" ? value : Number(value);
+  if (Number.isNaN(num)) return fallback;
+  return Math.min(1, Math.max(0, num));
+}
+
+function normalizePositiveInt(value: unknown): number | undefined {
+  const num = typeof value === "number" ? value : Number(value);
+  if (!Number.isFinite(num)) return undefined;
+  const rounded = Math.round(num);
+  return rounded > 0 ? rounded : undefined;
+}
+
+export function repairVisionJson(data: Record<string, unknown>): Record<string, unknown> {
+  const obj = { ...data };
+  obj.confidence = normalizeConfidence(obj.confidence);
+  obj.detectedStitchType = coerceAiString(obj.detectedStitchType);
+  obj.summary = coerceAiString(obj.summary);
+  obj.estimatedRowNumber = normalizePositiveInt(obj.estimatedRowNumber);
+  obj.estimatedStitchCount = normalizePositiveInt(obj.estimatedStitchCount);
+
+  for (const key of [
+    "likelyMissedStitches",
+    "likelyExtraStitches",
+  ] as const) {
+    const num = typeof obj[key] === "number" ? obj[key] : Number(obj[key]);
+    obj[key] = Number.isFinite(num) && num >= 0 ? Math.round(num as number) : 0;
+  }
+
+  if (Array.isArray(obj.findings)) {
+    obj.findings = obj.findings
+      .map((finding) => {
+        if (!finding || typeof finding !== "object") return null;
+        const item = { ...(finding as Record<string, unknown>) };
+        item.type = coerceAiString(item.type) ?? "note";
+        item.description =
+          coerceAiString(item.description) ?? "Review this area carefully.";
+        const severity = coerceAiString(item.severity)?.toLowerCase();
+        item.severity =
+          severity === "error" || severity === "warning" ? severity : "info";
+        if (item.confidence !== undefined) {
+          item.confidence = normalizeConfidence(item.confidence);
+        }
+        return item;
+      })
+      .filter(Boolean);
+  } else {
+    obj.findings = [];
+  }
+
+  if (Array.isArray(obj.problemAreas)) {
+    obj.problemAreas = obj.problemAreas
+      .map((area) => {
+        if (!area || typeof area !== "object") return null;
+        const item = { ...(area as Record<string, unknown>) };
+        item.x = normalizeUnitInterval(item.x);
+        item.y = normalizeUnitInterval(item.y);
+        item.width = normalizeUnitInterval(item.width, 0.1);
+        item.height = normalizeUnitInterval(item.height, 0.1);
+        item.label = coerceAiString(item.label);
+        return item;
+      })
+      .filter(Boolean);
+  } else {
+    obj.problemAreas = [];
+  }
+
+  if (Array.isArray(obj.suggestedCorrections)) {
+    obj.suggestedCorrections = obj.suggestedCorrections
+      .map((entry) => coerceAiString(entry))
+      .filter(Boolean);
+  } else {
+    obj.suggestedCorrections = [];
+  }
+
+  delete obj.analysisSource;
   return obj;
 }
 

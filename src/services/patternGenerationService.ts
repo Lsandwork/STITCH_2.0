@@ -370,10 +370,10 @@ export async function generatePattern(
     }
   }
 
-  console.error("[generatePattern] All AI providers failed, using fallback:", lastError);
-  const fallback = buildMockDachshundPattern(parsedInput);
-  return {
-    ...fallback,
-    model: `${providers[0]?.model ?? "stitch"}-fallback`,
-  };
+  console.error("[generatePattern] All AI providers failed:", lastError);
+  throw new Error(
+    lastError instanceof Error
+      ? `Pattern generation failed: ${lastError.message}`
+      : "Pattern generation failed. Please try again.",
+  );
 }

@@ -8,45 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/Card";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { useSubscription } from "@/components/providers/SubscriptionProvider";
-
-async function compressImageFile(
-  file: File,
-  maxDimension = 1600,
-  quality = 0.82,
-): Promise<string> {
-  if (!file.type.startsWith("image/")) {
-    throw new Error("Please upload an image file.");
-  }
-
-  const objectUrl = URL.createObjectURL(file);
-  try {
-    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-      const img = new Image();
-      img.onload = () => resolve(img);
-      img.onerror = () => reject(new Error("Could not read that image."));
-      img.src = objectUrl;
-    });
-
-    const scale = Math.min(
-      1,
-      maxDimension / Math.max(image.width, image.height, 1),
-    );
-    const width = Math.max(1, Math.round(image.width * scale));
-    const height = Math.max(1, Math.round(image.height * scale));
-
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext("2d");
-    if (!context) {
-      throw new Error("Could not prepare image for upload.");
-    }
-    context.drawImage(image, 0, 0, width, height);
-    return canvas.toDataURL("image/jpeg", quality);
-  } finally {
-    URL.revokeObjectURL(objectUrl);
-  }
-}
+import { compressImageFile } from "@/lib/ai-image-compress";
 
 export default function PhotoPatternPage() {
   const { featureTier, lifetimeAccess } = useSubscription();

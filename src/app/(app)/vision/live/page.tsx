@@ -35,11 +35,20 @@ export default function VisionLivePage() {
   async function analyzeFrame() {
     if (!videoRef.current) return;
     setLoading(true);
+    const sourceWidth = videoRef.current.videoWidth || 640;
+    const sourceHeight = videoRef.current.videoHeight || 480;
+    const maxDimension = 1280;
+    const scale = Math.min(
+      1,
+      maxDimension / Math.max(sourceWidth, sourceHeight, 1),
+    );
     const canvas = document.createElement("canvas");
-    canvas.width = videoRef.current.videoWidth || 640;
-    canvas.height = videoRef.current.videoHeight || 480;
-    canvas.getContext("2d")?.drawImage(videoRef.current, 0, 0);
-    const imageDataUrl = canvas.toDataURL("image/jpeg", 0.8);
+    canvas.width = Math.max(1, Math.round(sourceWidth * scale));
+    canvas.height = Math.max(1, Math.round(sourceHeight * scale));
+    canvas
+      .getContext("2d")
+      ?.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
+    const imageDataUrl = canvas.toDataURL("image/jpeg", 0.82);
 
     try {
       const response = await fetch("/api/ai/vision", {
@@ -47,10 +56,26 @@ export default function VisionLivePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ scanType: "stitch_check", imageDataUrl }),
       });
-      const payload = await response.json();
-      setResult(payload.result?.summary ?? "Analysis complete.");
-    } catch {
-      setResult("Live analysis unavailable offline.");
+      const payload = (await response.json()) as {
+        result?: { summary?: string; analysisSource?: string };
+        error?: string;
+        demoMode?: boolean;
+      };
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Live analysis failed");
+      }
+      const summary = payload.result?.summary ?? "Analysis complete.";
+      setResult(
+        payload.demoMode || payload.result?.analysisSource === "mock"
+          ? `Demo mode: ${summary}`
+          : summary,
+      );
+    } catch (error) {
+      setResult(
+        error instanceof Error
+          ? error.message
+          : "Live analysis unavailable. Try Scan My Work with a photo.",
+      );
     } finally {
       setLoading(false);
     }

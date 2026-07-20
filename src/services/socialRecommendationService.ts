@@ -3,7 +3,7 @@ import {
   socialAiRecommendationsResultSchema,
   type SocialAiRecommendationsResult,
 } from "@/lib/schemas/social";
-import { getAIProvider, isMockMode } from "@/services/ai/provider";
+import { generateJSONWithFallback, isMockMode } from "@/services/ai/provider";
 
 function buildMockRecommendations(
   skillLevel: string,
@@ -120,6 +120,18 @@ Provide personalized recommendations:
 
 Use realistic crochet community language. Respond as JSON.`;
 
-  const provider = getAIProvider();
-  return provider.generateJSON(prompt, socialAiRecommendationsResultSchema);
+  try {
+    const { data } = await generateJSONWithFallback(
+      prompt,
+      socialAiRecommendationsResultSchema,
+    );
+    return data;
+  } catch (error) {
+    console.error("[getSocialRecommendations] AI failed:", error);
+    throw new Error(
+      error instanceof Error
+        ? `Social AI failed: ${error.message}`
+        : "Social AI failed. Please try again.",
+    );
+  }
 }

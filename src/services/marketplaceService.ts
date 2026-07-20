@@ -5,7 +5,7 @@ import {
   type MarketplaceProcessResult,
 } from "@/lib/schemas/marketplace";
 import { normalizeListingLanguages } from "@/lib/marketplace-i18n";
-import { getAIProvider, isMockMode } from "@/services/ai/provider";
+import { generateJSONWithFallback, isMockMode } from "@/services/ai/provider";
 
 const THUMBNAIL_PALETTES: Record<string, { gradientFrom: string; gradientTo: string; emoji: string }> = {
   amigurumi: { gradientFrom: "#f46f61", gradientTo: "#e7a63b", emoji: "🧸" },
@@ -124,13 +124,24 @@ Generate:
 
 Respond as JSON matching the schema exactly.`;
 
-  const provider = getAIProvider();
-  const result = await provider.generateJSON(prompt, marketplaceProcessResultSchema);
-  return {
-    ...result,
-    languages: normalizeListingLanguages(result.languages, {
-      title: validated.title,
-      description: `A ${validated.skillLevel} ${validated.projectType} crochet pattern.`,
-    }),
-  };
+  try {
+    const { data: result } = await generateJSONWithFallback(
+      prompt,
+      marketplaceProcessResultSchema,
+    );
+    return {
+      ...result,
+      languages: normalizeListingLanguages(result.languages, {
+        title: validated.title,
+        description: `A ${validated.skillLevel} ${validated.projectType} crochet pattern.`,
+      }),
+    };
+  } catch (error) {
+    console.error("[processMarketplaceListing] AI failed:", error);
+    throw new Error(
+      error instanceof Error
+        ? `Marketplace AI failed: ${error.message}`
+        : "Marketplace AI failed. Please try again.",
+    );
+  }
 }

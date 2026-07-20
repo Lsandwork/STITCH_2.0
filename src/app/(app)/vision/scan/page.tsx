@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { LoadingState } from "@/components/ui/LoadingState";
 import { useSubscription } from "@/components/providers/SubscriptionProvider";
+import { compressImageFile } from "@/lib/ai-image-compress";
 import type { VisionScanResult } from "@/lib/schemas/vision";
 
 export default function VisionScanPage() {
@@ -18,16 +19,18 @@ export default function VisionScanPage() {
   const [demoMode, setDemoMode] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleFile(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreview(reader.result as string);
-      setResult(null);
-      setError(null);
-    };
-    reader.readAsDataURL(file);
+    setError(null);
+    setResult(null);
+    try {
+      const dataUrl = await compressImageFile(file, 1280, 0.82);
+      setPreview(dataUrl);
+    } catch (err) {
+      setPreview(null);
+      setError(err instanceof Error ? err.message : "Could not load that image.");
+    }
   }
 
   async function runScan() {
@@ -41,7 +44,6 @@ export default function VisionScanPage() {
         body: JSON.stringify({
           scanType: "stitch_check",
           imageDataUrl: preview,
-          projectId: "demo-dachshund",
           currentRow: 24,
         }),
       });
@@ -51,7 +53,9 @@ export default function VisionScanPage() {
         demoMode?: boolean;
       };
 
-      setDemoMode(Boolean(payload.demoMode));
+      setDemoMode(
+        Boolean(payload.demoMode) || payload.result?.analysisSource === "mock",
+      );
 
       if (!response.ok) {
         throw new Error(payload.error ?? "Scan failed");
@@ -79,7 +83,12 @@ export default function VisionScanPage() {
         hideUpgradePrompt={lifetimeAccess}
       >
         <Card padding="lg" className="max-w-2xl">
-          <input type="file" accept="image/*" capture="environment" onChange={handleFile} />
+          <input
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={(event) => void handleFile(event)}
+          />
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -88,13 +97,18 @@ export default function VisionScanPage() {
               className="mt-4 max-h-80 w-full rounded-stitch-md object-contain"
             />
           ) : null}
-          <Button onClick={runScan} disabled={!preview || loading} className="mt-4">
+          <Button
+            onClick={() => void runScan()}
+            disabled={!preview || loading}
+            className="mt-4"
+          >
             Run scan
           </Button>
           {loading ? <LoadingState label="Analyzing your crochet work…" /> : null}
           {demoMode ? (
             <p className="mt-4 rounded-stitch-md border border-stitch-gold/40 bg-stitch-peach/50 px-4 py-2 text-sm">
-              Demo mode — add an AI API key for live photo analysis.
+              Demo mode — AI API keys are missing on this deployment, so analysis
+              is approximate.
             </p>
           ) : null}
           {error ? (
@@ -109,6 +123,9 @@ export default function VisionScanPage() {
                 <Badge>
                   {Math.round(result.confidence * 100)}% confidence
                 </Badge>
+                {result.analysisSource === "ai" ? (
+                  <Badge>Live AI</Badge>
+                ) : null}
                 {result.detectedStitchType ? (
                   <Badge>{result.detectedStitchType}</Badge>
                 ) : null}
@@ -118,29 +135,27 @@ export default function VisionScanPage() {
               ) : null}
               {result.estimatedRowNumber ? (
                 <p className="text-sm text-stitch-muted">
-                  Estimated row: {result.estimatedRowNumber}
-                  {result.estimatedStitchCount
-                    ? ` · ~${result.estimatedStitchCount} stitches`
-                    : ""}
+                  Estimated row/round: {result.estimatedRowNumber}
                 </p>
               ) : null}
-              {result.findings.length ? (
+              {result.findings.length > 0 ? (
                 <ul className="space-y-2 text-sm">
-                  {result.findings.map((finding, index) => (
-                    <li
-                      key={`${finding.type}-${index}`}
-                      className="rounded-stitch-sm bg-stitch-paper px-3 py-2"
-                    >
-                      <span className="font-medium">{finding.type}: </span>
+                  {result.findings.map((finding) => (
+                    <li key={`${finding.type}-${finding.description}`}>
+                      <span className="font-medium capitalize">
+                        {finding.severity}:
+                      </span>{" "}
                       {finding.description}
                     </li>
                   ))}
                 </ul>
               ) : null}
-              {result.suggestedCorrections.length ? (
+              {result.suggestedCorrections.length > 0 ? (
                 <div>
-                  <p className="mb-2 text-sm font-semibold">Suggested corrections</p>
-                  <ul className="list-disc space-y-1 pl-5 text-sm text-stitch-muted">
+                  <p className="text-sm font-medium text-stitch-ink">
+                    Suggested next steps
+                  </p>
+                  <ul className="mt-1 list-disc pl-5 text-sm text-stitch-muted">
                     {result.suggestedCorrections.map((item) => (
                       <li key={item}>{item}</li>
                     ))}
@@ -149,9 +164,6 @@ export default function VisionScanPage() {
               ) : null}
             </div>
           ) : null}
-          <Button href="/vision/history" variant="secondary" className="mt-4">
-            View scan history
-          </Button>
         </Card>
       </FeatureGate>
     </>

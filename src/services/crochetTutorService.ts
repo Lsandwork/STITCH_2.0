@@ -10,7 +10,7 @@ import {
   buildProjectContextBlock,
   buildUserContextBlock,
 } from "@/lib/ai-user-context";
-import { getAIProvider, isMockMode } from "@/services/ai/provider";
+import { generateJSONWithFallback, isMockMode } from "@/services/ai/provider";
 
 function buildMockTutorResponse(input: TutorMessageInput): TutorResponse {
   const project = DEMO_PROJECTS.find((p) => p.id === input.projectId);
@@ -125,14 +125,22 @@ export async function getTutorResponse(
 ): Promise<TutorResponse> {
   const parsed = tutorMessageInputSchema.parse(input);
 
-  if (!isMockMode()) {
-    try {
-      const provider = getAIProvider();
-      return await provider.generateJSON(buildTutorPrompt(parsed), tutorResponseSchema);
-    } catch (error) {
-      console.error("[crochetTutorService] AI provider failed, using mock fallback:", error);
-    }
+  if (isMockMode()) {
+    return buildMockTutorResponse(parsed);
   }
 
-  return buildMockTutorResponse(parsed);
+  try {
+    const { data } = await generateJSONWithFallback(
+      buildTutorPrompt(parsed),
+      tutorResponseSchema,
+    );
+    return data;
+  } catch (error) {
+    console.error("[crochetTutorService] AI provider failed:", error);
+    throw new Error(
+      error instanceof Error
+        ? `Tutor AI failed: ${error.message}`
+        : "Tutor AI failed. Please try again.",
+    );
+  }
 }
